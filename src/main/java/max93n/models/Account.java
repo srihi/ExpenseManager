@@ -11,7 +11,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    @Column(name = "account_id")
     private Long id;
 
     private String name;
@@ -20,7 +20,8 @@ public class Account {
     private CurrencyEnum currency;
     private double balance;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 

@@ -3,9 +3,10 @@ package max93n.models;
 import max93n.models.enums.RoleEnum;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Role {
+public class Role implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -83,6 +83,9 @@ public class UserServiceImpl implements UserService{
 
         Set<RoleEnum> roleEnums = new HashSet<>();
         roleEnums.add(RoleEnum.USER);
+
+        
+
         add(newUser, roleEnums);
 
         return newUser;

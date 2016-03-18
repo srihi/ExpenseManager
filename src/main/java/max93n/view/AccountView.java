@@ -1,0 +1,114 @@
+package max93n.view;
+
+
+import max93n.models.Account;
+import max93n.models.User;
+import max93n.models.enums.CurrencyEnum;
+import max93n.services.AccountService;
+import max93n.services.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import sun.security.util.SecurityConstants;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import java.util.List;
+
+@ManagedBean
+public class AccountView {
+
+    @ManagedProperty("#{accountService}")
+    private AccountService accountService;
+
+    @ManagedProperty("#{userService}")
+    private UserService userService;
+
+    private String name;
+    private String description;
+    private String currency;
+    private double balance = 0.0;
+
+    private List<Account> accounts;
+
+    @PostConstruct
+    public void init() {
+        accounts = accountService.getAll();
+    }
+
+    public void removeAccount(Account account) {
+        accountService.remove(account);
+        accounts.remove(account);
+    }
+
+    public void createAccount() {
+        Account account = new Account();
+        account.setName(name);
+        account.setDescription(description);
+        account.setCurrency(CurrencyEnum.valueOf(currency));
+        account.setBalance(balance);
+
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        account.setUser(currentUser);
+        accountService.add(account);
+        accounts.add(account);
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public AccountService getAccountService() {
+        return accountService;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+}

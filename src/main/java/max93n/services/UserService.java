@@ -1,6 +1,5 @@
 package max93n.services;
 
-import max93n.models.Role;
 import max93n.models.User;
 import max93n.models.enums.RoleEnum;
 import max93n.utils.exceptions.UserExistsException;
