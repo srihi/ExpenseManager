@@ -1,6 +1,5 @@
 package max93n.models;
 
-import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
@@ -26,6 +24,10 @@ public class User implements UserDetails{
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date registrationDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<Account> accounts;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -64,6 +66,14 @@ public class User implements UserDetails{
     }
 
     public User() {
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     public Date getRegistrationDate() {

@@ -9,12 +9,9 @@
         <f:view locale="#{languageBean.locale}"/>
 
         <p:menubar>
-            <p:menuitem value="UserApp" url="index.jsf"/>
+            <p:menuitem value="ExpenseManager" url="index.jsf"/>
             <sec:authorize access="isAuthenticated()">
-                <p:menuitem value="App" url="app.jsf"/>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ADMIN')">
-                <p:menuitem value="Admin" url="admin.jsf"/>
+                <p:menuitem value="Dashboard" url="dashboard.jsf"/>
             </sec:authorize>
 
             <f:facet name="options">
