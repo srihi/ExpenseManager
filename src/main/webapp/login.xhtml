@@ -32,7 +32,7 @@
                     <p:message for="j_password"/>
 
                 </h:panelGrid>
-                <h:commandButton value="#{msg['login']}" action="#{authBean.doLogin}"/>
+                <p:commandButton value="#{msg['login']}" action="#{authBean.doLogin}" ajax="false"/>
             </h:form>
 
         </ui:define>
