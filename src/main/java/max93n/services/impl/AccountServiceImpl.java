@@ -32,14 +32,15 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public void save(Account account) {
+        accountRepository.saveAndFlush(account);
+    }
+
+    @Override
     public void remove(Account account) {
         accountRepository.delete(account.getId());
     }
 
-    @Override
-    public Account getById(Long id) {
-        return accountRepository.findOne(id);
-    }
 
     @Override
     public Account getByName(String name) {

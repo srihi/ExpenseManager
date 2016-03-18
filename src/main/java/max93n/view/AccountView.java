@@ -6,16 +6,16 @@ import max93n.models.User;
 import max93n.models.enums.CurrencyEnum;
 import max93n.services.AccountService;
 import max93n.services.UserService;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import sun.security.util.SecurityConstants;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import java.util.List;
 
 @ManagedBean
+@SessionScoped
 public class AccountView {
 
     @ManagedProperty("#{accountService}")
@@ -28,6 +28,8 @@ public class AccountView {
     private String description;
     private String currency;
     private double balance = 0.0;
+
+    private Account currentAccount;
 
     private List<Account> accounts;
 
@@ -53,6 +55,22 @@ public class AccountView {
         account.setUser(currentUser);
         accountService.add(account);
         accounts.add(account);
+    }
+
+    public void editAccount() {
+
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        currentAccount.setUser(currentUser);
+        accountService.save(currentAccount);
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
     }
 
     public void setAccounts(List<Account> accounts) {

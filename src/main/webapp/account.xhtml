@@ -8,7 +8,7 @@
 
     <ui:composition template="templates/common.xhtml">
         <ui:define name="title">
-            Login
+            Account
         </ui:define>
         <ui:define name="header">
             <ui:include src="templates/commonHeader.xhtml"/>
@@ -51,12 +51,47 @@
                 </h:form>
             </p:dialog>
 
+            <p:dialog header="Edit account" widgetVar="editAccountDialog">
+                <h:form id="editAccountForm">
+                    <h:panelGrid columns="2" id="edit-grid">
+                        <p:outputLabel for="edit-name" value="Name"/>
+                        <p:inputText id="edit-name" value="#{accountView.currentAccount.name}"
+                                     required="true"
+                                     requiredMessage="Enter name"/>
+
+                        <p:outputLabel for="edit-description" value="Description"/>
+                        <p:inputText id="edit-description" value="#{accountView.currentAccount.description}"/>
+
+                        <p:outputLabel for="edit-currency" value="Currency"/>
+                        <p:selectOneMenu id="edit-currency" value="#{accountView.currentAccount.currency}">
+                            <f:selectItem itemLabel="MDL" itemValue="MDL"/>
+                            <f:selectItem itemLabel="EUR" itemValue="EUR"/>
+                            <f:selectItem itemLabel="USD" itemValue="USD"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="edit-initialBalance" value="Initial Balance"/>
+                        <p:inputText id="edit-initialBalance" value="#{accountView.currentAccount.balance}">
+                            <f:validator validatorId="validators.balanceValidator"/>
+                        </p:inputText>
+
+                        <p:commandButton value="Cancel" process="@this" onclick="PF('editAccountDialog').hide()"
+                                         update="editAccountForm">
+                            <p:resetInput target="editAccountForm"/>
+                        </p:commandButton>
+
+                        <p:commandButton value="Ok" action="#{accountView.editAccount()}"
+                                         update="editAccountForm :accountsDataTable"/>
+                    </h:panelGrid>
+                    <p:messages id="edit-messages" closable="true"/>
+                </h:form>
+            </p:dialog>
+
+
+
             <h:form>
                 <p:commandButton value="Create account"
                                  onclick="PF('createAccountDialog').show();"/>
             </h:form>
-
-            list of accounts
 
             <p:dataTable value="#{accountView.accounts}" var="account" id="accountsDataTable">
                 <p:column headerText="Name">
@@ -74,7 +109,10 @@
 
                 <p:column headerText="Operations">
                     <h:form>
-                        <p:commandButton value="Edit"/>
+                        <p:commandButton value="Edit"
+                                         action="#{accountView.setCurrentAccount(account)}"
+                                         update=":editAccountForm"
+                                         oncomplete="PF('editAccountDialog').show();"/>
                         <p:commandButton value="Remove"
                                          update="accountsDataTable"
                                          action="#{accountView.removeAccount(account)}"/>
