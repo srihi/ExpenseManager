@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<h:body>
+    <ui:composition>
+        <f:view locale="#{languageBean.locale}"/>
+
+        <p:menubar>
+            <p:menuitem value="UserApp" url="index.jsf"/>
+            <sec:authorize access="isAuthenticated()">
+                <p:menuitem value="App" url="app.jsf"/>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ADMIN')">
+                <p:menuitem value="Admin" url="admin.jsf"/>
+            </sec:authorize>
+
+            <f:facet name="options">
+                <sec:authorize access="isAnonymous()">
+                    <h:link value="#{msg['registration']}" outcome="registration"/>
+                    <h:outputText value="   "/>
+                    <h:link value="#{msg['login']}" outcome="login"/>
+                </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <h:outputText value="#{msg['user']}: #{authBean.currentUser.username}"/>
+                    <a href="j_spring_security_logout">#{msg['logout']}</a>
+                </sec:authorize>
+            </f:facet>
+        </p:menubar>
+
+        <h:form>
+            <h:commandButton value="English" action="#{languageBean.changeLanguage('en')}" image="resources/img/en.png"/>
+            <h:outputText value=" "/>
+            <h:commandButton value="Russian" action="#{languageBean.changeLanguage('ru')}" image="resources/img/ru.png"/>
+        </h:form>
+
+    </ui:composition>
+</h:body>
+</html>

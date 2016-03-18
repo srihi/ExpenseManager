@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Application
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+            <h2>#{msg['welcome']}</h2>
+
+            <h:outputText value="#{msg['welcome']} "/>
+            <h:outputText value="#{authBean.currentUser.username}"/>
+
+            <sec:authorize access="hasRole('ADMIN')">
+                <br/>
+                <a href="/admin.xhtml">#{msg['admin']}</a>
+            </sec:authorize>
+
+            <br/>
+            <a href="j_spring_security_logout">#{msg['logout']}</a>
+        </ui:define>
+    </ui:composition>
+
+
+</h:body>
+</html>

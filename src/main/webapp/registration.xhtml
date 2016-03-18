@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:rich="http://java.sun.com/jsf/html">
+<h:body>
+
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Registration
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+
+            <h2>#{msg['registration']}</h2>
+            <h:form id="registrationForm">
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="username" value="#{msg['username']}"/>
+                    <p:inputText value="#{authBean.username}" id="username"/>
+                    <p:message for="username"/>
+
+                    <p:outputLabel for="email" value="#{msg['email']}"/>
+                    <p:inputText value="#{authBean.email}" id="email">
+                        <f:validator validatorId="validators.emailValidator"/>
+                    </p:inputText>
+                    <p:message for="email"/>
+
+
+                    <p:outputLabel for="password1" value="#{msg['password']}"/>
+                    <p:password value="#{authBean.password1}"
+                                id="password1"
+                                required="true"
+                                requiredMessage="#{msg['password required']}"/>
+                    <p:message for="password1"/>
+
+                    <p:outputLabel for="password2" value="#{msg['confirmPassword']}"/>
+                    <p:password value="#{authBean.password2}"
+                                id="password2"
+                                required="true"
+                                requiredMessage="#{msg['password required']}"/>
+                    <p:message for="password2"/>
+                </h:panelGrid>
+
+                <p:commandButton value="#{msg['registrate']}" action="#{authBean.registrate()}" update="registrationForm"/>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>

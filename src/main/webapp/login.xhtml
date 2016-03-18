@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Login
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+
+            <h:form id="loginForm" prependId="false">
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="j_username" value="#{msg['username']}"/>
+                    <p:inputText id="j_username"
+                                 required="true"
+                                 requiredMessage="#{msg['username required']}"/>
+
+                    <p:message for="j_username"/>
+
+                    <p:outputLabel for="j_password" value="#{msg['password']}"/>
+                    <p:password id="j_password"
+                                required="true"
+                                requiredMessage="#{msg['password required']}"/>
+
+                    <p:message for="j_password"/>
+
+                </h:panelGrid>
+                <h:commandButton value="#{msg['login']}" action="#{authBean.doLogin}"/>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>

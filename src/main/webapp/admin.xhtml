@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Admin
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="scripts">
+            <script type="text/javascript">
+                function start() {
+                    PF('statusDialog').show();
+                }
+
+                function stop() {
+                    PF('statusDialog').hide();
+                }
+            </script>
+        </ui:define>
+        <ui:define name="content">
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Downloading" draggable="false" closable="false"
+                      resizable="false">
+                <p:graphicImage name="img/ajaxloadingbar.gif"/>
+            </p:dialog>
+
+            <h:form  enctype="multipart/form-data">
+                <p:fileUpload value="#{adminBean.uploadedFile}" mode="simple" skinSimple="true" required="true"/>
+                <br/>
+                <p:commandButton value="Export" ajax="false"
+                                 onclick="PrimeFaces.monitorDownload(start, stop);">
+                    <p:fileDownload value="#{adminBean.file}"/>
+                </p:commandButton>
+                <p:commandButton value="Import" ajax="false" actionListener="#{adminBean.importData}" />
+            </h:form>
+
+            <p:dataTable var="user" value="#{adminBean.users}" id="userTable">
+                <p:column headerText="#{msg['id']}">
+                    <h:outputText value="#{user.id}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['username']}">
+                    <h:outputText value="#{user.username}"/>
+                </p:column>
+
+
+                <p:column headerText="#{msg['email']}">
+                    <h:outputText value="#{user.email}"/>
+                </p:column>
+
+
+                <p:column headerText="#{msg['registrationDate']}">
+                    <h:outputText value="#{user.registrationDate}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['roles']}">
+                    <p:dataList var="userRole" value="#{user.userRoles}">
+                        #{userRole.role}
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="#{msg['operations']}">
+                    <h:form>
+                        <p:commandButton value="#{msg['edit']}"
+                                         action="#{adminBean.setUser(user)}"
+                                         oncomplete="PF('editDialog').show()"
+                                         update=":editForm"/>
+                        <p:commandButton value="#{msg['remove']}"
+                                         action="#{adminBean.remove(user)}"
+                                         update=":userTable"/>
+                    </h:form>
+
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="#{msg['edit']}" widgetVar="editDialog" closeOnEscape="true" modal="true">
+                <h:form id="editForm">
+                    <p:growl id="growl" showDetail="true" sticky="true"/>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="username" value="#{msg['username']}"/>
+                        <p:inputText value="#{adminBean.user.username}"
+                                     id="username"
+                                     required="true"
+                                     requiredMessage="#{msg['username required']}">
+                            <f:validateLength minimum="3"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="registration-date" value="#{msg['registrationDate']}"/>
+                        <p:calendar id="registration-date" value="#{adminBean.user.registrationDate}"
+                                    pattern="MM/dd/yyyy HH:mm:ss"/>
+                    </h:panelGrid>
+                    <p:commandButton value="#{msg['save']}" action="#{adminBean.edit()}" update=":userTable growl"/>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+
+
+</h:body>
+</html>
