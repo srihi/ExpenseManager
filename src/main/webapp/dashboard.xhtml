@@ -15,17 +15,14 @@
             <ui:include src="templates/commonHeader.xhtml"/>
         </ui:define>
         <ui:define name="content">
-            <p:tabView>
-                <p:tab title="Личные">
-                    Личные
+            <p:tabView value="#{dashboardView.accounts}" var="account">
+                <p:tab title="#{account.name}">
+                    #{account.name}
+                    <br/>
+                    #{account.description}
                 </p:tab>
-                <p:tab title="new">
-                    Личные
-                </p:tab>
+
             </p:tabView>
-
-
-
         </ui:define>
     </ui:composition>
 

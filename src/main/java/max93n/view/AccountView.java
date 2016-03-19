@@ -33,9 +33,12 @@ public class AccountView {
 
     private List<Account> accounts;
 
+    private User currentUser;
+
     @PostConstruct
     public void init() {
-        accounts = accountService.getAll();
+        currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        accounts = accountService.getAllByUser(currentUser);
     }
 
     public void removeAccount(Account account) {
@@ -49,8 +52,6 @@ public class AccountView {
         account.setDescription(description);
         account.setCurrency(CurrencyEnum.valueOf(currency));
         account.setBalance(balance);
-
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         account.setUser(currentUser);
         accountService.add(account);
@@ -128,5 +129,13 @@ public class AccountView {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

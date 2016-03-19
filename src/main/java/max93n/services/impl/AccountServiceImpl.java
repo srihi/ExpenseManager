@@ -1,6 +1,7 @@
 package max93n.services.impl;
 
 import max93n.models.Account;
+import max93n.models.User;
 import max93n.repositories.AccountRepository;
 import max93n.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class AccountServiceImpl implements AccountService{
     private AccountRepository accountRepository;
 
     @Override
-    public List<Account> getAll() {
+    public List<Account> getAllByUser(User user) {
         return accountRepository.findAll();
     }
 
