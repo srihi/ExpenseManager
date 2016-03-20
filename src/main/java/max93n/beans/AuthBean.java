@@ -89,7 +89,7 @@ public class AuthBean {
 
         if (auth.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(auth);
-            return "app?faces-redirect=true";
+            return "dashboard?faces-redirect=true";
         }
 
         return "registration";
