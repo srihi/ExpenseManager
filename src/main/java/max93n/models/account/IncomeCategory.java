@@ -1,7 +1,9 @@
 package max93n.models.account;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class IncomeCategory implements Serializable{
 
     private String category;
