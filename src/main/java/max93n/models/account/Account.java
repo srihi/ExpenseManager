@@ -1,7 +1,7 @@
-package max93n.models;
+package max93n.models.account;
 
 
-import max93n.models.enums.CurrencyEnum;
+import max93n.models.user.User;
 
 import javax.persistence.*;
 

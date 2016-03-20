@@ -1,5 +1,6 @@
-package max93n.models;
+package max93n.models.user;
 
+import max93n.models.account.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,9 +1,9 @@
 package max93n.view;
 
 
-import max93n.models.Account;
-import max93n.models.User;
-import max93n.models.enums.CurrencyEnum;
+import max93n.models.account.Account;
+import max93n.models.user.User;
+import max93n.models.account.CurrencyEnum;
 import max93n.services.AccountService;
 import max93n.services.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;

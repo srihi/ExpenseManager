@@ -1,7 +1,7 @@
 package max93n.beans;
 
 
-import max93n.models.User;
+import max93n.models.user.User;
 import max93n.services.UserService;
 import max93n.utils.PasswordHelper;
 import max93n.utils.exceptions.UserExistsException;

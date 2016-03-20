@@ -1,8 +1,8 @@
 package max93n.services.impl;
 
 
-import max93n.models.Role;
-import max93n.models.enums.RoleEnum;
+import max93n.models.user.Role;
+import max93n.models.user.RoleEnum;
 import max93n.repositories.RoleRepository;
 import max93n.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;

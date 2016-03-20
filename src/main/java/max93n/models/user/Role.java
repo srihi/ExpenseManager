@@ -1,6 +1,4 @@
-package max93n.models;
-
-import max93n.models.enums.RoleEnum;
+package max93n.models.user;
 
 import javax.persistence.*;
 import java.io.Serializable;

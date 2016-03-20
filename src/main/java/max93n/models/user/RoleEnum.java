@@ -1,4 +1,4 @@
-package max93n.models.enums;
+package max93n.models.user;
 
 public enum RoleEnum {
     USER, ADMIN, MODERATOR

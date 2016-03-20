@@ -1,6 +1,6 @@
 package max93n.repositories;
 
-import max93n.models.User;
+import max93n.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
