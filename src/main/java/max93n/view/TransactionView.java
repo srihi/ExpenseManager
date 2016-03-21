@@ -5,6 +5,7 @@ import max93n.models.account.Account;
 import max93n.models.account.IncomeCategory;
 import max93n.models.account.IncomeTransaction;
 import max93n.services.AccountService;
+import max93n.services.IncomeCategoryService;
 import max93n.services.IncomeTransactionService;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +27,9 @@ public class TransactionView {
 
     @ManagedProperty("#{accountService}")
     private AccountService accountService;
+
+    @ManagedProperty("#{incomeCategoryService}")
+    private IncomeCategoryService incomeCategoryService;
 
 
 
@@ -67,7 +71,7 @@ public class TransactionView {
         incomeTransaction.setDate(date);
         incomeTransaction.setAmount(amount);
         incomeTransaction.setPayer(payer);
-        IncomeCategory incomeCategory = new IncomeCategory(category);
+        IncomeCategory incomeCategory = incomeCategoryService.getByCategory(category);
         incomeTransaction.setIncomeCategory(incomeCategory);
         incomeTransaction.setPaymentMethod(paymentMethod);
         incomeTransaction.setDescription(description);
@@ -97,6 +101,14 @@ public class TransactionView {
 
     public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
         this.incomeTransactionService = incomeTransactionService;
+    }
+
+    public IncomeCategoryService getIncomeCategoryService() {
+        return incomeCategoryService;
+    }
+
+    public void setIncomeCategoryService(IncomeCategoryService incomeCategoryService) {
+        this.incomeCategoryService = incomeCategoryService;
     }
 
     public Date getDate() {

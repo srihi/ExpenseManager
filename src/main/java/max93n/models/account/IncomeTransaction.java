@@ -1,13 +1,13 @@
 package max93n.models.account;
 
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class IncomeTransaction extends AppTransaction {
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "income_category_id", nullable = false)
     private IncomeCategory incomeCategory;
 
     public IncomeTransaction() {
@@ -20,4 +20,5 @@ public class IncomeTransaction extends AppTransaction {
     public void setIncomeCategory(IncomeCategory incomeCategory) {
         this.incomeCategory = incomeCategory;
     }
+
 }

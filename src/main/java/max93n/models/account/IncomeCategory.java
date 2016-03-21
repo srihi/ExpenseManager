@@ -1,10 +1,16 @@
 package max93n.models.account;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Embeddable
+@Entity
 public class IncomeCategory implements Serializable{
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "income_category_id")
+    private Long id;
 
     private String category;
 
@@ -21,5 +27,15 @@ public class IncomeCategory implements Serializable{
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
