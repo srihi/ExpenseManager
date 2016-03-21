@@ -13,6 +13,9 @@
             <sec:authorize access="isAuthenticated()">
                 <p:menuitem value="Dashboard" url="dashboard.jsf"/>
                 <p:menuitem value="Account" url="account.jsf"/>
+                <p:submenu icon="ui-icon-plus">
+                    <p:menuitem value="Income Category" url="incomeCategory.jsf"/>
+                </p:submenu>
             </sec:authorize>
 
             <f:facet name="options">
