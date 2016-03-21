@@ -16,8 +16,8 @@
         </ui:define>
         <ui:define name="content">
 
-            <p:dialog header="Edit" widgetVar="editDialog">
-                <h:form>
+            <p:dialog header="Edit" widgetVar="editDialog" closeOnEscape="true">
+                <h:form id="editForm">
                     <h:outputLabel for="edit-category" value="Category"/>
                     <p:inputText id="edit-category" value="#{incomeCategoryView.modifyingIncomeCategory.category}"/>
                     <br/>
@@ -37,8 +37,9 @@
                     </f:facet>
                     Category:
                     <p:commandButton value="Edit" icon="ui-icon-pencil"
-                                     oncomplete="PF('editDialog').show()"
-                                     action="#{incomeCategoryView.edit(c)}"/>
+                                     action="#{incomeCategoryView.edit(c)}"
+                                     update=":editForm"
+                                     oncomplete="PF('editDialog').show()"/>
                     <p:commandButton value="Remove" icon="ui-icon-close"
                                      update="categoriesForm"
                                      action="#{incomeCategoryView.removeCategory(c)}"/>
