@@ -1,7 +1,7 @@
 package max93n.services.impl;
 
-import max93n.models.account.Account;
-import max93n.models.user.User;
+import max93n.entities.Account;
+import max93n.entities.User;
 import max93n.repositories.AccountRepository;
 import max93n.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

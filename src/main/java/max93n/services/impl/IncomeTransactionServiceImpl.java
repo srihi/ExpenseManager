@@ -1,8 +1,7 @@
 package max93n.services.impl;
 
-import max93n.models.account.Account;
-import max93n.models.account.AppTransaction;
-import max93n.models.account.IncomeTransaction;
+import max93n.entities.Account;
+import max93n.entities.IncomeTransaction;
 import max93n.repositories.IncomeTrancationRepository;
 import max93n.services.IncomeTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package max93n.services;
 
-import max93n.models.account.Account;
-import max93n.models.account.IncomeTransaction;
+import max93n.entities.Account;
+import max93n.entities.IncomeTransaction;
 
 import java.util.List;
 

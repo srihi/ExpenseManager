@@ -1,7 +1,5 @@
-package max93n.models.account;
+package max93n.entities;
 
-
-import max93n.models.user.User;
 
 import javax.persistence.*;
 

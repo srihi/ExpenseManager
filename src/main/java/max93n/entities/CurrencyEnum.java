@@ -1,4 +1,4 @@
-package max93n.models.account;
+package max93n.entities;
 
 public enum  CurrencyEnum {
     MDL, EUR, USD

@@ -1,7 +1,7 @@
 package max93n.services.impl;
 
 
-import max93n.models.user.User;
+import max93n.entities.User;
 import max93n.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

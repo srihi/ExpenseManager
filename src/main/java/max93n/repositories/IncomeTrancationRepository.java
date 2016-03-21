@@ -1,7 +1,7 @@
 package max93n.repositories;
 
-import max93n.models.account.Account;
-import max93n.models.account.IncomeTransaction;
+import max93n.entities.Account;
+import max93n.entities.IncomeTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

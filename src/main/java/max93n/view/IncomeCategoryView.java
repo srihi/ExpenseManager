@@ -1,7 +1,7 @@
 package max93n.view;
 
 
-import max93n.models.account.IncomeCategory;
+import max93n.entities.IncomeCategory;
 import max93n.services.IncomeCategoryService;
 
 import javax.annotation.PostConstruct;

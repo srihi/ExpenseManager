@@ -1,6 +1,6 @@
 package max93n.repositories;
 
-import max93n.models.account.IncomeCategory;
+import max93n.entities.IncomeCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

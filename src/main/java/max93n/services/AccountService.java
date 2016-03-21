@@ -1,7 +1,7 @@
 package max93n.services;
 
-import max93n.models.account.Account;
-import max93n.models.user.User;
+import max93n.entities.Account;
+import max93n.entities.User;
 
 import java.util.List;
 

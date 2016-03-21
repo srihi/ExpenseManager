@@ -1,7 +1,7 @@
 package max93n.services.impl;
 
 
-import max93n.models.account.IncomeCategory;
+import max93n.entities.IncomeCategory;
 import max93n.repositories.IncomeCategoryRepository;
 import max93n.services.IncomeCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

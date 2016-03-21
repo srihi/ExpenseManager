@@ -1,6 +1,6 @@
 package max93n.services;
 
-import max93n.models.account.IncomeCategory;
+import max93n.entities.IncomeCategory;
 
 import java.util.List;
 

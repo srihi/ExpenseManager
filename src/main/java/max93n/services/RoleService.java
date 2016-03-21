@@ -1,7 +1,7 @@
 package max93n.services;
 
-import max93n.models.user.Role;
-import max93n.models.user.RoleEnum;
+import max93n.entities.Role;
+import max93n.entities.RoleEnum;
 
 import java.util.List;
 

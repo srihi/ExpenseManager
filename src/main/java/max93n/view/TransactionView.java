@@ -1,9 +1,9 @@
 package max93n.view;
 
 
-import max93n.models.account.Account;
-import max93n.models.account.IncomeCategory;
-import max93n.models.account.IncomeTransaction;
+import max93n.entities.Account;
+import max93n.entities.IncomeCategory;
+import max93n.entities.IncomeTransaction;
 import max93n.services.AccountService;
 import max93n.services.IncomeCategoryService;
 import max93n.services.IncomeTransactionService;
