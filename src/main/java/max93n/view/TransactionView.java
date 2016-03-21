@@ -12,10 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 @ManagedBean
 @RequestScoped
@@ -31,8 +32,6 @@ public class TransactionView {
     @ManagedProperty("#{incomeCategoryService}")
     private IncomeCategoryService incomeCategoryService;
 
-
-
     private Date date;
     private Double amount;
     private String payer;
@@ -41,11 +40,23 @@ public class TransactionView {
     private String paymentMethod;
     private String description;
 
+    private List<SelectItem> incomeCategorySelectItems;
+
+
     @PostConstruct
     public void init() {
         date = new Date();
         amount = 0.0;
         paymentMethod = "Cash";
+
+        List<IncomeCategory> incomeCategories= incomeCategoryService.getAll();
+
+        incomeCategorySelectItems = new ArrayList<>();
+
+        for (IncomeCategory incomeCategory : incomeCategories) {
+            incomeCategorySelectItems.add(new SelectItem(incomeCategory.getCategory(), incomeCategory.getCategory()));
+        }
+
 
     }
 
@@ -167,4 +178,11 @@ public class TransactionView {
         this.description = description;
     }
 
+    public List<SelectItem> getIncomeCategorySelectItems() {
+        return incomeCategorySelectItems;
+    }
+
+    public void setIncomeCategorySelectItems(List<SelectItem> incomeCategorySelectItems) {
+        this.incomeCategorySelectItems = incomeCategorySelectItems;
+    }
 }

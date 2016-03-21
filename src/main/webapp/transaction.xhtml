@@ -29,9 +29,7 @@
 
                     <h:outputText value="Category"/>
                     <p:selectOneMenu value="#{transactionView.category}" rendered="#{param['type'] eq 'income'}">
-                        <f:selectItem itemLabel="Salary" itemValue="Salary"/>
-                        <f:selectItem itemLabel="Personal Savings" itemValue="Personal Savings"/>
-                        <f:selectItem itemLabel="Pensions" itemValue="Pensions"/>
+                        <f:selectItems value="#{transactionView.incomeCategorySelectItems}"/>
                     </p:selectOneMenu>
                     <p:outputLabel value="expense" rendered="#{not param['type'] eq 'income'}"/>
                     <!--//TODO:add income dropdown-->
