@@ -12,6 +12,4 @@ public interface IncomeTrancationRepository extends JpaRepository<IncomeTransact
 
     @Query("select i from IncomeTransaction i where i.account = :account")
     List<IncomeTransaction> getAllByAccount(@Param("account") Account account);
-
-
 }

@@ -11,6 +11,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
         <intercept-url pattern="/login.jsf" access="isAnonymous()"/>
         <intercept-url pattern="/registration.jsf" access="isAnonymous()"/>
         <intercept-url pattern="/dashboard.jsf" access="isAuthenticated()"/>
+        <intercept-url pattern="/transaction.jsf" access="isAuthenticated()"/>
 
         <form-login login-page="/login.jsf" default-target-url="/dashboard.jsf"
                     authentication-failure-url="/login.jsf?status=error"/>

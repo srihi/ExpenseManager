@@ -11,6 +11,10 @@ public class IncomeCategory implements Serializable{
     public IncomeCategory() {
     }
 
+    public IncomeCategory(String category) {
+        this.category = category;
+    }
+
     public String getCategory() {
         return category;
     }

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Transaction
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+            <h2>New Transaction - #{param['type']}</h2>
+            <h:form>
+                <p:panelGrid columns="2">
+                    <h:outputText value="Date"/>
+                    <p:calendar value="#{transactionView.date}" pattern="MM/dd/yyyy HH:mm:ss"/>
+
+
+                    <h:outputText value="Amount"/>
+                    <p:inputText value="#{transactionView.amount}"/>
+
+                    <h:outputText value="Payer"/>
+                    <p:inputText value="#{transactionView.payer}"/>
+
+                    <h:outputText value="Category"/>
+                    <p:selectOneMenu value="#{transactionView.category}" rendered="#{param['type'] eq 'income'}">
+                        <f:selectItem itemLabel="Salary" itemValue="Salary"/>
+                        <f:selectItem itemLabel="Personal Savings" itemValue="Personal Savings"/>
+                        <f:selectItem itemLabel="Pensions" itemValue="Pensions"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="expense" rendered="#{not param['type'] eq 'income'}"/>
+                    <!--//TODO:add income dropdown-->
+
+                    <h:outputText value="Payment Method"/>
+                    <p:selectOneMenu value="#{transactionView.paymentMethod}">
+                        <f:selectItem itemLabel="Cash" itemValue="Cash"/>
+                        <f:selectItem itemLabel="Card" itemValue="Card"/>
+                        <f:selectItem itemLabel="Bank Transfer" itemValue="Bank Transfer"/>
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Description"/>
+                    <p:inputText value="#{transactionView.description}"/>
+
+
+                    <!--//TODO: add tags, quantity, unit for measure-->
+                </p:panelGrid>
+
+                <p:commandButton value="Back" onclick="history.go(-1)"/>
+                <p:commandButton value="OK &amp; New" action="#{transactionView.addTransaction()}">
+                    <f:param name="account-name" value="#{param['account-name']}"/>
+                    <f:param name="type" value="#{param['type']}"/>
+                </p:commandButton>
+                <p:commandButton value="OK"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

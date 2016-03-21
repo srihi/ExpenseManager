@@ -20,8 +20,38 @@
                     #{account.name}
                     <br/>
                     #{account.description}
-                </p:tab>
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Current Balance: "/>
+                        <h:outputText value="0"/>
 
+                        <h:outputText value="This Month Balance: "/>
+                        <h:outputText value="0"/>
+
+                        <h:outputText value="This week income: "/>
+                        <h:outputText value="0"/>
+
+                        <h:outputText value="This month income: "/>
+                        <h:outputText value="0"/>
+
+                        <h:outputText value="Today expense: "/>
+                        <h:outputText value="0"/>
+
+                        <h:outputText value="This week expense: "/>
+                        <h:outputText value="0"/>
+
+                        <h:outputText value="This month expense: "/>
+                        <h:outputText value="0"/>
+
+                    </p:panelGrid>
+
+
+                    <h:form>
+                        <p:commandButton value="New Income" action="#{dashboardView.goToIncomeTransactionView(account.name)}"/>
+                        <p:commandButton value="New Expense"/>
+                        <p:commandButton value="Charts"/>
+                        <p:commandButton value="Schedule"/>
+                    </h:form>
+                </p:tab>
             </p:tabView>
         </ui:define>
     </ui:composition>

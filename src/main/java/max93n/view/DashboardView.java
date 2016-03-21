@@ -34,6 +34,10 @@ public class DashboardView {
         accounts = accountService.getAllByUser(currentUser);
     }
 
+    public String goToIncomeTransactionView(String accountName) {
+        return "transaction?account-name=" + accountName + "&type=income&faces-redirect=true";
+    }
+
 
     public AccountService getAccountService() {
         return accountService;
