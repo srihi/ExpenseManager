@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @MappedSuperclass
-public abstract class Transaction {
+public abstract class AppTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +22,13 @@ public abstract class Transaction {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
     //// TODO: need to add: tags, quantity, measure
 
-    public Transaction() {
+    public AppTransaction() {
         date = new Date();
         paymentMethod = "Cash";
     }
@@ -74,6 +78,15 @@ public abstract class Transaction {
     }
 
     public void setDescription(String description) {
+
         this.description = description;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

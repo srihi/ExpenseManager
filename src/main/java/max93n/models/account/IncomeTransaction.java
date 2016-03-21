@@ -5,7 +5,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Entity
-public class IncomeTransaction extends Transaction {
+public class IncomeTransaction extends AppTransaction {
 
     @Embedded
     private IncomeCategory incomeCategory;
