@@ -7,17 +7,19 @@ import max93n.services.IncomeCategoryService;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import java.util.List;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class IncomeCategoryView {
 
     @ManagedProperty("#{incomeCategoryService}")
     private IncomeCategoryService incomeCategoryService;
 
     private List<IncomeCategory> incomeCategories;
+
+    private IncomeCategory modifyingIncomeCategory;
 
     private String category;
 
@@ -26,6 +28,17 @@ public class IncomeCategoryView {
         incomeCategories = incomeCategoryService.getAll();
     }
 
+
+    public void save() {
+        if (modifyingIncomeCategory != null) {
+
+        }
+        incomeCategoryService.save(modifyingIncomeCategory);
+    }
+
+    public void edit(IncomeCategory incomeCategory) {
+        modifyingIncomeCategory = incomeCategory;
+    }
 
     public void addCategory() {
         IncomeCategory incomeCategory = incomeCategoryService.getByCategory(category);
@@ -67,5 +80,13 @@ public class IncomeCategoryView {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public IncomeCategory getModifyingIncomeCategory() {
+        return modifyingIncomeCategory;
+    }
+
+    public void setModifyingIncomeCategory(IncomeCategory modifyingIncomeCategory) {
+        this.modifyingIncomeCategory = modifyingIncomeCategory;
     }
 }

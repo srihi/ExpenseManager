@@ -26,6 +26,11 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService{
     }
 
     @Override
+    public void save(IncomeCategory incomeCategory) {
+        incomeCategoryRepository.saveAndFlush(incomeCategory);
+    }
+
+    @Override
     public void add(IncomeCategory incomeCategory) {
         incomeCategoryRepository.saveAndFlush(incomeCategory);
     }
