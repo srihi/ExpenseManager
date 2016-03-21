@@ -17,37 +17,67 @@
         <ui:define name="content">
             <p:tabView value="#{dashboardView.accounts}" var="account">
                 <p:tab title="#{account.name}">
-                    #{account.name}
-                    <br/>
-                    #{account.description}
-                    <p:panelGrid columns="2">
-                        <h:outputText value="Current Balance: "/>
-                        <h:outputText value="0"/>
+                    <div class="description">
+                        <span class="description-header">Description: </span>#{account.description}
+                    </div>
+                    <p:panelGrid styleClass="full-width">
+                        <p:row>
+                            <p:column><h:outputText value="Current Balance: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
 
-                        <h:outputText value="This Month Balance: "/>
-                        <h:outputText value="0"/>
+                        <p:row>
+                            <p:column><h:outputText value="This Month Balance: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
 
-                        <h:outputText value="This week income: "/>
-                        <h:outputText value="0"/>
+                        <p:row>
+                            <p:column colspan="2" styleClass="ui-widget-header">
+                                <p:spacer height="0"/>
+                            </p:column>
+                        </p:row>
 
-                        <h:outputText value="This month income: "/>
-                        <h:outputText value="0"/>
+                        <p:row>
+                            <p:column><h:outputText value="This week income: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
 
-                        <h:outputText value="Today expense: "/>
-                        <h:outputText value="0"/>
 
-                        <h:outputText value="This week expense: "/>
-                        <h:outputText value="0"/>
+                        <p:row>
+                            <p:column><h:outputText value="This month income: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
 
-                        <h:outputText value="This month expense: "/>
-                        <h:outputText value="0"/>
+
+                        <p:row>
+                            <p:column colspan="2" styleClass="ui-widget-header">
+                                <p:spacer height="0"/>
+                            </p:column>
+                        </p:row>
+
+
+                        <p:row>
+                            <p:column><h:outputText value="Today expense: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
+
+
+                        <p:row>
+                            <p:column><h:outputText value="This week expense: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column><h:outputText value="This month expense: "/></p:column>
+                            <p:column><h:outputText value="0"/></p:column>
+                        </p:row>
 
                     </p:panelGrid>
-
 
                     <h:form>
                         <p:commandButton value="New Income" action="#{dashboardView.goToIncomeTransactionView(account.name)}"/>
                         <p:commandButton value="New Expense"/>
+                        <p:commandButton value="Summary"/>
                         <p:commandButton value="Charts"/>
                         <p:commandButton value="Schedule"/>
                     </h:form>

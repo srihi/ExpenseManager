@@ -2,6 +2,7 @@ package max93n.entities;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -21,6 +22,9 @@ public class Account {
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "account")
+    private List<IncomeTransaction> incomeTransactions;
 
 
     public Account() {
@@ -73,5 +77,13 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<IncomeTransaction> getIncomeTransactions() {
+        return incomeTransactions;
+    }
+
+    public void setIncomeTransactions(List<IncomeTransaction> incomeTransactions) {
+        this.incomeTransactions = incomeTransactions;
     }
 }

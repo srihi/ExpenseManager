@@ -23,7 +23,11 @@ public class IncomeTransactionServiceImpl implements IncomeTransactionService {
 
     @Override
     public void add(IncomeTransaction transaction) {
+
         incomeTrancationRepository.saveAndFlush(transaction);
+
+        transaction.getAccount().setBalance(transaction.getAccount().getBalance() + transaction.getAmount());
+
     }
 
 
