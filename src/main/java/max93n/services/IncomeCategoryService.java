@@ -9,4 +9,5 @@ public interface IncomeCategoryService {
     IncomeCategory getByCategory(String category);
     List<IncomeCategory> getAll();
     void add(IncomeCategory incomeCategory);
+    void remove(IncomeCategory incomeCategory);
 }

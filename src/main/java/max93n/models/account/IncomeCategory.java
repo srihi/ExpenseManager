@@ -12,6 +12,7 @@ public class IncomeCategory implements Serializable{
     @Column(name = "income_category_id")
     private Long id;
 
+    @Column(unique = true)
     private String category;
 
     public IncomeCategory() {

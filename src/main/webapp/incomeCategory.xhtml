@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Income category
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+            <h2>Income category</h2>
+            <h:form id="categoriesForm">
+                <p:dataList value="#{incomeCategoryView.incomeCategories}" var="c" type="definition">
+                    <f:facet name="header">
+                        Income category
+                    </f:facet>
+                    Category:
+                    <p:commandButton value="Edit" icon="ui-icon-pencil"/>
+                    <p:commandButton value="Remove" icon="ui-icon-close"
+                                     update="categoriesForm"
+                                     action="#{incomeCategoryView.removeCategory(c)}"/>
+
+
+                    <f:facet name="description">
+                        <div style="padding: 10px;">
+                            #{c.category}
+                        </div>
+                    </f:facet>
+                </p:dataList>
+            </h:form>
+
+            <h2>New Category</h2>
+            <h:form id="newCategoryForm">
+                <p:panel id="panel">
+                    <h:outputLabel for="category" value="Category: "/>
+                    <p:inputText id="category" value="#{incomeCategoryView.category}"/>
+                </p:panel>
+                <br/>
+                <p:commandButton value="Cancel" update="panel">
+                    <p:resetInput target="panel"/>
+                </p:commandButton>
+                <p:commandButton value="OK"
+                                 update=":categoriesForm"
+                                 action="#{incomeCategoryView.addCategory()}"/>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
