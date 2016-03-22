@@ -35,7 +35,7 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel for="initialBalance" value="Initial Balance"/>
-                        <p:inputText id="initialBalance" value="#{accountView.balance}">
+                        <p:inputText id="initialBalance" value="#{accountView.initialBalance}">
                             <f:validator validatorId="validators.balanceValidator"/>
                         </p:inputText>
 
@@ -70,7 +70,7 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel for="edit-initialBalance" value="Initial Balance"/>
-                        <p:inputText id="edit-initialBalance" value="#{accountView.currentAccount.balance}">
+                        <p:inputText id="edit-initialBalance" value="#{accountView.currentAccount.initialBalance}">
                             <f:validator validatorId="validators.balanceValidator"/>
                         </p:inputText>
 
@@ -107,8 +107,8 @@
                     <h:outputText value="#{account.currency}"/>
                 </p:column>
 
-                <p:column headerText="Balance">
-                    <h:outputText value="#{account.balance}"/>
+                <p:column headerText="Initial initialBalance">
+                    <h:outputText value="#{account.initialBalance}"/>
                 </p:column>
 
                 <p:column headerText="Operations">

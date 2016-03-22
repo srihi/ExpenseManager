@@ -17,7 +17,7 @@ public class Account {
     private String description;
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currency;
-    private double balance;
+    private double initialBalance;
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id", nullable = false)
@@ -62,12 +62,12 @@ public class Account {
         this.currency = currency;
     }
 
-    public double getBalance() {
-        return balance;
+    public double getInitialBalance() {
+        return initialBalance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setInitialBalance(double balance) {
+        this.initialBalance = balance;
     }
 
     public User getUser() {

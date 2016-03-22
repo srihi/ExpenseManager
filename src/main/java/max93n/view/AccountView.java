@@ -27,7 +27,7 @@ public class AccountView {
     private String name;
     private String description;
     private String currency;
-    private double balance = 0.0;
+    private double initialBalance = 0.0;
 
     private Account currentAccount;
 
@@ -51,7 +51,7 @@ public class AccountView {
         account.setName(name);
         account.setDescription(description);
         account.setCurrency(CurrencyEnum.valueOf(currency));
-        account.setBalance(balance);
+        account.setInitialBalance(initialBalance);
 
         account.setUser(currentUser);
         accountService.add(account);
@@ -123,12 +123,12 @@ public class AccountView {
         this.currency = currency;
     }
 
-    public double getBalance() {
-        return balance;
+    public double getInitialBalance() {
+        return initialBalance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setInitialBalance(double initialBalance) {
+        this.initialBalance = initialBalance;
     }
 
     public User getCurrentUser() {

@@ -19,6 +19,19 @@ public class AccountServiceImpl implements AccountService{
     private AccountRepository accountRepository;
 
     @Override
+    public double getCurrentBalance(Account account) {
+
+        double balance = 0;
+
+        for (IncomeTransaction income : account.getIncomeTransactions()) {
+
+            balance += income.getAmount();
+        }
+        //TODO: add expense to current balance
+        return  balance + account.getInitialBalance();
+    }
+
+    @Override
     public double getThisMonthBalance(Account account) {
 
         Calendar calender = Calendar.getInstance();

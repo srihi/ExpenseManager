@@ -43,13 +43,6 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService{
 
     @Override
     public void remove(IncomeCategory incomeCategory) {
-        List<IncomeTransaction> incomeTransactions= incomeCategory.getIncomeTransactions();
-        for (IncomeTransaction incomeTransaction : incomeTransactions) {
-            Account account = incomeTransaction.getAccount();
-            account.setBalance(account.getBalance() - incomeTransaction.getAmount());
-            accountService.save(account);
-        }
-
         incomeCategoryRepository.delete(incomeCategory.getId());
     }
 }

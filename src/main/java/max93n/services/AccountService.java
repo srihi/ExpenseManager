@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface AccountService {
 
+
+    double getCurrentBalance(Account account);
+
     double getThisMonthBalance(Account account);
 
     double getThisWeekIncome(Account account);

@@ -23,7 +23,7 @@
                     <p:panelGrid styleClass="full-width">
                         <p:row>
                             <p:column><h:outputText value="Current Balance: "/></p:column>
-                            <p:column><h:outputText value="#{account.balance}"/></p:column>
+                            <p:column><h:outputText value="#{dashboardView.getCurrentBalance(account)}"/></p:column>
                         </p:row>
 
                         <p:row>

@@ -29,10 +29,6 @@ public class IncomeTransactionServiceImpl implements IncomeTransactionService {
     public void add(IncomeTransaction transaction) {
 
         incomeTrancationRepository.saveAndFlush(transaction);
-        Account account = transaction.getAccount();
-        account.setBalance(account.getBalance() + transaction.getAmount());
-
-        accountService.save(account);
 
     }
 
