@@ -23,12 +23,12 @@
                     <p:panelGrid styleClass="full-width">
                         <p:row>
                             <p:column><h:outputText value="Current Balance: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column><h:outputText value="#{account.balance}"/></p:column>
                         </p:row>
 
                         <p:row>
                             <p:column><h:outputText value="This Month Balance: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column><h:outputText value="#{dashboardView.getThisMonthBalance(account)}"/></p:column>
                         </p:row>
 
                         <p:row>
@@ -39,7 +39,7 @@
 
                         <p:row>
                             <p:column><h:outputText value="This week income: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column><h:outputText value="#{dashboardView.getThisWeekIncome(account)}"/></p:column>
                         </p:row>
 
 

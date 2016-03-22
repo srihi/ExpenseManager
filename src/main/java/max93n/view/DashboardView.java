@@ -29,16 +29,28 @@ public class DashboardView {
 
     private User currentUser;
 
+
+
     @PostConstruct
     public void init() {
         currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         accounts = accountService.getAllByUser(currentUser);
     }
 
+    public double getThisMonthBalance(Account account) {
+        return accountService.getThisMonthBalance(account);
+    }
+
+
+    public double getThisWeekIncome(Account account) {
+        return accountService.getThisWeekIncome(account);
+    }
+
+
+
     public String goToIncomeTransactionView(String accountName) {
         return "transaction?account-name=" + accountName + "&type=income&faces-redirect=true";
     }
-
 
     public AccountService getAccountService() {
         return accountService;

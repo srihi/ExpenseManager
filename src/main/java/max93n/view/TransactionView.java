@@ -63,21 +63,22 @@ public class TransactionView {
 
     //TODO: add tags, quantity, unit for measure
 
-    public  void addTransaction() {
+    public  String addTransaction() {
 
         String type = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("type");
         String accountName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("account-name");
 
         if (type.equals("income")) {
-            addIncomeTransaction(accountName);
+            return addIncomeTransaction(accountName);
         }
         else if (type.equals("expense")) {
-            addExpenseTransaction(accountName);
+            return addExpenseTransaction(accountName);
         }
 
+        return null;
     }
 
-    private void addIncomeTransaction(String accountName) {
+    private String addIncomeTransaction(String accountName) {
         IncomeTransaction incomeTransaction = new IncomeTransaction();
         incomeTransaction.setDate(date);
         incomeTransaction.setAmount(amount);
@@ -89,12 +90,13 @@ public class TransactionView {
         Account account = accountService.getByName(accountName);
         incomeTransaction.setAccount(account);
         incomeTransactionService.add(incomeTransaction);
-
+        return "dashboard";
     }
 
 
-    private void addExpenseTransaction(String accountName) {
+    private String addExpenseTransaction(String accountName) {
         //TODO:create addExpenseTransaction
+        return "dashboard";
     }
 
 

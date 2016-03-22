@@ -23,13 +23,12 @@ public class Account {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<IncomeTransaction> incomeTransactions;
 
 
     public Account() {
     }
-
 
     public Long getId() {
         return id;
