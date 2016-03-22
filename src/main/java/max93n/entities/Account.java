@@ -26,6 +26,9 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<IncomeTransaction> incomeTransactions;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<ExpenseTransaction> expenseTransactions;
+
 
     public Account() {
     }
@@ -84,5 +87,13 @@ public class Account {
 
     public void setIncomeTransactions(List<IncomeTransaction> incomeTransactions) {
         this.incomeTransactions = incomeTransactions;
+    }
+
+    public List<ExpenseTransaction> getExpenseTransactions() {
+        return expenseTransactions;
+    }
+
+    public void setExpenseTransactions(List<ExpenseTransaction> expenseTransactions) {
+        this.expenseTransactions = expenseTransactions;
     }
 }
