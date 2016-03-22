@@ -52,6 +52,9 @@ public class DashboardView {
     }
 
 
+    public double getThisMonthIncome(Account account) {
+        return accountService.getThisMonthIncome(account);
+    }
 
     public String goToIncomeTransactionView(String accountName) {
         return "transaction?account-name=" + accountName + "&type=income&faces-redirect=true";

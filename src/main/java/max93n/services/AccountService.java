@@ -13,6 +13,7 @@ public interface AccountService {
     double getThisMonthBalance(Account account);
 
     double getThisWeekIncome(Account account);
+    double getThisMonthIncome(Account account);
 
 
     List<Account> getAllByUser(User user);
