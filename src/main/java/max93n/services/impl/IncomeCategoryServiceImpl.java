@@ -1,8 +1,11 @@
 package max93n.services.impl;
 
 
+import max93n.entities.Account;
 import max93n.entities.IncomeCategory;
+import max93n.entities.IncomeTransaction;
 import max93n.repositories.IncomeCategoryRepository;
+import max93n.services.AccountService;
 import max93n.services.IncomeCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,9 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService{
 
     @Autowired
     private IncomeCategoryRepository incomeCategoryRepository;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public IncomeCategory getByCategory(String category) {
@@ -37,6 +43,13 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService{
 
     @Override
     public void remove(IncomeCategory incomeCategory) {
+        List<IncomeTransaction> incomeTransactions= incomeCategory.getIncomeTransactions();
+        for (IncomeTransaction incomeTransaction : incomeTransactions) {
+            Account account = incomeTransaction.getAccount();
+            account.setBalance(account.getBalance() - incomeTransaction.getAmount());
+            accountService.save(account);
+        }
+
         incomeCategoryRepository.delete(incomeCategory.getId());
     }
 }
