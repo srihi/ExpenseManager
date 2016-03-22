@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://java.sun.com/jsf/html">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Expense category
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+            <h2>Categories</h2>
+
+            <p:tree value="#{expenseCategoryView.root}" var="node" selectionMode="single" id="tree">
+                <p:ajax event="select" listener="#{expenseCategoryView.onNodeSelect}" update=":form"/>
+
+                <p:treeNode>
+                    <h:outputText value="#{node}"/>
+                </p:treeNode>
+            </p:tree>
+
+
+            <h2>Category</h2>
+            <h:form id="form">
+                <p:panel id="panel">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel for="category" value="Category: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="category" value="#{expenseCategoryView.category}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Edit"
+                                                 update=":tree"
+                                                 action="#{expenseCategoryView.editCategory()}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Remove"
+                                                 update=":tree"
+                                                 action="#{expenseCategoryView.removeCategory}"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel for="subCategory" value="SubCategory: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="subCategory"
+                                             update=":tree"
+                                             value="#{expenseCategoryView.subCategory}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Edit"
+                                                 update=":tree"
+                                                 action="#{expenseCategoryView.editSubCategory()}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Remove"
+                                                 update=":tree"
+                                                 action="#{expenseCategoryView.removeSubCategory}"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="Cancel"
+                                     update="panel"
+                                     actionListener="#{expenseCategoryView.reset}"/>
+                    <p:commandButton value="Add new"
+                                     update=":tree"
+                                     action="#{expenseCategoryView.add()}"/>
+                </p:panel>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

@@ -1,5 +1,8 @@
 package max93n.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,10 +15,13 @@ public class ExpenseCategory {
 
 
     private String category;
-    private String subCategory;
 
+    @OneToMany(mappedBy = "expenseCategory", cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<ExpenseSubCategory> subCategory;
 
-    @OneToMany(mappedBy = "expenseCategory", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "expenseCategory", cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<ExpenseTransaction> expenseTransactions;
 
 
@@ -39,19 +45,19 @@ public class ExpenseCategory {
         this.category = category;
     }
 
-    public String getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
-
     public List<ExpenseTransaction> getExpenseTransactions() {
         return expenseTransactions;
     }
 
     public void setExpenseTransactions(List<ExpenseTransaction> expenseTransactions) {
         this.expenseTransactions = expenseTransactions;
+    }
+
+    public List<ExpenseSubCategory> getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(List<ExpenseSubCategory> subCategory) {
+        this.subCategory = subCategory;
     }
 }
