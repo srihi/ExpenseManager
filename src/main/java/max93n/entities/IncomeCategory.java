@@ -2,6 +2,7 @@ package max93n.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class IncomeCategory implements Serializable{
@@ -14,6 +15,9 @@ public class IncomeCategory implements Serializable{
 
     @Column(unique = true)
     private String category;
+
+    @OneToMany(mappedBy = "incomeCategory", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<IncomeTransaction> incomeTransactions;
 
     public IncomeCategory() {
     }
@@ -30,7 +34,13 @@ public class IncomeCategory implements Serializable{
         this.category = category;
     }
 
+    public List<IncomeTransaction> getIncomeTransactions() {
+        return incomeTransactions;
+    }
 
+    public void setIncomeTransactions(List<IncomeTransaction> incomeTransactions) {
+        this.incomeTransactions = incomeTransactions;
+    }
 
     public Long getId() {
         return id;
