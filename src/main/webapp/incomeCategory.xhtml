@@ -57,7 +57,7 @@
             <h:form id="newCategoryForm">
                 <p:panel id="panel">
                     <h:outputLabel for="category" value="Category: "/>
-                    <p:inputText id="category" value="#{incomeCategoryView.category}"/>
+                    <p:inputText id="category" value="#{incomeCategoryView.category}" required="true"/>
                 </p:panel>
                 <br/>
                 <p:commandButton value="Cancel" update="panel">

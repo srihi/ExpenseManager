@@ -1,12 +1,8 @@
 package max93n.view;
 
 
-import max93n.entities.Account;
-import max93n.entities.IncomeCategory;
-import max93n.entities.IncomeTransaction;
-import max93n.services.AccountService;
-import max93n.services.IncomeCategoryService;
-import max93n.services.IncomeTransactionService;
+import max93n.entities.*;
+import max93n.services.*;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -14,9 +10,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.faces.model.SelectItemGroup;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @ManagedBean
 @RequestScoped
@@ -32,6 +28,15 @@ public class TransactionView {
     @ManagedProperty("#{incomeCategoryService}")
     private IncomeCategoryService incomeCategoryService;
 
+
+    @ManagedProperty("#{expenseCategoryService}")
+    private ExpenseCategoryService expenseCategoryService;
+
+    @ManagedProperty("#{expenseSubCategoryService}")
+    private ExpenseSubCategoryService expenseSubCategoryService;
+
+
+
     private Date date;
     private Double amount;
     private String payer;
@@ -41,7 +46,10 @@ public class TransactionView {
     private String description;
 
     private List<SelectItem> incomeCategorySelectItems;
+    private List<SelectItem> expenseCategorySelectItems;
 
+
+    private String transactionType;
 
     @PostConstruct
     public void init() {
@@ -49,14 +57,37 @@ public class TransactionView {
         amount = 0.0;
         paymentMethod = "Cash";
 
-        List<IncomeCategory> incomeCategories= incomeCategoryService.getAll();
 
-        incomeCategorySelectItems = new ArrayList<>();
+        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
-        for (IncomeCategory incomeCategory : incomeCategories) {
-            incomeCategorySelectItems.add(new SelectItem(incomeCategory.getCategory(), incomeCategory.getCategory()));
+        Map<String, String[]> map = req.getParameterMap();
+        transactionType = map.get("type")[0];
+
+
+        if (transactionType.equals("income")) {
+            List<IncomeCategory> incomeCategories= incomeCategoryService.getAllEscapeInitial();
+
+            incomeCategorySelectItems = new ArrayList<>();
+
+            for (IncomeCategory incomeCategory : incomeCategories) {
+                incomeCategorySelectItems.add(new SelectItem(incomeCategory.getCategory(), incomeCategory.getCategory()));
+            }
         }
+        else if (transactionType.equals("expense")) {
+            expenseCategorySelectItems = new ArrayList<>();
+            List<ExpenseCategory> expenseCategories = expenseCategoryService.getAll();
+            for (ExpenseCategory expenseCategory : expenseCategories) {
+                SelectItemGroup group = new SelectItemGroup(expenseCategory.getCategory());
 
+                SelectItem [] items = new SelectItem[expenseCategory.getSubCategory().size()];
+                int i = 0;
+                for (ExpenseSubCategory expenseSubCategory : expenseCategory.getSubCategory()) {
+                    items[i++] = new SelectItem(expenseSubCategory.getSubCategory(), expenseSubCategory.getSubCategory());
+                }
+                group.setSelectItems(items);
+                expenseCategorySelectItems.add(group);
+            }
+        }
 
     }
 
@@ -95,7 +126,22 @@ public class TransactionView {
 
 
     private String addExpenseTransaction(String accountName) {
-        //TODO:create addExpenseTransaction
+        ExpenseTransaction expenseTransaction = new ExpenseTransaction();
+        expenseTransaction.setDate(date);
+        expenseTransaction.setAmount(amount);
+        expenseTransaction.setPayer(payer);
+
+        ExpenseSubCategory expenseSubCategory = expenseSubCategoryService.getBySubCategory(subCategory);
+        ExpenseCategory expenseCategory = expenseSubCategory.getExpenseCategory();
+        expenseTransaction.setExpenseCategory(expenseCategory);
+
+        expenseTransaction.setPaymentMethod(paymentMethod);
+        expenseTransaction.setDescription(description);
+        Account account = accountService.getByName(accountName);
+        expenseTransaction.setAccount(account);
+
+
+
         return "dashboard";
     }
 
@@ -186,5 +232,38 @@ public class TransactionView {
 
     public void setIncomeCategorySelectItems(List<SelectItem> incomeCategorySelectItems) {
         this.incomeCategorySelectItems = incomeCategorySelectItems;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public ExpenseCategoryService getExpenseCategoryService() {
+        return expenseCategoryService;
+    }
+
+    public void setExpenseCategoryService(ExpenseCategoryService expenseCategoryService) {
+        this.expenseCategoryService = expenseCategoryService;
+    }
+
+    public List<SelectItem> getExpenseCategorySelectItems() {
+        return expenseCategorySelectItems;
+    }
+
+    public void setExpenseCategorySelectItems(List<SelectItem> expenseCategorySelectItems) {
+        this.expenseCategorySelectItems = expenseCategorySelectItems;
+    }
+
+
+    public ExpenseSubCategoryService getExpenseSubCategoryService() {
+        return expenseSubCategoryService;
+    }
+
+    public void setExpenseSubCategoryService(ExpenseSubCategoryService expenseSubCategoryService) {
+        this.expenseSubCategoryService = expenseSubCategoryService;
     }
 }

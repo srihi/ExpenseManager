@@ -7,7 +7,7 @@ import java.util.List;
 public interface IncomeCategoryService {
 
     IncomeCategory getByCategory(String category);
-    List<IncomeCategory> getAll();
+    List<IncomeCategory> getAllEscapeInitial();
     void save(IncomeCategory incomeCategory);
     void add(IncomeCategory incomeCategory);
     void remove(IncomeCategory incomeCategory);

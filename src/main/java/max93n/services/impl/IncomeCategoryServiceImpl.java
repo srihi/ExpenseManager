@@ -27,8 +27,9 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService{
     }
 
     @Override
-    public List<IncomeCategory> getAll() {
-        return incomeCategoryRepository.findAll();
+    public List<IncomeCategory> getAllEscapeInitial() {
+
+        return incomeCategoryRepository.getAllEscapeInitial();
     }
 
     @Override

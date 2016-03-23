@@ -60,6 +60,10 @@ public class DashboardView {
         return "transaction?account-name=" + accountName + "&type=income&faces-redirect=true";
     }
 
+    public String goToExpanseTransactionView(String accountName) {
+        return "transaction?account-name=" + accountName + "&type=expense&faces-redirect=true";
+    }
+
     public AccountService getAccountService() {
         return accountService;
     }

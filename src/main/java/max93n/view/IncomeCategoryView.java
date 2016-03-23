@@ -25,7 +25,7 @@ public class IncomeCategoryView {
 
     @PostConstruct
     public void init() {
-        incomeCategories = incomeCategoryService.getAll();
+        incomeCategories = incomeCategoryService.getAllEscapeInitial();
     }
 
 

@@ -31,8 +31,10 @@
                     <p:selectOneMenu value="#{transactionView.category}" rendered="#{param['type'] eq 'income'}">
                         <f:selectItems value="#{transactionView.incomeCategorySelectItems}"/>
                     </p:selectOneMenu>
-                    <p:outputLabel value="expense" rendered="#{not param['type'] eq 'income'}"/>
-                    <!--//TODO:add income dropdown-->
+                    <p:selectOneMenu value="#{transactionView.subCategory}" rendered="#{param['type'] eq 'expense'}">
+                        <f:selectItems value="#{transactionView.expenseCategorySelectItems}"/>
+                    </p:selectOneMenu>
+
 
                     <h:outputText value="Payment Method"/>
                     <p:selectOneMenu value="#{transactionView.paymentMethod}">

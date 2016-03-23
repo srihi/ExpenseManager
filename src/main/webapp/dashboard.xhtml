@@ -2,8 +2,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:rich="http://java.sun.com/jsf/html">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 
 
@@ -76,7 +76,7 @@
 
                     <h:form>
                         <p:commandButton value="New Income" action="#{dashboardView.goToIncomeTransactionView(account.name)}"/>
-                        <p:commandButton value="New Expense"/>
+                        <p:commandButton value="New Expense" action="#{dashboardView.goToExpanseTransactionView(account.name)}"/>
                         <p:commandButton value="Summary"/>
                         <p:commandButton value="Charts"/>
                         <p:commandButton value="Schedule"/>
