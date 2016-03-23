@@ -77,6 +77,11 @@ public class DashboardView {
         return "transaction?account-name=" + accountName + "&type=expense&faces-redirect=true";
     }
 
+    public String goToScheduleView(String accountName) {
+        return "schedule?account-name=" + accountName + "&faces-redirect=true";
+    }
+
+
     public AccountService getAccountService() {
         return accountService;
     }
