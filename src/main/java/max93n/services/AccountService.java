@@ -15,6 +15,10 @@ public interface AccountService {
     double getThisWeekIncome(Account account);
     double getThisMonthIncome(Account account);
 
+    double getTodayExpense(Account account);
+    double getThisWeekExpense(Account account);
+    double getThisMonthExpense(Account account);
+
 
     List<Account> getAllByUser(User user);
     boolean add(Account account, double initialBalance);

@@ -5,7 +5,6 @@ import max93n.repositories.AccountRepository;
 import max93n.services.AccountService;
 import max93n.services.IncomeCategoryService;
 import max93n.services.IncomeTransactionService;
-import max93n.validators.BalanceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,10 @@ public class AccountServiceImpl implements AccountService{
 
             balance += income.getAmount();
         }
-        //TODO: add expense to current balance
+        for (ExpenseTransaction expense : account.getExpenseTransactions()) {
+
+            balance -= expense.getAmount();
+        }
 
         return  balance;
     }
@@ -43,10 +45,9 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public double getThisMonthBalance(Account account) {
-
-        return calcSum(account.getIncomeTransactions(), Calendar.MONTH);
-        //TODO: add expense to this month balance
-
+        double balance = calcSum(account.getIncomeTransactions(), Calendar.MONTH);
+        balance -= calcSum(account.getExpenseTransactions(), Calendar.MONTH);
+        return balance;
     }
 
     @Override
@@ -57,6 +58,21 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public double getThisMonthIncome(Account account) {
         return calcSum(account.getIncomeTransactions(), Calendar.MONTH);
+    }
+
+    @Override
+    public double getTodayExpense(Account account) {
+        return calcSum(account.getExpenseTransactions(), Calendar.DAY_OF_WEEK_IN_MONTH);
+    }
+
+    @Override
+    public double getThisWeekExpense(Account account) {
+        return calcSum(account.getExpenseTransactions(), Calendar.WEEK_OF_MONTH);
+    }
+
+    @Override
+    public double getThisMonthExpense(Account account) {
+        return calcSum(account.getExpenseTransactions(), Calendar.MONTH);
     }
 
 

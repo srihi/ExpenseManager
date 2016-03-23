@@ -56,6 +56,19 @@ public class DashboardView {
         return accountService.getThisMonthIncome(account);
     }
 
+    public double getTodayExpense(Account account) {
+        return accountService.getTodayExpense(account);
+    }
+
+    public double getThisWeekExpense(Account account) {
+        return accountService.getThisWeekExpense(account);
+    }
+
+    public double getThisMonthExpense(Account account) {
+        return accountService.getThisMonthExpense(account);
+    }
+
+
     public String goToIncomeTransactionView(String accountName) {
         return "transaction?account-name=" + accountName + "&type=income&faces-redirect=true";
     }

@@ -23,12 +23,18 @@
                     <p:panelGrid styleClass="full-width">
                         <p:row>
                             <p:column><h:outputText value="Current Balance: "/></p:column>
-                            <p:column><h:outputText value="#{dashboardView.getCurrentBalance(account)}"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getCurrentBalance(account)}"
+                                              styleClass="#{dashboardView.getCurrentBalance(account) lt 0 ? 'negative-balance-color':''}"/>
+                            </p:column>
                         </p:row>
 
                         <p:row>
                             <p:column><h:outputText value="This Month Balance: "/></p:column>
-                            <p:column><h:outputText value="#{dashboardView.getThisMonthBalance(account)}"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getThisMonthBalance(account)}"
+                                              styleClass="#{dashboardView.getThisMonthBalance(account) lt 0 ? 'negative-balance-color':''}"/>
+                            </p:column>
                         </p:row>
 
                         <p:row>
@@ -39,13 +45,17 @@
 
                         <p:row>
                             <p:column><h:outputText value="This week income: "/></p:column>
-                            <p:column><h:outputText value="#{dashboardView.getThisWeekIncome(account)}"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getThisWeekIncome(account)}" styleClass="income-color"/>
+                            </p:column>
                         </p:row>
 
 
                         <p:row>
                             <p:column><h:outputText value="This month income: "/></p:column>
-                            <p:column><h:outputText value="#{dashboardView.getThisMonthIncome(account)}"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getThisMonthIncome(account)}" styleClass="income-color"/>
+                            </p:column>
                         </p:row>
 
 
@@ -58,18 +68,24 @@
 
                         <p:row>
                             <p:column><h:outputText value="Today expense: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getTodayExpense(account)}" styleClass="expense-color"/>
+                            </p:column>
                         </p:row>
 
 
                         <p:row>
                             <p:column><h:outputText value="This week expense: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getThisWeekExpense(account)}" styleClass="expense-color"/>
+                            </p:column>
                         </p:row>
 
                         <p:row>
                             <p:column><h:outputText value="This month expense: "/></p:column>
-                            <p:column><h:outputText value="0"/></p:column>
+                            <p:column>
+                                <h:outputText value="#{dashboardView.getThisMonthExpense(account)}" styleClass="expense-color"/>
+                            </p:column>
                         </p:row>
 
                     </p:panelGrid>
