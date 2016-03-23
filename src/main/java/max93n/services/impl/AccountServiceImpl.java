@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public double getTodayExpense(Account account) {
-        return calcSum(account.getExpenseTransactions(), Calendar.DAY_OF_WEEK_IN_MONTH);
+        return calcSum(account.getExpenseTransactions(), Calendar.DATE);
     }
 
     @Override
