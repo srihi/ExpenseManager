@@ -14,7 +14,7 @@
             <ui:include src="templates/commonHeader.xhtml"/>
         </ui:define>
         <ui:define name="content">
-            <p:schedule value="#{scheduleView.eventModel}" ignoreTimezone="false"/>
+            <p:schedule value="#{scheduleView.eventModel}" clientTimeZone="local"/>
         </ui:define>
     </ui:composition>
 
