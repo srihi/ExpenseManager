@@ -8,4 +8,7 @@ public interface ExpenseSubCategoryService {
 
     ExpenseSubCategory getBySubCategory(String subCategory);
     void add(ExpenseCategory expenseCategory, String subCategory);
+    void edit(ExpenseSubCategory expenseSubCategory);
+    void remove(ExpenseSubCategory expenseSubCategory);
+
 }

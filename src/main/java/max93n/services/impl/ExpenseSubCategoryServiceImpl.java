@@ -34,4 +34,14 @@ public class ExpenseSubCategoryServiceImpl implements ExpenseSubCategoryService{
             expenseSubCategoryRepository.saveAndFlush(expenseSubCategory);
         }
     }
+
+    @Override
+    public void edit(ExpenseSubCategory expenseSubCategory) {
+        expenseSubCategoryRepository.saveAndFlush(expenseSubCategory);
+    }
+
+    @Override
+    public void remove(ExpenseSubCategory expenseSubCategory) {
+        expenseSubCategoryRepository.delete(expenseSubCategory.getId());
+    }
 }

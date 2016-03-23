@@ -29,7 +29,7 @@ public class ExpenseCategoryView {
     private String subCategory;
 
     private ExpenseCategory selectedExpenseCategory;
-    private ExpenseSubCategory selectedSubExpenseCategory;
+    private ExpenseSubCategory selectedExpenseSubCategory;
 
     private TreeNode root;
 
@@ -49,13 +49,13 @@ public class ExpenseCategoryView {
 
     public void onNodeSelect(NodeSelectEvent event) {
 
-        if (event.getTreeNode().getChildCount() == 0) {
+        if (event.getTreeNode().getChildCount() == 0 && !event.getTreeNode().getParent().getData().equals("CategoriesRoot")) {
             //selected subCategory
             subCategory = event.getTreeNode().getData().toString();
             category = event.getTreeNode().getParent().getData().toString();
 
             selectedExpenseCategory = expenseCategoryService.getByCategory(category);
-            selectedSubExpenseCategory = expenseSubCategoryService.getBySubCategory(subCategory);
+            selectedExpenseSubCategory = expenseSubCategoryService.getBySubCategory(subCategory);
         }
         else {
             //selected category
@@ -71,6 +71,9 @@ public class ExpenseCategoryView {
     public void add() {
         if (category != null && !category.trim().equals("") && subCategory != null && !subCategory.trim().equals("")) {
             expenseCategoryService.add(category, subCategory);
+            ExpenseCategory expenseCategory = expenseCategoryService.getByCategory(category);
+            expenseSubCategoryService.add(expenseCategory, subCategory);
+            reset();
         }
         init();
     }
@@ -79,38 +82,42 @@ public class ExpenseCategoryView {
         if (category != null && !category.trim().equals("")) {
             selectedExpenseCategory.setCategory(category);
             expenseCategoryService.edit(selectedExpenseCategory);
+            reset();
         }
         init();
     }
 
     public void editSubCategory() {
         if (category != null && !category.trim().equals("") && subCategory != null && !subCategory.trim().equals("")) {
-            //TODO editSubCategory
+            selectedExpenseSubCategory.setSubCategory(subCategory);
+            expenseSubCategoryService.edit(selectedExpenseSubCategory);
+            reset();
         }
         init();
     }
 
     public void removeCategory() {
         if (category != null && !category.trim().equals("")) {
-            //TODO removeCategory
             expenseCategoryService.remove(selectedExpenseCategory);
-            selectedExpenseCategory = null;
-            selectedSubExpenseCategory = null;
+            reset();
         }
         init();
     }
 
     public void removeSubCategory() {
         if (category != null && !category.trim().equals("") && subCategory != null && !subCategory.trim().equals("")) {
-            //TODO removeSubCategory
+            expenseSubCategoryService.remove(selectedExpenseSubCategory);
+            reset();
         }
         init();
     }
 
 
     public void reset() {
-        category = "";
-        subCategory = "";
+        category = null;
+        subCategory = null;
+        selectedExpenseCategory = null;
+        selectedExpenseSubCategory = null;
     }
 
     public String getCategory() {
@@ -159,5 +166,13 @@ public class ExpenseCategoryView {
 
     public void setExpenseSubCategoryService(ExpenseSubCategoryService expenseSubCategoryService) {
         this.expenseSubCategoryService = expenseSubCategoryService;
+    }
+
+    public ExpenseSubCategory getSelectedExpenseSubCategory() {
+        return selectedExpenseSubCategory;
+    }
+
+    public void setSelectedExpenseSubCategory(ExpenseSubCategory selectedExpenseSubCategory) {
+        this.selectedExpenseSubCategory = selectedExpenseSubCategory;
     }
 }

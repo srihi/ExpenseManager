@@ -18,7 +18,7 @@
             <h2>Categories</h2>
 
             <p:tree value="#{expenseCategoryView.root}" var="node" selectionMode="single" id="tree">
-                <p:ajax event="select" listener="#{expenseCategoryView.onNodeSelect}" update=":form"/>
+                <p:ajax event="select" listener="#{expenseCategoryView.onNodeSelect}" update=":form selectPanel"/>
 
                 <p:treeNode>
                     <h:outputText value="#{node}"/>
@@ -27,6 +27,21 @@
 
 
             <h2>Category</h2>
+
+            <p:panel id="selectPanel">
+                <p:panelGrid columns="2">
+                    <h:outputText rendered="#{expenseCategoryView.selectedExpenseCategory != null}"
+                                  value="Category selected: "/>
+                    <h:outputText rendered="#{expenseCategoryView.selectedExpenseCategory != null}"
+                                  value="#{expenseCategoryView.selectedExpenseCategory.category}"/>
+
+                    <h:outputText rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}"
+                                  value="SubCategory selected: "/>
+                    <h:outputText rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}"
+                                  value="#{expenseCategoryView.selectedExpenseSubCategory.subCategory}"/>
+                </p:panelGrid>
+            </p:panel>
+
             <h:form id="form">
                 <p:panel id="panel">
                     <p:panelGrid>
@@ -37,14 +52,14 @@
                             <p:column>
                                 <p:inputText id="category" value="#{expenseCategoryView.category}"/>
                             </p:column>
-                            <p:column>
+                            <p:column rendered="#{expenseCategoryView.selectedExpenseCategory != null}">
                                 <p:commandButton value="Edit"
-                                                 update=":tree"
+                                                 update=":tree  selectPanel panel"
                                                  action="#{expenseCategoryView.editCategory()}"/>
                             </p:column>
-                            <p:column>
+                            <p:column rendered="#{expenseCategoryView.selectedExpenseCategory != null}">
                                 <p:commandButton value="Remove"
-                                                 update=":tree"
+                                                 update=":tree panel  selectPanel panel"
                                                  action="#{expenseCategoryView.removeCategory}"/>
                             </p:column>
                         </p:row>
@@ -55,17 +70,16 @@
                             </p:column>
                             <p:column>
                                 <p:inputText id="subCategory"
-                                             update=":tree"
                                              value="#{expenseCategoryView.subCategory}"/>
                             </p:column>
-                            <p:column>
+                            <p:column rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}">
                                 <p:commandButton value="Edit"
-                                                 update=":tree"
+                                                 update=":tree  selectPanel panel"
                                                  action="#{expenseCategoryView.editSubCategory()}"/>
                             </p:column>
-                            <p:column>
+                            <p:column rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}">
                                 <p:commandButton value="Remove"
-                                                 update=":tree"
+                                                 update=":tree panel selectPanel panel"
                                                  action="#{expenseCategoryView.removeSubCategory}"/>
                             </p:column>
                         </p:row>
@@ -73,10 +87,10 @@
                     </p:panelGrid>
                     <br/>
                     <p:commandButton value="Cancel"
-                                     update="panel"
+                                     update="panel selectPanel"
                                      actionListener="#{expenseCategoryView.reset}"/>
                     <p:commandButton value="Add new"
-                                     update=":tree"
+                                     update=":tree panel selectPanel"
                                      action="#{expenseCategoryView.add()}"/>
                 </p:panel>
             </h:form>
