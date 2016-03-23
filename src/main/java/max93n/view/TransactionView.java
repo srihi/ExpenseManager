@@ -22,6 +22,10 @@ public class TransactionView {
     @ManagedProperty("#{incomeTransactionService}")
     private IncomeTransactionService incomeTransactionService;
 
+    @ManagedProperty("#{expenseTransactionService}")
+    private ExpenseTransactionService expenseTransactionService;
+
+
     @ManagedProperty("#{accountService}")
     private AccountService accountService;
 
@@ -140,7 +144,7 @@ public class TransactionView {
         Account account = accountService.getByName(accountName);
         expenseTransaction.setAccount(account);
 
-
+        expenseTransactionService.add(expenseTransaction);
 
         return "dashboard";
     }
@@ -265,5 +269,13 @@ public class TransactionView {
 
     public void setExpenseSubCategoryService(ExpenseSubCategoryService expenseSubCategoryService) {
         this.expenseSubCategoryService = expenseSubCategoryService;
+    }
+
+    public ExpenseTransactionService getExpenseTransactionService() {
+        return expenseTransactionService;
+    }
+
+    public void setExpenseTransactionService(ExpenseTransactionService expenseTransactionService) {
+        this.expenseTransactionService = expenseTransactionService;
     }
 }

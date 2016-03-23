@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("expenseTransactionService")
 public class ExpenseTransactionServiceImpl implements ExpenseTransactionService {
 
     @Autowired

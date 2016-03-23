@@ -55,22 +55,26 @@
                 <h:form id="editAccountForm">
                     <h:panelGrid columns="2" id="edit-grid">
                         <p:outputLabel for="edit-name" value="Name"/>
-                        <p:inputText id="edit-name" value="#{accountView.currentAccount.name}"
+                        <p:inputText id="edit-name"
+                                     value="#{accountView.currentAccountAndBalance.account.name}"
                                      required="true"
                                      requiredMessage="Enter name"/>
 
                         <p:outputLabel for="edit-description" value="Description"/>
-                        <p:inputText id="edit-description" value="#{accountView.currentAccount.description}"/>
+                        <p:inputText id="edit-description"
+                                     value="#{accountView.currentAccountAndBalance.account.description}"/>
 
                         <p:outputLabel for="edit-currency" value="Currency"/>
-                        <p:selectOneMenu id="edit-currency" value="#{accountView.currentAccount.currency}">
+                        <p:selectOneMenu id="edit-currency"
+                                         value="#{accountView.currentAccountAndBalance.account.currency}">
                             <f:selectItem itemLabel="MDL" itemValue="MDL"/>
                             <f:selectItem itemLabel="EUR" itemValue="EUR"/>
                             <f:selectItem itemLabel="USD" itemValue="USD"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel for="edit-initialBalance" value="Initial Balance"/>
-                        <p:inputText id="edit-initialBalance" value="#{accountView.currentAccount.initialBalance}">
+                        <p:inputText id="edit-initialBalance"
+                                     value="#{accountView.currentAccountAndBalance.balance}">
                             <f:validator validatorId="validators.balanceValidator"/>
                         </p:inputText>
 
@@ -87,39 +91,38 @@
             </p:dialog>
 
 
-
             <h:form>
                 <p:commandButton value="Create account"
                                  onclick="PF('createAccountDialog').show();"/>
             </h:form>
 
-            <p:dataTable value="#{accountView.accounts}" var="account" id="accountsDataTable">
+            <p:dataTable value="#{accountView.accountsAndBalance}" var="accountBalance" id="accountsDataTable">
                 <p:column headerText="Name">
-                    <h:outputText value="#{account.name}"/>
+                    <h:outputText value="#{accountBalance.account.name}"/>
 
                 </p:column>
 
                 <p:column headerText="Description">
-                    <h:outputText value="#{account.description}"/>
+                    <h:outputText value="#{accountBalance.account.description}"/>
                 </p:column>
 
                 <p:column headerText="Currency">
-                    <h:outputText value="#{account.currency}"/>
+                    <h:outputText value="#{accountBalance.account.currency}"/>
                 </p:column>
 
                 <p:column headerText="Initial Balance">
-                    <h:outputText value="#{account.initialBalance}"/>
+                    <h:outputText value="#{accountBalance.balance}"/>
                 </p:column>
 
                 <p:column headerText="Operations">
                     <h:form>
                         <p:commandButton value="Edit"
-                                         action="#{accountView.setCurrentAccount(account)}"
+                                         action="#{accountView.setCurrentAccountAndBalance(accountBalance)}"
                                          update=":editAccountForm"
                                          oncomplete="PF('editAccountDialog').show();"/>
                         <p:commandButton value="Remove"
                                          update="accountsDataTable"
-                                         action="#{accountView.removeAccount(account)}"/>
+                                         action="#{accountView.removeAccount(accountBalance)}"/>
 
                     </h:form>
                 </p:column>

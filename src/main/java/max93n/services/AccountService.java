@@ -17,8 +17,8 @@ public interface AccountService {
 
 
     List<Account> getAllByUser(User user);
-    void add(Account account);
-    void save(Account account);
+    boolean add(Account account, double initialBalance);
+    void save(Account account, double initialBalance);
     void remove(Account account);
     Account getByName(String name);
 }

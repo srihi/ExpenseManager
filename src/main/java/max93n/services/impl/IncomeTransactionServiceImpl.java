@@ -8,6 +8,7 @@ import max93n.services.IncomeTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,16 +22,23 @@ public class IncomeTransactionServiceImpl implements IncomeTransactionService {
     private AccountService accountService;
 
     @Override
+    public IncomeTransaction getInitial(Account account) {
+        return incomeTrancationRepository.getInitial(account);
+    }
+
+    @Override
     public List<IncomeTransaction> getAllByAccount(Account account) {
         return incomeTrancationRepository.getAllByAccount(account);
     }
 
     @Override
     public void add(IncomeTransaction transaction) {
-
         incomeTrancationRepository.saveAndFlush(transaction);
-
     }
 
+    @Override
+    public void save(IncomeTransaction transaction) {
+        incomeTrancationRepository.saveAndFlush(transaction);
+    }
 
 }

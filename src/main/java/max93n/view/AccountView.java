@@ -2,16 +2,20 @@ package max93n.view;
 
 
 import max93n.entities.Account;
+import max93n.entities.IncomeTransaction;
 import max93n.entities.User;
 import max93n.entities.CurrencyEnum;
 import max93n.services.AccountService;
+import max93n.services.IncomeTransactionService;
 import max93n.services.UserService;
+import max93n.utils.AccountAndBalance;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -24,26 +28,38 @@ public class AccountView {
     @ManagedProperty("#{userService}")
     private UserService userService;
 
+    @ManagedProperty("#{incomeTransactionService}")
+    private IncomeTransactionService incomeTransactionService;
+
+
     private String name;
     private String description;
     private String currency;
     private double initialBalance = 0.0;
 
-    private Account currentAccount;
-
-    private List<Account> accounts;
+    private AccountAndBalance currentAccountAndBalance;
 
     private User currentUser;
+
+    private List<AccountAndBalance> accountsAndBalance;
 
     @PostConstruct
     public void init() {
         currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        accounts = accountService.getAllByUser(currentUser);
+        List<Account> accounts = accountService.getAllByUser(currentUser);
+        accountsAndBalance = new ArrayList<>();
+
+        for (Account account : accounts) {
+            IncomeTransaction income = incomeTransactionService.getInitial(account);
+
+            double balance = incomeTransactionService.getInitial(account).getAmount();
+            accountsAndBalance.add(new AccountAndBalance(account, balance));
+        }
     }
 
-    public void removeAccount(Account account) {
-        accountService.remove(account);
-        accounts.remove(account);
+    public void removeAccount(AccountAndBalance accountAndBalance) {
+        accountService.remove(accountAndBalance.getAccount());
+        accountsAndBalance.remove(accountAndBalance);
     }
 
     public void createAccount() {
@@ -51,36 +67,23 @@ public class AccountView {
         account.setName(name);
         account.setDescription(description);
         account.setCurrency(CurrencyEnum.valueOf(currency));
-        account.setInitialBalance(initialBalance);
+
 
         account.setUser(currentUser);
-        accountService.add(account);
-        accounts.add(account);
+        if (accountService.add(account, initialBalance)) {
+            accountsAndBalance.add(new AccountAndBalance(account, initialBalance));
+        }
+
+
     }
 
     public void editAccount() {
 
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        currentAccount.setUser(currentUser);
-        accountService.save(currentAccount);
+        //currentAccount.setUser(currentUser);
+        accountService.save(currentAccountAndBalance.getAccount(), currentAccountAndBalance.getBalance());
     }
 
-    public Account getCurrentAccount() {
-        return currentAccount;
-    }
 
-    public void setCurrentAccount(Account currentAccount) {
-        this.currentAccount = currentAccount;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
-
-    public List<Account> getAccounts() {
-        return accounts;
-    }
 
 
     public UserService getUserService() {
@@ -137,5 +140,29 @@ public class AccountView {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public IncomeTransactionService getIncomeTransactionService() {
+        return incomeTransactionService;
+    }
+
+    public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
+        this.incomeTransactionService = incomeTransactionService;
+    }
+
+    public List<AccountAndBalance> getAccountsAndBalance() {
+        return accountsAndBalance;
+    }
+
+    public void setAccountsAndBalance(List<AccountAndBalance> accountsAndBalance) {
+        this.accountsAndBalance = accountsAndBalance;
+    }
+
+    public AccountAndBalance getCurrentAccountAndBalance() {
+        return currentAccountAndBalance;
+    }
+
+    public void setCurrentAccountAndBalance(AccountAndBalance currentAccountAndBalance) {
+        this.currentAccountAndBalance = currentAccountAndBalance;
     }
 }

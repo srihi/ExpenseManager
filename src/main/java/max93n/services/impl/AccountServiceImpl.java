@@ -1,11 +1,10 @@
 package max93n.services.impl;
 
-import max93n.entities.Account;
-import max93n.entities.AppTransaction;
-import max93n.entities.IncomeTransaction;
-import max93n.entities.User;
+import max93n.entities.*;
 import max93n.repositories.AccountRepository;
 import max93n.services.AccountService;
+import max93n.services.IncomeCategoryService;
+import max93n.services.IncomeTransactionService;
 import max93n.validators.BalanceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,13 @@ public class AccountServiceImpl implements AccountService{
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    IncomeCategoryService incomeCategoryService;
+
+    @Autowired
+    IncomeTransactionService incomeTransactionService;
+
+
     @Override
     public double getCurrentBalance(Account account) {
 
@@ -30,7 +36,8 @@ public class AccountServiceImpl implements AccountService{
             balance += income.getAmount();
         }
         //TODO: add expense to current balance
-        return  balance + account.getInitialBalance();
+
+        return  balance;
     }
 
 
@@ -81,19 +88,33 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public void add(Account account) {
+    public boolean add(Account account, double initialBalance) {
         Account a = getByName(account.getName());
 
         if (a != null) {
-            return;
+            return false;
         }
-
         accountRepository.saveAndFlush(account);
+
+        IncomeTransaction incomeTransaction = new IncomeTransaction();
+        incomeTransaction.setDate(new Date());
+        incomeTransaction.setAmount(initialBalance);
+        incomeTransaction.setPayer("Self");
+        IncomeCategory incomeCategory = incomeCategoryService.getByCategory("Initial Balance");
+        incomeTransaction.setIncomeCategory(incomeCategory);
+        incomeTransaction.setPaymentMethod("Cash");
+        incomeTransaction.setDescription("Initial Balance");
+        incomeTransaction.setAccount(account);
+        incomeTransactionService.add(incomeTransaction);
+        return true;
     }
 
     @Override
-    public void save(Account account) {
+    public void save(Account account, double initialBalance) {
         accountRepository.saveAndFlush(account);
+        IncomeTransaction incomeTransaction= incomeTransactionService.getInitial(account);
+        incomeTransaction.setAmount(initialBalance);
+        incomeTransactionService.save(incomeTransaction);
     }
 
     @Override
