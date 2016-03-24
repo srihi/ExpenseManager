@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="custom_include">
+            <h:outputStylesheet library="c3" name="c3.css"/>
+            <h:outputScript library="c3" name="d3.min.js"/>
+            <h:outputScript library="c3" name="c3.min.js"/>
+        </ui:define>
+
+        <ui:define name="title">
+            Charts
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+
+            <p:panel>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="filter" value="Filter:"/>
+                    <p:selectOneRadio id="filter" value="#{chartsView.filter}">
+                        <f:selectItem itemLabel="All" itemValue="All"/>
+                        <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
+                        <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
+                        <f:selectItem itemLabel="Yearly" itemValue="Yearly"/>
+
+                        <p:ajax event="change" update="tabView"
+                                listener="#{chartsView.filterChanged()}"/>
+                    </p:selectOneRadio>
+                </h:panelGrid>
+            </p:panel>
+            <p:tabView value="#{chartsView.tabs}" var="tab" id="tabView">
+                <p:tab title="#{tab.toString()}">
+                    <div id="chart"></div>
+                </p:tab>
+            </p:tabView>
+
+            <script type="application/javascript">
+                var chart = c3.generate(#{chartsView.jsonString});
+
+            </script>
+
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>

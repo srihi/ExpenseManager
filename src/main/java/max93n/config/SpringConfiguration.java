@@ -1,10 +1,14 @@
 package max93n.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import max93n.chart.c3.ChartC3ModelJson;
+import max93n.chart.c3.model.*;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -56,6 +60,75 @@ public class SpringConfiguration {
         dataSource.setUsername("root");
         dataSource.setPassword("root");
         return dataSource;
+    }
+
+
+    @Bean
+    public ChartC3ModelJson myChartJson() {
+        ChartC3ModelJson myChartJson = new ChartC3ModelJson();
+        myChartJson.setBindto("#chart");
+
+        Data data = new Data();
+        data.setType("bar");
+        data.setColumns(new String[][]{
+                {"Data", "40", "10", "30", "15"}
+        });
+
+        myChartJson.setData(data);
+        return myChartJson;
+    }
+
+    @Bean
+    public ChartC3ModelJson horizontalBarChartJson() {
+        ChartC3ModelJson chart = new ChartC3ModelJson();
+        chart.setBindto("#chart");
+
+
+        // data configuration
+        Data data = new Data();
+        data.setType("bar");
+
+        Map<String, String> axes = new HashMap<>();
+        axes.put("expense", "y");
+        data.setAxes(axes);
+
+        Map<String, String> colors = new HashMap<>();
+        colors.put("expense", "#ff0000");
+        data.setColors(colors);
+
+        data.setLabels(true);
+        chart.setData(data);
+
+        data.setX("headers");
+
+        //  bar configuration
+        Bar bar = new Bar();
+        Width width = new Width();
+        width.setRatio(0.5);
+        bar.setWidth(width);
+        chart.setBar(bar);
+
+        //axis configuration
+        Axis axis = new Axis();
+        X x = new X();
+        x.setType("category");
+        x.setShow(true);
+        axis.setX(x);
+        axis.setRotated(true);
+        chart.setAxis(axis);
+
+        //grid configuration
+        Grid grid = new Grid();
+        X xGrid = new X();
+        xGrid.setShow(true);
+        chart.setGrid(grid);
+
+        //legend configuration
+        Legend legend = new Legend();
+        legend.setShow(false);
+        chart.setLegend(legend);
+
+        return chart;
     }
 
 }

@@ -3,6 +3,7 @@ package max93n.services.impl;
 import max93n.entities.*;
 import max93n.repositories.AccountRepository;
 import max93n.services.AccountService;
+import max93n.services.ExpenseTransactionService;
 import max93n.services.IncomeCategoryService;
 import max93n.services.IncomeTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     IncomeTransactionService incomeTransactionService;
+
+    @Autowired
+    ExpenseTransactionService expenseTransactionService;
 
 
     @Override
@@ -74,7 +78,6 @@ public class AccountServiceImpl implements AccountService{
     public double getThisMonthExpense(Account account) {
         return calcSum(account.getExpenseTransactions(), Calendar.MONTH);
     }
-
 
     private double calcSum(List<? extends AppTransaction> transactions, int calType) {
         Calendar calender = Calendar.getInstance();

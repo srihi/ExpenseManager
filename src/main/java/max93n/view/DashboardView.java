@@ -81,6 +81,9 @@ public class DashboardView {
         return "schedule?account-name=" + accountName + "&faces-redirect=true";
     }
 
+    public String goToChartsView(String accountName) {
+        return "charts?account-name=" + accountName + "&faces-redirect=true";
+    }
 
     public AccountService getAccountService() {
         return accountService;
