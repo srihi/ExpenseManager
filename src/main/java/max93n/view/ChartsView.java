@@ -7,7 +7,6 @@ import max93n.chart.c3.ChartC3ModelJson;
 import max93n.chart.c3.model.Data;
 import max93n.entities.Account;
 import max93n.entities.ExpenseCategory;
-import max93n.entities.ExpenseTransaction;
 import max93n.services.AccountService;
 import max93n.services.ExpenseCategoryService;
 import max93n.services.ExpenseTransactionService;
@@ -28,7 +27,10 @@ public class ChartsView {
 
     private String jsonString;
 
-    private List<String> tabs;
+    // title, jsonString
+    private Map<String, String> tabs;
+    private List<String> tabKeys;
+
 
     @ManagedProperty("#{accountService}")
     private AccountService accountService;
@@ -43,65 +45,128 @@ public class ChartsView {
     @ManagedProperty("#{horizontalBarChartJson}")
     private ChartC3ModelJson horizontalBarChartJson;
 
+    private Account account;
+
     @PostConstruct
     public void init() {
         filter = "All";
 
         String accountName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("account-name");
 
-        Account account = accountService.getByName(accountName);
+        account = accountService.getByName(accountName);
 
-        Date firstDate = expenseTransactionService.getFirstDateOfExpense(account);
-        Date lastDate = expenseTransactionService.getLastDateOfExpense(account);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        tabs = new ArrayList<>();
-        tabs.add(format.format(firstDate) + " - " + format.format(lastDate));
-
-
-        Data data = horizontalBarChartJson.getData();
-        List<ExpenseCategory> expenseCategories = expenseCategoryService.getAll();
-
-
-        List<String> headersList = new ArrayList<>();
-        headersList.add("headers");
-        List<String> expenseList = new ArrayList<>();
-        expenseList.add("expense");
-        final String[] s = new String[]{};
-        for (ExpenseCategory expenseCategory : expenseCategories) {
-
-            Double sum = expenseTransactionService.getSumFormCategory(account, expenseCategory);
-            if (sum != null) {
-                headersList.add(expenseCategory.getCategory());
-                expenseList.add(String.valueOf(sum.doubleValue()));
-            }
-
-        }
-
-        data.setColumns(new String[][]{
-                headersList.toArray(s),
-                expenseList.toArray(s)
-
-        });
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            jsonString = mapper.writeValueAsString(horizontalBarChartJson);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        generateTabForAllPeriod();
     }
 
     public void filterChanged() {
-        System.out.println(filter);
+        if (filter.equals("All")) {
+            generateTabForAllPeriod();
+        }
+        else if (filter.equals("Weekly")) {
+            generateTabs(expenseTransactionService.getByWeeks(account));
+        }
+        else if (filter.equals("Monthly")) {
+            generateTabs(expenseTransactionService.getByMonths(account));
+        }
+        else if (filter.equals("Yearly")) {
+            generateTabs(expenseTransactionService.getByYears(account));
+        }
     }
 
-    public List<String> getTabs() {
+    public void generateTabForAllPeriod() {
+        generateTabs(expenseTransactionService.getByAllPeriod(account));
+    }
+
+    private void generateTabs(List<Object[]> list) {
+        tabs = new LinkedHashMap<>();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        // generation of map
+        // key: week number, value - array of objects: min date, max date, sum, expenseCategory
+        Map<String, List<Object[]>> map = new LinkedHashMap<>();
+        for (Object[] objArr : list) {
+            String dateStr = Integer.toString((Integer) objArr[0]);
+
+            if (map.containsKey(dateStr)) {
+                List<Object[]> tempList = map.get(dateStr);
+                tempList.add(new Object[]{
+                        objArr[1], objArr[2], objArr[3], objArr[4]
+                });
+            } else {
+                List<Object[]> tempList = new ArrayList<>();
+                tempList.add(new Object[]{
+                        objArr[1], objArr[2], objArr[3], objArr[4]
+                });
+                map.put(dateStr, tempList);
+            }
+        }
+
+        final String[] s = new String[]{};
+
+
+
+        // key: week number, value - array of objects: min date, max date, sum, expenseCategory
+        for (Map.Entry<String, List<Object[]>> entry : map.entrySet()) {
+
+            Data data = horizontalBarChartJson.getData();
+
+            List<String> headersList = new ArrayList<>();
+            headersList.add("headers");
+            List<String> expenseList = new ArrayList<>();
+            expenseList.add("expense");
+
+            // setting tab-title
+            Iterator<Object[]> iter = entry.getValue().iterator();
+            Object[] arr = iter.next();
+            Date minDate = (Date) arr[0];
+            Date maxDate = (Date) arr[1];
+            while (iter.hasNext()) {
+                arr = iter.next();
+
+                Date nextMinDate = (Date) arr[0];
+                Date nextMaxDate = (Date) arr[1];
+
+                if (minDate.getTime() > nextMinDate.getTime()) {
+                    minDate.setTime(nextMinDate.getTime());
+                }
+
+                if (maxDate.getTime() < nextMaxDate.getTime()) {
+                    maxDate.setTime(nextMaxDate.getTime());
+                }
+            }
+            String title = format.format(minDate) + " - " + format.format(maxDate);
+
+            // generation
+            iter = entry.getValue().iterator();
+            while (iter.hasNext()) {
+                arr = iter.next();
+                headersList.add(((ExpenseCategory)arr[3]).getCategory());
+                expenseList.add(String.valueOf((double)arr[2]));
+            }
+
+            data.setColumns(new String[][]{
+                    headersList.toArray(s),
+                    expenseList.toArray(s)
+            });
+
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                horizontalBarChartJson.setBindto("#id" + title.replace(" ", ""));
+                tabs.put(title, mapper.writeValueAsString(horizontalBarChartJson));
+                tabKeys = new ArrayList<>(tabs.keySet());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public Map<String, String> getTabs() {
         return tabs;
     }
 
-    public void setTabs(List<String> tabs) {
+    public void setTabs(Map<String, String> tabs) {
         this.tabs = tabs;
     }
 
@@ -155,7 +220,20 @@ public class ChartsView {
         this.expenseCategoryService = expenseCategoryService;
     }
 
+    public Account getAccount() {
+        return account;
+    }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
+    public List<String> getTabKeys() {
+        return tabKeys;
+    }
+
+    public void setTabKeys(List<String> tabKeys) {
+        this.tabKeys = tabKeys;
+    }
 }
 

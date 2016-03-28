@@ -25,6 +25,26 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
     }
 
     @Override
+    public List<Object[]> getByWeeks(Account account) {
+        return expenseTransactionRepository.getByWeeks(account);
+    }
+
+    @Override
+    public List<Object[]> getByMonths(Account account) {
+        return expenseTransactionRepository.getByMonths(account);
+    }
+
+    @Override
+    public List<Object[]> getByYears(Account account) {
+        return expenseTransactionRepository.getByYears(account);
+    }
+
+    @Override
+    public List<Object[]> getByAllPeriod(Account account) {
+        return expenseTransactionRepository.getByAllPeriod(account);
+    }
+
+    @Override
     public void add(ExpenseTransaction transaction) {
         expenseTransactionRepository.saveAndFlush(transaction);
     }

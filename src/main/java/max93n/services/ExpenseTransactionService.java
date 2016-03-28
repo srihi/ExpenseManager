@@ -10,7 +10,14 @@ import java.util.List;
 public interface ExpenseTransactionService {
 
     List<ExpenseTransaction> getAllByAccount(Account account);
+    List<Object[]> getByWeeks(Account account);
+    List<Object[]> getByMonths(Account account);
+    List<Object[]> getByYears(Account account);
+    List<Object[]> getByAllPeriod(Account account);
+
+
     void add(ExpenseTransaction transaction);
+
 
     Date getFirstDateOfExpense(Account account);
     Date getLastDateOfExpense(Account account);

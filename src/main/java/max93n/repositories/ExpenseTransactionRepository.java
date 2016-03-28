@@ -15,6 +15,35 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
     @Query("select e from ExpenseTransaction e where e.account = :account")
     List<ExpenseTransaction> getAllByAccount(@Param("account") Account account);
 
+    @Query(value = "select week(e.date),min(e.date), max(e.date), sum(e.amount), e.expenseCategory" +
+            " from ExpenseTransaction e " +
+            " where e.account = :account" +
+            " group by week(e.date), e.expenseCategory" +
+            " order by min(e.date)")
+    List<Object[]> getByWeeks(@Param("account") Account account);
+
+    @Query(value = "select month(e.date),min(e.date), max(e.date), sum(e.amount), e.expenseCategory" +
+            " from ExpenseTransaction e " +
+            " where e.account = :account" +
+            " group by week(e.date), e.expenseCategory" +
+            " order by min(e.date)")
+    List<Object[]> getByMonths(@Param("account") Account account);
+
+    @Query(value = "select year(e.date),min(e.date), max(e.date), sum(e.amount), e.expenseCategory" +
+            " from ExpenseTransaction e " +
+            " where e.account = :account" +
+            " group by year(e.date), e.expenseCategory" +
+            " order by min(e.date)")
+    List<Object[]> getByYears(@Param("account") Account account);
+
+    @Query(value = "select 1,min(e.date), max(e.date), sum(e.amount), e.expenseCategory" +
+            " from ExpenseTransaction e " +
+            " where e.account = :account" +
+            " group by e.expenseCategory" +
+            " order by min(e.date)")
+    List<Object[]> getByAllPeriod(@Param("account") Account account);
+
+
     @Query("select min(e.date) from ExpenseTransaction e where e.account = :account")
     Date getFirstDateOfExpense(@Param("account") Account account);
 
