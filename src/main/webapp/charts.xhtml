@@ -39,10 +39,6 @@
             <p:tabView value="#{chartsView.tabKeys}" var="tabKey" id="tabView">
                 <p:tab title="#{tabKey}">
                     <div id='id#{tabKey.replace(" ", "")}'></div>
-                    #{tabKey}
-                    <br/>
-                    #{chartsView.tabs[tabKey]}
-                    <br/>
                     <script type="application/javascript">
                         var chart = c3.generate(#{chartsView.tabs[tabKey]});
                     </script>
