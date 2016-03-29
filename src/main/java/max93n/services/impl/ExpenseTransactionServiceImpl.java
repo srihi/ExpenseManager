@@ -45,6 +45,11 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
     }
 
     @Override
+    public List<Object[]> getSumGroupedByMonthsOfYear(Account account) {
+        return expenseTransactionRepository.getSumGroupedByMonthsOfYear(account);
+    }
+
+    @Override
     public void add(ExpenseTransaction transaction) {
         expenseTransactionRepository.saveAndFlush(transaction);
     }

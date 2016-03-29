@@ -16,6 +16,8 @@ public interface ExpenseTransactionService {
     List<Object[]> getByAllPeriod(Account account);
 
 
+    List<Object[]> getSumGroupedByMonthsOfYear(Account account);
+
     void add(ExpenseTransaction transaction);
 
 

@@ -17,4 +17,13 @@ public interface IncomeTrancationRepository extends JpaRepository<IncomeTransact
 
     @Query("select i from IncomeTransaction i where i.account = :account")
     List<IncomeTransaction> getAllByAccount(@Param("account") Account account);
+
+    @Query(value = "select month(i.date), year(i.date), sum(i.amount)" +
+            " from IncomeTransaction i " +
+            " where i.account = :account" +
+            " group by month(i.date)" +
+            " order by year(i.date)")
+    List<Object[]> getSumGroupedByMonthsOfYear(@Param("account") Account account);
+
+
 }

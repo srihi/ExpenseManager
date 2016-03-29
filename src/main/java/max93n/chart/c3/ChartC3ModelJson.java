@@ -18,6 +18,16 @@ public class ChartC3ModelJson implements Serializable{
 
     private Legend legend;
 
+    private Color color;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public Data getData() {
         return data;
     }

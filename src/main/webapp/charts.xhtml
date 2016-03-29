@@ -20,11 +20,24 @@
             <ui:include src="templates/commonHeader.xhtml"/>
         </ui:define>
         <ui:define name="content">
-
             <p:panel>
-                <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="filter" value="Filter:"/>
-                    <h:form>
+                <h:form>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="chartType" value="Chart type:"/>
+                        <p:selectOneRadio id="chartType" value="#{chartsView.chartType}">
+                            <f:selectItem itemLabel="Expenses by Category Chart" itemValue="1"/>
+                            <f:selectItem itemLabel="Monthly incomes/expenses chart" itemValue="2"/>
+                            <p:ajax event="change" update=":tabView :charFilterPanel"
+                                    listener="#{chartsView.chartTypeChanged()}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+
+            <p:panel id="charFilterPanel">
+                <h:form rendered="#{chartsView.filterNeed}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="filter" value="Filter:"/>
                         <p:selectOneRadio id="filter" value="#{chartsView.filter}">
                             <f:selectItem itemLabel="All" itemValue="All"/>
                             <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
@@ -33,8 +46,8 @@
                             <p:ajax event="change" update="tabView"
                                     listener="#{chartsView.filterChanged()}"/>
                         </p:selectOneRadio>
-                    </h:form>
-                </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
             </p:panel>
             <p:tabView value="#{chartsView.tabKeys}" var="tabKey" id="tabView">
                 <p:tab title="#{tabKey}">
@@ -42,7 +55,6 @@
                     <script type="application/javascript">
                         var chart = c3.generate(#{chartsView.tabs[tabKey]});
                     </script>
-
                 </p:tab>
             </p:tabView>
         </ui:define>

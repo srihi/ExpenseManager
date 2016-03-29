@@ -79,7 +79,7 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public ChartC3ModelJson horizontalBarChartJson() {
+    public ChartC3ModelJson verticalBarChartJson() {
         ChartC3ModelJson chart = new ChartC3ModelJson();
         chart.setBindto("#chart");
 
@@ -126,6 +126,57 @@ public class SpringConfiguration {
         //legend configuration
         Legend legend = new Legend();
         legend.setShow(false);
+        chart.setLegend(legend);
+
+        return chart;
+    }
+
+
+    @Bean
+    public ChartC3ModelJson horizontalBarChartJson() {
+        ChartC3ModelJson chart = new ChartC3ModelJson();
+        chart.setBindto("#chart");
+
+        Color color = new Color();
+        color.setPattern(
+                new String[] {
+                        "#ee0000", "#00dd00"
+                }
+        );
+        chart.setColor(color);
+
+        // data configuration
+        Data data = new Data();
+        data.setType("bar");
+        data.setLabels(true);
+        chart.setData(data);
+        data.setX("months");
+
+        //  bar configuration
+        Bar bar = new Bar();
+        Width width = new Width();
+        width.setRatio(0.5);
+        bar.setWidth(width);
+        chart.setBar(bar);
+
+        //axis configuration
+        Axis axis = new Axis();
+        X x = new X();
+        x.setType("category");
+        x.setShow(true);
+        axis.setX(x);
+        axis.setRotated(false);
+        chart.setAxis(axis);
+
+        //grid configuration
+        Grid grid = new Grid();
+        X xGrid = new X();
+        xGrid.setShow(true);
+        chart.setGrid(grid);
+
+        //legend configuration
+        Legend legend = new Legend();
+        legend.setShow(true);
         chart.setLegend(legend);
 
         return chart;

@@ -27,6 +27,11 @@ public class IncomeTransactionServiceImpl implements IncomeTransactionService {
     }
 
     @Override
+    public List<Object[]> getSumGroupedByMonthsOfYear(Account account) {
+        return incomeTrancationRepository.getSumGroupedByMonthsOfYear(account);
+    }
+
+    @Override
     public List<IncomeTransaction> getAllByAccount(Account account) {
         return incomeTrancationRepository.getAllByAccount(account);
     }

@@ -1,8 +1,7 @@
 package max93n.view;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import max93n.chart.c3.ChartC3ModelJson;
 import max93n.chart.c3.model.Data;
 import max93n.entities.Account;
@@ -10,6 +9,7 @@ import max93n.entities.ExpenseCategory;
 import max93n.services.AccountService;
 import max93n.services.ExpenseCategoryService;
 import max93n.services.ExpenseTransactionService;
+import max93n.services.IncomeTransactionService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -23,6 +23,29 @@ import java.util.*;
 @ViewScoped
 public class ChartsView {
 
+
+    @ManagedProperty("#{accountService}")
+    private AccountService accountService;
+
+    @ManagedProperty("#{expenseTransactionService}")
+    private ExpenseTransactionService expenseTransactionService;
+
+    @ManagedProperty("#{incomeTransactionService}")
+    private IncomeTransactionService incomeTransactionService;
+
+    @ManagedProperty("#{expenseCategoryService}")
+    private ExpenseCategoryService expenseCategoryService;
+
+
+    @ManagedProperty("#{verticalBarChartJson}")
+    private ChartC3ModelJson verticalBarChartJson;
+
+    @ManagedProperty("#{horizontalBarChartJson}")
+    private ChartC3ModelJson horizontalBarChartJson;
+
+
+    private int chartType;
+
     private String filter;
 
     private String jsonString;
@@ -31,21 +54,10 @@ public class ChartsView {
     private Map<String, String> tabs;
     private List<String> tabKeys;
 
-
-    @ManagedProperty("#{accountService}")
-    private AccountService accountService;
-
-    @ManagedProperty("#{expenseTransactionService}")
-    private ExpenseTransactionService expenseTransactionService;
-
-    @ManagedProperty("#{expenseCategoryService}")
-    private ExpenseCategoryService expenseCategoryService;
-
-
-    @ManagedProperty("#{horizontalBarChartJson}")
-    private ChartC3ModelJson horizontalBarChartJson;
-
     private Account account;
+
+    private boolean filterNeed;
+
 
     @PostConstruct
     public void init() {
@@ -56,22 +68,126 @@ public class ChartsView {
         account = accountService.getByName(accountName);
 
         generateTabForAllPeriod();
+        filterNeed = true;
+        chartType = 1;
     }
+
+    public void chartTypeChanged() {
+        if (chartType == 1) {
+            filterNeed = true;
+            filterChanged();
+        } else {
+            generateTabForIncomeExpense();
+            filterNeed = false;
+        }
+    }
+
 
     public void filterChanged() {
         if (filter.equals("All")) {
             generateTabForAllPeriod();
-        }
-        else if (filter.equals("Weekly")) {
+        } else if (filter.equals("Weekly")) {
             generateTabs(expenseTransactionService.getByWeeks(account));
-        }
-        else if (filter.equals("Monthly")) {
+        } else if (filter.equals("Monthly")) {
             generateTabs(expenseTransactionService.getByMonths(account));
-        }
-        else if (filter.equals("Yearly")) {
+        } else if (filter.equals("Yearly")) {
             generateTabs(expenseTransactionService.getByYears(account));
         }
     }
+
+    /**
+     * Generate map
+     *
+     * @param map  target map
+     * @param list contain: month, year, sum. Grouped by month
+     * @param pos  index in Double[]. 0 - expense, 1 - income
+     */
+    private void generateMap(Map<Integer, Map<Integer, Double[]>> map, List<Object[]> list, int pos) {
+        for (Object[] objArr : list) {
+            Integer yearKey = (Integer) objArr[1];
+            Integer monthKey = (Integer) objArr[0];
+            if (map.containsKey(yearKey)) {
+                Map<Integer, Double[]> subMap = map.get(yearKey);
+                Double[] sumArray = new Double[2];
+                if (subMap.containsKey(monthKey)) {
+                    subMap.get(monthKey)[pos] = (Double) objArr[2];
+
+                } else {
+                    sumArray[pos] = (Double) objArr[2];
+                    subMap.put(monthKey, sumArray);
+                }
+
+            } else {
+                Map<Integer, Double[]> subMap = new TreeMap<>();
+                Double[] sumArray = new Double[2];
+                sumArray[pos] = (Double) objArr[2];
+
+                subMap.put(monthKey, sumArray);
+                map.put(yearKey, subMap);
+            }
+        }
+    }
+
+    public void generateTabForIncomeExpense() {
+
+        List<String> headersList = new ArrayList<>();
+        headersList.add("months");
+        List<String> expenseList = new ArrayList<>();
+        expenseList.add("expense");
+        List<String> incomeList = new ArrayList<>();
+        incomeList.add("income");
+
+        tabs = new LinkedHashMap<>();
+        String title = "Monthly incomes expenses";
+
+
+        List<Object[]> expenseTransactions = expenseTransactionService.getSumGroupedByMonthsOfYear(account);
+        List<Object[]> incomeTransactions = incomeTransactionService.getSumGroupedByMonthsOfYear(account);
+
+        Map<Integer, Map<Integer, Double[]>> map = new TreeMap<>();
+        generateMap(map, expenseTransactions, 0);
+        generateMap(map, incomeTransactions, 1);
+
+
+        Data data = horizontalBarChartJson.getData();
+
+        for (Map.Entry<Integer, Map<Integer, Double[]>> entry : map.entrySet()) {
+
+            for (Map.Entry<Integer, Double[]> subEntry : entry.getValue().entrySet()) {
+                headersList.add(entry.getKey() + " " + subEntry.getKey());
+
+                if (subEntry.getValue()[0] == null) {
+                    expenseList.add("0.0");
+                }
+                else {
+                    expenseList.add(String.valueOf(subEntry.getValue()[0]));
+                }
+
+                if (subEntry.getValue()[1] == null) {
+                    incomeList.add("0.0");
+                }
+                else {
+                    incomeList.add(String.valueOf(subEntry.getValue()[1]));
+                }
+            }
+        }
+
+        final String[] s = new String[]{};
+        data.setColumns(new String[][]{
+                headersList.toArray(s),
+                expenseList.toArray(s),
+                incomeList.toArray(s)
+        });
+
+        horizontalBarChartJson.setData(data);
+
+        Gson gson = new Gson();
+        horizontalBarChartJson.setBindto("#id" + title.replace(" ", ""));
+        tabs.put(title, gson.toJson(horizontalBarChartJson));
+        tabKeys = new ArrayList<>(tabs.keySet());
+
+    }
+
 
     public void generateTabForAllPeriod() {
         generateTabs(expenseTransactionService.getByAllPeriod(account));
@@ -105,11 +221,10 @@ public class ChartsView {
         final String[] s = new String[]{};
 
 
-
         // key: week number, value - array of objects: min date, max date, sum, expenseCategory
         for (Map.Entry<String, List<Object[]>> entry : map.entrySet()) {
 
-            Data data = horizontalBarChartJson.getData();
+            Data data = verticalBarChartJson.getData();
 
             List<String> headersList = new ArrayList<>();
             headersList.add("headers");
@@ -141,8 +256,8 @@ public class ChartsView {
             iter = entry.getValue().iterator();
             while (iter.hasNext()) {
                 arr = iter.next();
-                headersList.add(((ExpenseCategory)arr[3]).getCategory());
-                expenseList.add(String.valueOf((double)arr[2]));
+                headersList.add(((ExpenseCategory) arr[3]).getCategory());
+                expenseList.add(String.valueOf((double) arr[2]));
             }
 
             data.setColumns(new String[][]{
@@ -150,14 +265,10 @@ public class ChartsView {
                     expenseList.toArray(s)
             });
 
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                horizontalBarChartJson.setBindto("#id" + title.replace(" ", ""));
-                tabs.put(title, mapper.writeValueAsString(horizontalBarChartJson));
-                tabKeys = new ArrayList<>(tabs.keySet());
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            Gson gson = new Gson();
+            verticalBarChartJson.setBindto("#id" + title.replace(" ", ""));
+            tabs.put(title, gson.toJson(verticalBarChartJson));
+            tabKeys = new ArrayList<>(tabs.keySet());
         }
     }
 
@@ -187,12 +298,12 @@ public class ChartsView {
         this.jsonString = jsonString;
     }
 
-    public ChartC3ModelJson getHorizontalBarChartJson() {
-        return horizontalBarChartJson;
+    public ChartC3ModelJson getVerticalBarChartJson() {
+        return verticalBarChartJson;
     }
 
-    public void setHorizontalBarChartJson(ChartC3ModelJson horizontalBarChartJson) {
-        this.horizontalBarChartJson = horizontalBarChartJson;
+    public void setVerticalBarChartJson(ChartC3ModelJson verticalBarChartJson) {
+        this.verticalBarChartJson = verticalBarChartJson;
     }
 
     public AccountService getAccountService() {
@@ -234,6 +345,38 @@ public class ChartsView {
 
     public void setTabKeys(List<String> tabKeys) {
         this.tabKeys = tabKeys;
+    }
+
+    public int getChartType() {
+        return chartType;
+    }
+
+    public void setChartType(int chartType) {
+        this.chartType = chartType;
+    }
+
+    public boolean isFilterNeed() {
+        return filterNeed;
+    }
+
+    public void setFilterNeed(boolean filterNeed) {
+        this.filterNeed = filterNeed;
+    }
+
+    public ChartC3ModelJson getHorizontalBarChartJson() {
+        return horizontalBarChartJson;
+    }
+
+    public void setHorizontalBarChartJson(ChartC3ModelJson horizontalBarChartJson) {
+        this.horizontalBarChartJson = horizontalBarChartJson;
+    }
+
+    public IncomeTransactionService getIncomeTransactionService() {
+        return incomeTransactionService;
+    }
+
+    public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
+        this.incomeTransactionService = incomeTransactionService;
     }
 }
 

@@ -11,6 +11,9 @@ public interface IncomeTransactionService {
 
     IncomeTransaction getInitial(Account account);
 
+
+    List<Object[]> getSumGroupedByMonthsOfYear(Account account);
+
     List<IncomeTransaction> getAllByAccount(Account account);
     void add(IncomeTransaction transaction);
     void save(IncomeTransaction transaction);

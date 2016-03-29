@@ -1,5 +1,6 @@
 package max93n.chart.c3.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Data {
@@ -9,6 +10,11 @@ public class Data {
     private String type;
     private Map<String, String> axes;
     private Map<String, String> colors;
+
+    public Data() {
+        axes = new HashMap<>();
+        colors = new HashMap<>();
+    }
 
     //TODO:add format to labels
     private Boolean labels;

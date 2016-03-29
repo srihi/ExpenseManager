@@ -44,6 +44,15 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
     List<Object[]> getByAllPeriod(@Param("account") Account account);
 
 
+    @Query(value = "select month(e.date), year(e.date), sum(e.amount)" +
+            " from ExpenseTransaction e " +
+            " where e.account = :account" +
+            " group by month(e.date)" +
+            " order by year(e.date)")
+    List<Object[]> getSumGroupedByMonthsOfYear(@Param("account") Account account);
+
+
+
     @Query("select min(e.date) from ExpenseTransaction e where e.account = :account")
     Date getFirstDateOfExpense(@Param("account") Account account);
 
