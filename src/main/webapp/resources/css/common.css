@@ -7,15 +7,21 @@
 .full-width {
     width: 100%;
 }
-.income-color, .income-color .fc-title {
-    color: #0f0;
+.income-color{
+    color: #0d0;
     font-weight: bold;
 }
-.expense-color, .expense-color .fc-title {
-    color: #f00;
+.expense-color{
+    color: #e00;
     font-weight: bold;
 }
 .negative-balance-color{
-    color: #f00;
+    color: #e00;
+    font-weight: bold;
+    font-style: italic;
 }
-
+.positive-balance-color{
+    color: #0d0;
+    font-weight: bold;
+    font-style: italic;
+}

@@ -37,6 +37,7 @@ public class DashboardView {
         accounts = accountService.getAllByUser(currentUser);
     }
 
+
     public double getCurrentBalance(Account account) {
         return accountService.getCurrentBalance(account);
     }

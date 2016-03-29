@@ -111,7 +111,9 @@
                 </p:column>
 
                 <p:column headerText="Initial Balance">
-                    <h:outputText value="#{accountBalance.balance}"/>
+                    <h:outputText value="#{accountBalance.balance}">
+                        <f:convertNumber type="currency" currencySymbol=""/>
+                    </h:outputText>
                 </p:column>
 
                 <p:column headerText="Operations">
