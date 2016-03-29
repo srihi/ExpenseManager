@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dashboard.jsf").access("isAuthenticated()")
                 .antMatchers("/transaction.jsf").access("isAuthenticated()")
                 .antMatchers("/incomeCategory.jsf").access("isAuthenticated()")
-                .antMatchers("/expenseCategory.jsf").access("isAuthenticated()");
+                .antMatchers("/expenseCategory.jsf").access("isAuthenticated()")
+                .antMatchers("/tags.jsf").access("isAuthenticated()");
 
 
         http.formLogin()

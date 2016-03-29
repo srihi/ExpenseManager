@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="title">
+            Tags
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+
+            <p:dataList value="#{tagsView.tags}" var="tag" id="tagList">
+                <f:facet name="header">
+                    Tags
+                </f:facet>
+                <p:commandLink update=":tagPanel" oncomplete="PF('tagDialog').show();" title="Select tag">
+                    <f:setPropertyActionListener value="#{tag}" target="#{tagsView.currentTag}"/>
+                    <h:outputText value="#{tag.name}"/>
+                </p:commandLink>
+            </p:dataList>
+
+            <h:form>
+                <p:panel id="newTagPanel" header="New Tag">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Name"/>
+                        <p:inputText value="#{tagsView.name}" required="true"/>
+
+                        <h:outputText value="Description"/>
+                        <p:inputText value="#{tagsView.description}" rendered="true"/>
+
+                        <p:commandButton update="newTagPanel" process="@this" value="Reset" actionListener="#{tagsView.reset()}">
+                            <p:resetInput target="newTagPanel"/>
+                        </p:commandButton>
+                        <p:commandButton value="Add" action="#{tagsView.add()}" update=":tagList"/>
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+
+
+            <p:dialog widgetVar="tagDialog" header="Tag">
+                <p:outputPanel id="tagPanel">
+                    <h:form>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Name"/>
+                            <p:inputText value="#{tagsView.currentTag.name}"/>
+
+                            <h:outputText value="Description"/>
+                            <p:inputText value="#{tagsView.currentTag.description}"/>
+                        </p:panelGrid>
+                        <p:commandButton value="Remove"
+                                         update=":tagList"
+                                         oncomplete="PF('tagDialog').hide();"
+                                         action="#{tagsView.removeCurrent()}"/>
+                        <p:commandButton value="Edit"
+                                         update=":tagList"
+                                         action="#{tagsView.editCurrent()}"/>
+                    </h:form>
+                </p:outputPanel>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>
