@@ -46,6 +46,13 @@
                     <h:outputText value="Description"/>
                     <p:inputText value="#{transactionView.description}"/>
 
+                    <h:outputText value="Tags"/>
+                    <p:selectManyMenu value="#{transactionView.selectedTagTitles}" showCheckbox="true">
+                        <f:selectItems value="#{transactionView.availableTags}"
+                                       var="tag"
+                                       itemLabel="#{tag.name}"
+                                       itemValue="#{tag.name}"/>
+                    </p:selectManyMenu>
 
                     <!--//TODO: add tags, quantity, unit for measure-->
                 </p:panelGrid>
@@ -55,8 +62,6 @@
                     <f:param name="account-name" value="#{param['account-name']}"/>
                     <f:param name="type" value="#{param['type']}"/>
                 </p:commandButton>
-                <p:commandButton value="OK"/>
-                <!--//TODO OK button-->
 
             </h:form>
         </ui:define>

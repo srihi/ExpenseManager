@@ -3,6 +3,7 @@ package max93n.view;
 
 import max93n.entities.*;
 import max93n.services.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -40,6 +41,12 @@ public class TransactionView {
     private ExpenseSubCategoryService expenseSubCategoryService;
 
 
+    @ManagedProperty("#{tagService}")
+    private TagService tagService;
+
+    @ManagedProperty("#{expenseTagService}")
+    private ExpenseTagService expenseTagService;
+
 
     private Date date;
     private Double amount;
@@ -52,6 +59,10 @@ public class TransactionView {
     private List<SelectItem> incomeCategorySelectItems;
     private List<SelectItem> expenseCategorySelectItems;
 
+    private List<Tag> availableTags;
+    private List<String> selectedTagTitles;
+
+    private User user;
 
     private String transactionType;
 
@@ -61,6 +72,9 @@ public class TransactionView {
         amount = 0.0;
         paymentMethod = "Cash";
 
+        user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        availableTags = tagService.getAllByUser(user);
 
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -144,7 +158,23 @@ public class TransactionView {
         Account account = accountService.getByName(accountName);
         expenseTransaction.setAccount(account);
 
+        List<ExpenseTag> expenseTags = new ArrayList<>();
+
+        for (String tagTitle : selectedTagTitles) {
+            Tag tag = tagService.getByName(tagTitle);
+            ExpenseTag expenseTag = new ExpenseTag();
+            expenseTag.setTag(tag);
+            expenseTag.setExpenseTransaction(expenseTransaction);
+            expenseTags.add(expenseTag);
+        }
+
+        expenseTransaction.setExpenseTags(expenseTags);
+
         expenseTransactionService.add(expenseTransaction);
+
+        for (ExpenseTag expenseTag : expenseTags) {
+            expenseTagService.add(expenseTag);
+        }
 
         return "dashboard?faces-redirect=true";
     }
@@ -277,5 +307,45 @@ public class TransactionView {
 
     public void setExpenseTransactionService(ExpenseTransactionService expenseTransactionService) {
         this.expenseTransactionService = expenseTransactionService;
+    }
+
+    public TagService getTagService() {
+        return tagService;
+    }
+
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
+    }
+
+    public List<Tag> getAvailableTags() {
+        return availableTags;
+    }
+
+    public void setAvailableTags(List<Tag> availableTags) {
+        this.availableTags = availableTags;
+    }
+
+    public List<String> getSelectedTagTitles() {
+        return selectedTagTitles;
+    }
+
+    public void setSelectedTagTitles(List<String> selectedTagTitles) {
+        this.selectedTagTitles = selectedTagTitles;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ExpenseTagService getExpenseTagService() {
+        return expenseTagService;
+    }
+
+    public void setExpenseTagService(ExpenseTagService expenseTagService) {
+        this.expenseTagService = expenseTagService;
     }
 }

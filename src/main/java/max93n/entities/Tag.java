@@ -1,6 +1,7 @@
 package max93n.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Tag {
@@ -15,6 +16,9 @@ public class Tag {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "tag", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<ExpenseTag> expenseTags;
 
     public Tag() {}
 
@@ -49,6 +53,14 @@ public class Tag {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<ExpenseTag> getExpenseTags() {
+        return expenseTags;
+    }
+
+    public void setExpenseTags(List<ExpenseTag> expenseTags) {
+        this.expenseTags = expenseTags;
     }
 }
 
