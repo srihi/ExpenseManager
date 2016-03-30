@@ -7,9 +7,11 @@ import max93n.services.TagService;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -26,6 +28,7 @@ public class TagsView {
 
     private String name;
     private String description;
+
 
 
     public TagsView() {}
@@ -45,9 +48,10 @@ public class TagsView {
         tag.setName(name);
         tag.setDescription(description);
         tag.setUser(user);
-        tagService.add(tag);
 
-        tags.add(tag);
+        if (tagService.add(tag)) {
+            tags.add(tag);
+        }
 
     }
 
@@ -113,4 +117,5 @@ public class TagsView {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

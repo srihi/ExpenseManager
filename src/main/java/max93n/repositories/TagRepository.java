@@ -14,5 +14,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query("select t from Tag t where t.user = :user")
     List<Tag> getAllByUser(@Param("user") User user);
 
+    @Query("select t from Tag t where t.name = :name")
+    Tag getByName(@Param("name") String name);
 
 }

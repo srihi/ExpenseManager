@@ -15,6 +15,9 @@
         </ui:define>
         <ui:define name="content">
 
+            <p:growl id="messages" autoUpdate="true" showDetail="true"/>
+
+
             <p:dataList value="#{tagsView.tags}" var="tag" id="tagList">
                 <f:facet name="header">
                     Tags
@@ -58,7 +61,7 @@
                                          oncomplete="PF('tagDialog').hide();"
                                          action="#{tagsView.removeCurrent()}"/>
                         <p:commandButton value="Edit"
-                                         update=":tagList"
+                                         update=":tagList tagPanel"
                                          action="#{tagsView.editCurrent()}"/>
                     </h:form>
                 </p:outputPanel>
