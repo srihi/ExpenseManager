@@ -26,7 +26,9 @@ public abstract class AppTransaction {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    //// TODO: need to add: tags, quantity, measure
+    private double quantity;
+    private String measure;
+
 
     public AppTransaction() {
         date = new Date();
@@ -88,5 +90,21 @@ public abstract class AppTransaction {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
     }
 }

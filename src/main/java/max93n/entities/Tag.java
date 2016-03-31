@@ -20,6 +20,10 @@ public class Tag {
     @OneToMany(mappedBy = "tag", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<ExpenseTag> expenseTags;
 
+    @OneToMany(mappedBy = "tag", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<IncomeTag> incomeTags;
+
+
     public Tag() {}
 
 
@@ -61,6 +65,14 @@ public class Tag {
 
     public void setExpenseTags(List<ExpenseTag> expenseTags) {
         this.expenseTags = expenseTags;
+    }
+
+    public List<IncomeTag> getIncomeTags() {
+        return incomeTags;
+    }
+
+    public void setIncomeTags(List<IncomeTag> incomeTags) {
+        this.incomeTags = incomeTags;
     }
 }
 

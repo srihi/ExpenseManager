@@ -54,7 +54,16 @@
                                        itemValue="#{tag.name}"/>
                     </p:selectManyMenu>
 
-                    <!--//TODO: add tags, quantity, unit for measure-->
+                    <h:outputText value="Quantity"/>
+                    <p:inputText value="#{transactionView.quantity}"/>
+
+                    <h:outputText value="Unit of measure"/>
+                    <p:selectOneMenu value="#{transactionView.selectedMeasure}">
+                        <f:selectItem itemLabel="PCS" itemValue="PCS"/>
+                        <f:selectItem itemLabel="KG" itemValue="KG"/>
+                        <f:selectItem itemLabel="L" itemValue="L"/>
+                    </p:selectOneMenu>
+
                 </p:panelGrid>
 
                 <p:commandButton value="Back" onclick="history.go(-1)"/>

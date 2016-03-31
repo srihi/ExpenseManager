@@ -11,7 +11,7 @@ public class IncomeTransaction extends AppTransaction {
     @JoinColumn(name = "income_category_id", nullable = false)
     private IncomeCategory incomeCategory;
 
-    @OneToMany(mappedBy = "incomeTransaction", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "incomeTransaction", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<IncomeTag> incomeTags;
 
 

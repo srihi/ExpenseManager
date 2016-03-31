@@ -47,6 +47,11 @@ public class TransactionView {
     @ManagedProperty("#{expenseTagService}")
     private ExpenseTagService expenseTagService;
 
+    @ManagedProperty("#{incomeTagService}")
+    private IncomeTagService incomeTagService;
+
+
+
 
     private Date date;
     private Double amount;
@@ -61,6 +66,9 @@ public class TransactionView {
 
     private List<Tag> availableTags;
     private List<String> selectedTagTitles;
+    private double quantity;
+    private String selectedMeasure;
+
 
     private User user;
 
@@ -71,6 +79,8 @@ public class TransactionView {
         date = new Date();
         amount = 0.0;
         paymentMethod = "Cash";
+
+        selectedMeasure = "KG";
 
         user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -109,9 +119,6 @@ public class TransactionView {
 
     }
 
-
-    //TODO: add tags, quantity, unit for measure
-
     public  String addTransaction() {
 
         String type = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("type");
@@ -138,7 +145,27 @@ public class TransactionView {
         incomeTransaction.setDescription(description);
         Account account = accountService.getByName(accountName);
         incomeTransaction.setAccount(account);
+
+        List<IncomeTag> incomeTags = new ArrayList<>();
+
+        for (String tagTitle : selectedTagTitles) {
+            Tag tag = tagService.getByName(tagTitle);
+            IncomeTag incomeTag = new IncomeTag();
+            incomeTag.setTag(tag);
+            incomeTag.setIncomeTransaction(incomeTransaction);
+            incomeTags.add(incomeTag);
+        }
+
+        incomeTransaction.setIncomeTags(incomeTags);
+        incomeTransaction.setQuantity(quantity);
+        incomeTransaction.setMeasure(selectedMeasure);
+
         incomeTransactionService.add(incomeTransaction);
+
+        for (IncomeTag incomeTag : incomeTags) {
+            incomeTagService.add(incomeTag);
+        }
+
         return "dashboard";
     }
 
@@ -169,6 +196,8 @@ public class TransactionView {
         }
 
         expenseTransaction.setExpenseTags(expenseTags);
+        expenseTransaction.setQuantity(quantity);
+        expenseTransaction.setMeasure(selectedMeasure);
 
         expenseTransactionService.add(expenseTransaction);
 
@@ -347,5 +376,29 @@ public class TransactionView {
 
     public void setExpenseTagService(ExpenseTagService expenseTagService) {
         this.expenseTagService = expenseTagService;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getSelectedMeasure() {
+        return selectedMeasure;
+    }
+
+    public void setSelectedMeasure(String selectedMeasure) {
+        this.selectedMeasure = selectedMeasure;
+    }
+
+    public IncomeTagService getIncomeTagService() {
+        return incomeTagService;
+    }
+
+    public void setIncomeTagService(IncomeTagService incomeTagService) {
+        this.incomeTagService = incomeTagService;
     }
 }
