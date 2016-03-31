@@ -25,7 +25,7 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
     @Query(value = "select month(e.date),min(e.date), max(e.date), sum(e.amount), e.expenseCategory" +
             " from ExpenseTransaction e " +
             " where e.account = :account" +
-            " group by week(e.date), e.expenseCategory" +
+            " group by month(e.date), e.expenseCategory" +
             " order by min(e.date)")
     List<Object[]> getByMonths(@Param("account") Account account);
 

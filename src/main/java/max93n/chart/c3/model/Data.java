@@ -16,7 +16,6 @@ public class Data {
         colors = new HashMap<>();
     }
 
-    //TODO:add format to labels
     private Boolean labels;
 
     public String getX() {
