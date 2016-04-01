@@ -86,6 +86,11 @@ public class DashboardView {
         return "charts?account-name=" + accountName + "&faces-redirect=true";
     }
 
+    public String goToSummaryView(String accountName) {
+        return "summary?account-name=" + accountName + "&faces-redirect=true";
+    }
+
+
     public AccountService getAccountService() {
         return accountService;
     }

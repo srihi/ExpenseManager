@@ -7,11 +7,12 @@
 .full-width {
     width: 100%;
 }
-.income-color{
+.income-color, .income-color .fc-title {
     color: #0d0;
     font-weight: bold;
 }
-.expense-color{
+.expense-color, .expense-color .fc-title {
+
     color: #e00;
     font-weight: bold;
 }

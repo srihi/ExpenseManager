@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+    <ui:composition template="templates/common.xhtml">
+        <ui:define name="custom_include">
+            <h:outputStylesheet library="c3" name="c3.css"/>
+            <h:outputScript library="c3" name="d3.min.js"/>
+            <h:outputScript library="c3" name="c3.min.js"/>
+        </ui:define>
+
+        <ui:define name="title">
+            Summary
+        </ui:define>
+        <ui:define name="header">
+            <ui:include src="templates/commonHeader.xhtml"/>
+        </ui:define>
+        <ui:define name="content">
+
+            <p:panel id="periodFilterPanel">
+                <h:form>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="periodFilter" value="Period:"/>
+                        <p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">
+                            <f:selectItem itemLabel="All" itemValue="All"/>
+                            <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
+                            <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
+                            <f:selectItem itemLabel="Yearly" itemValue="Yearly"/>
+                            <p:ajax event="change" update=":dataTable"
+                                    listener="#{summaryView.periodFilterChanged()}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+            <p:dataTable id="dataTable"
+                         value="#{summaryView.lazyModel}" var="expense"
+                         rows="2"
+                         rowsPerPageTemplate="2,5,10,15"
+                         paginator="true"
+                         lazy="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         selectionMode="single">
+
+                <p:ajax event="rowSelect"  update=":transactionDetail"
+                        listener="#{summaryView.onRowSelect}"
+                        oncomplete="PF('transactionDialog').show()"/>
+
+                <p:column headerText="Category" filterBy="#{expense.expenseCategory.category}">
+                    <h:outputText value="#{expense.expenseCategory.category}"/>
+                </p:column>
+
+                <p:column headerText="SubCategory">
+                    <h:outputText value="#{expense.expenseCategory.subCategory.get(0).subCategory}"/>
+                </p:column>
+
+                <p:column headerText="Date">
+                    <h:outputText value="#{expense.date}"/>
+                </p:column>
+
+                <p:column headerText="Amount">
+                    <h:outputText value="#{expense.amount}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+            <p:dialog header="Expense Transaction" widgetVar="transactionDialog" modal="true">
+                <p:outputPanel id="transactionDetail">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Id"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.id}"/>
+
+                        <h:outputText value="Date"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.date}"/>
+
+                        <h:outputText value="Amount"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.amount}"/>
+
+                        <h:outputText value="Payer"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.payer}"/>
+
+                        <h:outputText value="PaymentMethod"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.paymentMethod}"/>
+
+                        <h:outputText value="Description"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.description}"/>
+
+                        <h:outputText value="Quantity"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.quantity}"/>
+
+                        <h:outputText value="Units of Measure"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.measure}"/>
+
+                        <h:outputText value="Units of Measure"/>
+                        <p:dataList value="#{summaryView.selectedTransaction.expenseTags}" var="expenseTag">
+                            <h:outputText value="#{expenseTag.tag.name}"/>
+                        </p:dataList>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>

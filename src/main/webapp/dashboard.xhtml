@@ -122,7 +122,7 @@
                                          action="#{dashboardView.goToIncomeTransactionView(account.name)}"/>
                         <p:commandButton value="New Expense"
                                          action="#{dashboardView.goToExpanseTransactionView(account.name)}"/>
-                        <p:commandButton value="Summary"/>
+                        <p:commandButton value="Summary" action="#{dashboardView.goToSummaryView(account.name)}"/>
                         <p:commandButton value="Charts" action="#{dashboardView.goToChartsView(account.name)}"/>
                         <p:commandButton value="Schedule" action="#{dashboardView.goToScheduleView(account.name)}"/>
                     </h:form>

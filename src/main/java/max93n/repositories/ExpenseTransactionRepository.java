@@ -3,13 +3,16 @@ package max93n.repositories;
 import max93n.entities.Account;
 import max93n.entities.ExpenseCategory;
 import max93n.entities.ExpenseTransaction;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-
+@Repository
 public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTransaction, Long> {
 
     @Query("select e from ExpenseTransaction e where e.account = :account")
@@ -51,6 +54,15 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
             " order by year(e.date)")
     List<Object[]> getSumGroupedByMonthsOfYear(@Param("account") Account account);
 
+
+    @Query("select count(e) from ExpenseTransaction  e where  e.account = :account")
+    int getCountOfTransactionsByAccount(@Param("account") Account account);
+
+
+    @Query("select e from ExpenseTransaction e where e.account = :account and  e.date between :startDate and :endDate")
+    List<ExpenseTransaction> getBetweenPeriod(@Param("account") Account account,
+                                              @Param("startDate") Date startDate, @Param("endDate")Date endDate,
+                                              Pageable request);
 
 
     @Query("select min(e.date) from ExpenseTransaction e where e.account = :account")
