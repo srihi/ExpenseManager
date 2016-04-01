@@ -8,6 +8,7 @@ import max93n.repositories.ExpenseTransactionRepository;
 import max93n.services.ExpenseTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -62,8 +63,14 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
 
     @Override
     public List<ExpenseTransaction> getBetweenPeriod(Account account, Date start, Date end, PageRequest request) {
+
         return expenseTransactionRepository.getBetweenPeriod(account, start, end, request);
     }
+
+    public List<ExpenseTransaction> getWithSpecification(Specification specification, PageRequest request) {
+        return  expenseTransactionRepository.findAll(specification, request).getContent();
+    }
+
 
     @Override
     public Date getFirstDateOfExpense(Account account) {

@@ -6,14 +6,16 @@ import max93n.entities.ExpenseTransaction;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+
 @Repository
-public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTransaction, Long> {
+public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTransaction, Long>, JpaSpecificationExecutor<ExpenseTransaction> {
 
     @Query("select e from ExpenseTransaction e where e.account = :account")
     List<ExpenseTransaction> getAllByAccount(@Param("account") Account account);
@@ -61,7 +63,7 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
 
     @Query("select e from ExpenseTransaction e where e.account = :account and  e.date between :startDate and :endDate")
     List<ExpenseTransaction> getBetweenPeriod(@Param("account") Account account,
-                                              @Param("startDate") Date startDate, @Param("endDate")Date endDate,
+                                              @Param("startDate") Date startDate, @Param("endDate") Date endDate,
                                               Pageable request);
 
 

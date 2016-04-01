@@ -4,6 +4,7 @@ import max93n.entities.Account;
 import max93n.entities.ExpenseCategory;
 import max93n.entities.ExpenseTransaction;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,6 @@ public interface ExpenseTransactionService {
     Date getLastDateOfExpense(Account account);
 
     Double getSumFormCategory(Account account, ExpenseCategory expenseCategory);
-
+    List<ExpenseTransaction> getWithSpecification(Specification specification, PageRequest request);
 
 }

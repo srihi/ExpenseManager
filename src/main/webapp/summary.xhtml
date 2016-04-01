@@ -30,43 +30,45 @@
                             <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
                             <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
                             <f:selectItem itemLabel="Yearly" itemValue="Yearly"/>
-                            <p:ajax event="change" update=":dataTable"
+                            <p:ajax event="change" update=":dataTableForm"
                                     listener="#{summaryView.periodFilterChanged()}"/>
                         </p:selectOneRadio>
                     </h:panelGrid>
                 </h:form>
             </p:panel>
-            <p:dataTable id="dataTable"
-                         value="#{summaryView.lazyModel}" var="expense"
-                         rows="2"
-                         rowsPerPageTemplate="2,5,10,15"
-                         paginator="true"
-                         lazy="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                         selectionMode="single">
+            <h:form id="dataTableForm">
+                <p:dataTable id="dataTable"
+                             value="#{summaryView.lazyModel}" var="expense"
+                             rows="2"
+                             rowsPerPageTemplate="2,5,10,15"
+                             paginator="true"
+                             lazy="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             selectionMode="single" selection="#{summaryView.selectedTransaction}">
 
-                <p:ajax event="rowSelect"  update=":transactionDetail"
-                        listener="#{summaryView.onRowSelect}"
-                        oncomplete="PF('transactionDialog').show()"/>
+                    <p:ajax event="rowSelect" update=":transactionDetail"
+                            listener="#{summaryView.onRowSelect}"
+                            oncomplete="PF('transactionDialog').show()"/>
 
-                <p:column headerText="Category" filterBy="#{expense.expenseCategory.category}">
-                    <h:outputText value="#{expense.expenseCategory.category}"/>
-                </p:column>
 
-                <p:column headerText="SubCategory">
-                    <h:outputText value="#{expense.expenseCategory.subCategory.get(0).subCategory}"/>
-                </p:column>
+                    <p:column headerText="Category" filterBy="#{expense.expenseCategory.category}">
+                        <h:outputText value="#{expense.expenseCategory.category}"/>
+                    </p:column>
 
-                <p:column headerText="Date">
-                    <h:outputText value="#{expense.date}"/>
-                </p:column>
+                    <p:column headerText="SubCategory">
+                        <h:outputText value="#{expense.expenseCategory.subCategory.get(0).subCategory}"/>
+                    </p:column>
 
-                <p:column headerText="Amount">
-                    <h:outputText value="#{expense.amount}"/>
-                </p:column>
+                    <p:column headerText="Date">
+                        <h:outputText value="#{expense.date}"/>
+                    </p:column>
 
-            </p:dataTable>
+                    <p:column headerText="Amount">
+                        <h:outputText value="#{expense.amount}"/>
+                    </p:column>
 
+                </p:dataTable>
+            </h:form>
 
             <p:dialog header="Expense Transaction" widgetVar="transactionDialog" modal="true">
                 <p:outputPanel id="transactionDetail">
@@ -76,7 +78,7 @@
 
                         <h:outputText value="Date"/>
                         <h:outputText value="#{summaryView.selectedTransaction.date}"/>
-
+                        <!--//TODO add currency converter-->
                         <h:outputText value="Amount"/>
                         <h:outputText value="#{summaryView.selectedTransaction.amount}"/>
 
@@ -95,7 +97,7 @@
                         <h:outputText value="Units of Measure"/>
                         <h:outputText value="#{summaryView.selectedTransaction.measure}"/>
 
-                        <h:outputText value="Units of Measure"/>
+                        <h:outputText value="Tags"/>
                         <p:dataList value="#{summaryView.selectedTransaction.expenseTags}" var="expenseTag">
                             <h:outputText value="#{expenseTag.tag.name}"/>
                         </p:dataList>
