@@ -7,6 +7,8 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.*;
 
@@ -72,7 +74,6 @@ public class LazyExpenseTransactionDataModel extends LazyDataModel<ExpenseTransa
                         minDate, maxDate)));
                 predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
             }
-
 
             Predicate[] predicatesArray = new Predicate[predicates.size()];
             return cb.and(predicates.toArray(predicatesArray));

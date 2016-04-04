@@ -6,10 +6,12 @@ import max93n.entities.ExpenseCategory;
 import max93n.entities.ExpenseTransaction;
 import max93n.repositories.ExpenseTransactionRepository;
 import max93n.services.ExpenseTransactionService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -67,8 +69,19 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
         return expenseTransactionRepository.getBetweenPeriod(account, start, end, request);
     }
 
+
+    @Transactional
     public List<ExpenseTransaction> getWithSpecification(Specification specification, PageRequest request) {
-        return  expenseTransactionRepository.findAll(specification, request).getContent();
+        List<ExpenseTransaction> res = expenseTransactionRepository.findAll(specification, request).getContent();
+
+        for (ExpenseTransaction expenseTransaction  :  res) {
+//            expenseTransaction.getExpenseTags().size();
+            Hibernate.initialize(expenseTransaction.getExpenseTags());
+        }
+
+
+
+        return  res;
     }
 
     public long getWithSpecificationCount(Specification specification) {

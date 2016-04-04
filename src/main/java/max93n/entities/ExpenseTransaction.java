@@ -12,7 +12,7 @@ public class ExpenseTransaction extends AppTransaction{
     @JoinColumn(name="expense_category_id", nullable = false)
     private ExpenseCategory expenseCategory;
 
-    @OneToMany(mappedBy = "expenseTransaction", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "expenseTransaction", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ExpenseTag> expenseTags;
 
 
