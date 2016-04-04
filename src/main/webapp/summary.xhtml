@@ -27,13 +27,26 @@
                         <h:outputLabel for="periodFilter" value="Period:"/>
                         <p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">
                             <f:selectItem itemLabel="All" itemValue="All"/>
-                            <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
-                            <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
-                            <f:selectItem itemLabel="Yearly" itemValue="Yearly"/>
-                            <p:ajax event="change" update=":tabView"
+                            <f:selectItem itemLabel="Date Range" itemValue="Date Range"/>
+                            <p:ajax event="change" update=":tabView dataRangeOutputPanel"
                                     listener="#{summaryView.periodFilterChanged()}"/>
                         </p:selectOneRadio>
                     </h:panelGrid>
+                    <p:outputPanel id="dataRangeOutputPanel" autoUpdate="true">
+                        <p:panel rendered="#{summaryView.dataRange}">
+                            <p:calendar id="begin" value="#{summaryView.beginDate}" pattern="MM/dd/yyyy HH:mm:ss">
+                                <p:ajax event="dateSelect"
+                                        update=":tabView"
+                                        listener="#{summaryView.periodFilterChanged}"/>
+                            </p:calendar>
+                            <h:outputText value=" - "/>
+                            <p:calendar id="finish" value="#{summaryView.finishDate}" pattern="MM/dd/yyyy HH:mm:ss">
+                                <p:ajax event="dateSelect"
+                                        update=":tabView"
+                                        listener="#{summaryView.periodFilterChanged}"/>
+                            </p:calendar>
+                        </p:panel>
+                    </p:outputPanel>
                 </h:form>
             </p:panel>
             <p:tabView value="#{summaryView.tabKeys}" var="tabKey" id="tabView">
@@ -70,7 +83,7 @@
                                     </p:selectCheckboxMenu>
                                 </f:facet>
                                 <p:dataList value="#{expense.expenseTags}" var="expenseTag">
-                                    #{expenseTag.tag.name}
+                                    #{expenseTag.expenseTag.name}
                                 </p:dataList>
                             </p:column>
 
@@ -116,7 +129,7 @@
 
                         <h:outputText value="Tags"/>
                         <p:dataList value="#{summaryView.selectedTransaction.expenseTags}" var="expenseTag">
-                            <h:outputText value="#{expenseTag.tag.name}"/>
+                            <h:outputText value="#{expenseTag.expenseTag.name}"/>
                         </p:dataList>
 
                     </p:panelGrid>

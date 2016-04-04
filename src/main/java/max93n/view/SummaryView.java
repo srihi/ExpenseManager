@@ -4,21 +4,21 @@ package max93n.view;
 import max93n.entities.Account;
 import max93n.entities.ExpenseTag;
 import max93n.entities.ExpenseTransaction;
+import max93n.entities.IncomeTransaction;
+import max93n.lazy.LazyExpenseTransactionDataModel;
 import max93n.services.AccountService;
 import max93n.services.ExpenseTagService;
 import max93n.services.ExpenseTransactionService;
+import max93n.services.IncomeTransactionService;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.criteria.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ManagedBean
@@ -31,6 +31,9 @@ public class SummaryView {
 
     @ManagedProperty("#{expenseTransactionService}")
     private ExpenseTransactionService expenseTransactionService;
+
+    @ManagedProperty("#{incomeTransactionService}")
+    private IncomeTransactionService incomeTransactionService;
 
 
     @ManagedProperty("#{expenseTagService}")
@@ -46,7 +49,6 @@ public class SummaryView {
     private Account account;
 
 
-
     private ExpenseTransaction selectedTransaction;
 
     private Map<String, Object> filters;
@@ -55,14 +57,28 @@ public class SummaryView {
 
     private Date minDate, maxDate;
 
+    private Date beginDate, finishDate;
 
     private List<String> tabKeys;
     private Map<String, LazyDataModel<ExpenseTransaction>> lazyDataModelMap;
 
-
+    private boolean dataRange;
 
     @PostConstruct
     public void init() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        beginDate = calendar.getTime();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        finishDate = calendar.getTime();
+
         String accountName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("account-name");
 
         account = accountService.getByName(accountName);
@@ -70,87 +86,26 @@ public class SummaryView {
         List<ExpenseTag> expenseTags = expenseTagService.getByAccount(account);
         availableTagNames = new ArrayList<>(expenseTags.size());
         for (ExpenseTag expenseTag : expenseTags) {
-            availableTagNames.add(expenseTag.getTag().getName());
+            availableTagNames.add(expenseTag.getExpenseTag().getName());
         }
 
         periodFilter = "All";
         periodFilterChanged();
+
+
+        List<IncomeTransaction> o = incomeTransactionService.getAllByAccount(account);
+        o.size();
+
+
+        List<ExpenseTransaction> oo = expenseTransactionService.getAllByAccount(account);
+        oo.size();
+
+
     }
 
-    private LazyDataModel<ExpenseTransaction> generateLazyModel() {
-        return  new LazyDataModel<ExpenseTransaction>() {
-
-            List<ExpenseTransaction> transactions;
-
-            @Override
-            public ExpenseTransaction getRowData(String rowKey) {
-                for (ExpenseTransaction transaction : transactions) {
-                    if (rowKey.equals(String.valueOf(transaction.getId()))) {
-                        return transaction;
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object getRowKey(ExpenseTransaction expenseTransaction) {
-                return expenseTransaction.getId();
-            }
-
-            @Override
-            public List<ExpenseTransaction> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                                 Map<String, Object> f) {
-
-                PageRequest request = new PageRequest(first / pageSize, pageSize);
-
-                filters = f;
-
-                Specification<ExpenseTransaction> specification = new Specification<ExpenseTransaction>() {
-                    @Override
-                    public Predicate toPredicate(Root<ExpenseTransaction> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-                        List<Predicate> predicates = new ArrayList<>();
-
-
-                        if (filters != null) {
-
-                            if (filters.containsKey("expenseCategory.category")) {
-                                String categoryFilterValue = filters.get("expenseCategory.category").toString();
-                                predicates.add(cb.and(cb.like(root.get("expenseCategory").get("category"), "%" + categoryFilterValue + "%")));
-                            }
-
-
-                            if (filters.containsKey("expenseTags") && ((String[]) filters.get("expenseTags")).length > 0) {
-                                //TODO: add tags to filter
-//                                String [] tagsArr = (String[]) filters.get("expenseTags");
-//                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
-
-                            }
-
-
-                            predicates.add(cb.and(cb.between(root.<Date>get("date"),
-                                    minDate, maxDate)));
-
-                            predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
-                        }
-
-
-                        Predicate[] predicatesArray = new Predicate[predicates.size()];
-                        return cb.and(predicates.toArray(predicatesArray));
-
-                    }
-                };
-
-                this.setRowCount((int) expenseTransactionService.getWithSpecificationCount(specification));
-                transactions = expenseTransactionService.getWithSpecification(specification, request);
-                return transactions;
-            }
-        };
-    }
 
 
     public void onRowSelect(SelectEvent event) {
-
         selectedTransaction = ((ExpenseTransaction) event.getObject());
     }
 
@@ -159,17 +114,23 @@ public class SummaryView {
         lazyDataModelMap = new LinkedHashMap<>();
 
         if (periodFilter.equals("All")) {
+            dataRange = false;
             minDate = expenseTransactionService.getFirstDateOfExpense(account);
             maxDate = expenseTransactionService.getLastDateOfExpense(account);
-            LazyDataModel<ExpenseTransaction> lazyModel = generateLazyModel();
+
+            LazyDataModel<ExpenseTransaction> lazyModel = new LazyExpenseTransactionDataModel(expenseTransactionService, account, minDate, maxDate);
 
             lazyDataModelMap.put("All", lazyModel);
 
         }
-        else if (periodFilter.equals("Weekly")) {
-
+        else if (periodFilter.equals("Date Range")) {
+            dataRange = true;
+            if (beginDate != null || finishDate != null) {
+                LazyDataModel<ExpenseTransaction> lazyModel = new LazyExpenseTransactionDataModel(expenseTransactionService, account, beginDate, finishDate);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                lazyDataModelMap.put(format.format(beginDate) + " - " + format.format(finishDate), lazyModel);
+            }
         }
-
 
         tabKeys = new ArrayList<>(lazyDataModelMap.keySet());
     }
@@ -281,4 +242,39 @@ public class SummaryView {
     public void setLazyDataModelMap(Map<String, LazyDataModel<ExpenseTransaction>> lazyDataModelMap) {
         this.lazyDataModelMap = lazyDataModelMap;
     }
+
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public boolean isDataRange() {
+        return dataRange;
+    }
+
+    public void setDataRange(boolean dataRange) {
+        this.dataRange = dataRange;
+    }
+
+    public IncomeTransactionService getIncomeTransactionService() {
+        return incomeTransactionService;
+    }
+
+    public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
+        this.incomeTransactionService = incomeTransactionService;
+    }
 }
+
+
+

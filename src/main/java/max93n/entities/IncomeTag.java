@@ -16,7 +16,7 @@ public class IncomeTag {
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
-    private Tag tag;
+    private Tag incomeTag;
 
 
     public Long getId() {
@@ -35,11 +35,11 @@ public class IncomeTag {
         this.incomeTransaction = incomeTransaction;
     }
 
-    public Tag getTag() {
-        return tag;
+    public Tag getIncomeTag() {
+        return incomeTag;
     }
 
-    public void setTag(Tag tag) {
-        this.tag = tag;
+    public void setIncomeTag(Tag incomeTag) {
+        this.incomeTag = incomeTag;
     }
 }

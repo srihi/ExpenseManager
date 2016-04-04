@@ -16,7 +16,7 @@ public class ExpenseTag {
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
-    private Tag tag;
+    private Tag expenseTag;
 
 
     public Long getId() {
@@ -35,11 +35,11 @@ public class ExpenseTag {
         this.expenseTransaction = expenseTransaction;
     }
 
-    public Tag getTag() {
-        return tag;
+    public Tag getExpenseTag() {
+        return expenseTag;
     }
 
-    public void setTag(Tag tag) {
-        this.tag = tag;
+    public void setExpenseTag(Tag expenseTag) {
+        this.expenseTag = expenseTag;
     }
 }

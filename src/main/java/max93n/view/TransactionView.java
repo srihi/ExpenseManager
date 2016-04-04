@@ -151,12 +151,12 @@ public class TransactionView {
         for (String tagTitle : selectedTagTitles) {
             Tag tag = tagService.getByName(tagTitle);
             IncomeTag incomeTag = new IncomeTag();
-            incomeTag.setTag(tag);
-            incomeTag.setIncomeTransaction(incomeTransaction);
-            incomeTags.add(incomeTag);
+//            incomeTag.setIncomeTag(tag);
+//            incomeTag.setIncomeTransaction(incomeTransaction);
+//            incomeTags.add(incomeTag);
         }
 
-        incomeTransaction.setIncomeTags(incomeTags);
+//        incomeTransaction.setIncomeTags(incomeTags);
         incomeTransaction.setQuantity(quantity);
         incomeTransaction.setMeasure(selectedMeasure);
 
@@ -190,7 +190,7 @@ public class TransactionView {
         for (String tagTitle : selectedTagTitles) {
             Tag tag = tagService.getByName(tagTitle);
             ExpenseTag expenseTag = new ExpenseTag();
-            expenseTag.setTag(tag);
+            expenseTag.setExpenseTag(tag);
             expenseTag.setExpenseTransaction(expenseTransaction);
             expenseTags.add(expenseTag);
         }

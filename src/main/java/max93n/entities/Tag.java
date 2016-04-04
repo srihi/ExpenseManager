@@ -17,15 +17,14 @@ public class Tag {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "tag", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "expenseTag", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<ExpenseTag> expenseTags;
 
-    @OneToMany(mappedBy = "tag", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "incomeTag", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<IncomeTag> incomeTags;
 
 
     public Tag() {}
-
 
     public Long getId() {
         return id;
@@ -39,8 +38,8 @@ public class Tag {
         return name;
     }
 
-    public void setName(String tag) {
-        this.name = tag;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

@@ -76,7 +76,8 @@ public interface ExpenseTransactionRepository extends JpaRepository<ExpenseTrans
     @Query("select sum(e.amount) from ExpenseTransaction e where e.account = :account and e.expenseCategory = :expenseCategory")
     Double getSumForCategory(@Param("account") Account account, @Param("expenseCategory") ExpenseCategory expenseCategory);
 
-    @Query("select week(e.date), min(e.date), max(e.date) from ExpenseTransaction  e where e.account = :account")
+    @Query("select week(e.date), min(e.date), max(e.date) from ExpenseTransaction  e where e.account = :account " +
+            "group by week(e.date) order by e.date")
     Object[] getWeekPeriods(@Param("account") Account account);
 
 }

@@ -19,6 +19,7 @@ public class ExpenseTransaction extends AppTransaction{
     public ExpenseTransaction() {
     }
 
+
     public ExpenseCategory getExpenseCategory() {
         return expenseCategory;
     }
