@@ -2,34 +2,23 @@ package max93n.view;
 
 
 import max93n.entities.Account;
-import max93n.entities.AppTransaction;
 import max93n.entities.ExpenseTag;
 import max93n.entities.ExpenseTransaction;
-import max93n.lazy.LazyExpenseTransactionDataModel;
 import max93n.services.AccountService;
 import max93n.services.ExpenseTagService;
 import max93n.services.ExpenseTransactionService;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.text.SimpleDateFormat;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 @ManagedBean
@@ -56,25 +45,40 @@ public class SummaryView {
 
     private Account account;
 
-    private LazyDataModel<ExpenseTransaction> lazyModel;
 
 
     private ExpenseTransaction selectedTransaction;
 
     private Map<String, Object> filters;
 
+    private List<String> availableTagNames;
+
+    private Date minDate, maxDate;
+
+
+    private List<String> tabKeys;
+    private Map<String, LazyDataModel<ExpenseTransaction>> lazyDataModelMap;
+
+
+
     @PostConstruct
     public void init() {
-        periodFilter = "All";
-
         String accountName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("account-name");
 
         account = accountService.getByName(accountName);
 
-        generateByExpenseCategory();
+        List<ExpenseTag> expenseTags = expenseTagService.getByAccount(account);
+        availableTagNames = new ArrayList<>(expenseTags.size());
+        for (ExpenseTag expenseTag : expenseTags) {
+            availableTagNames.add(expenseTag.getTag().getName());
+        }
 
+        periodFilter = "All";
+        periodFilterChanged();
+    }
 
-        lazyModel = new LazyDataModel<ExpenseTransaction>() {
+    private LazyDataModel<ExpenseTransaction> generateLazyModel() {
+        return  new LazyDataModel<ExpenseTransaction>() {
 
             List<ExpenseTransaction> transactions;
 
@@ -96,7 +100,6 @@ public class SummaryView {
             @Override
             public List<ExpenseTransaction> load(int first, int pageSize, String sortField, SortOrder sortOrder,
                                                  Map<String, Object> f) {
-                this.setRowCount(expenseTransactionService.getCountOfTransactionsByAccount(account));
 
                 PageRequest request = new PageRequest(first / pageSize, pageSize);
 
@@ -106,42 +109,45 @@ public class SummaryView {
                     @Override
                     public Predicate toPredicate(Root<ExpenseTransaction> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                        Predicate predicate = null;
+                        List<Predicate> predicates = new ArrayList<>();
+
 
                         if (filters != null) {
-                            Iterator<String> filterIterator = filters.keySet().iterator();
-                            while (filterIterator.hasNext()) {
-                                String filterProperty = filterIterator.next();
-                                Object filterValue = filters.get(filterProperty);
-                                if (filterProperty.equals("expenseCategory.category")) {
-                                    predicate =
-                                            cb.and(
-                                                    cb.like(root.get("expenseCategory").get("category"), "%" + filterValue.toString() + "%"),
-                                                    cb.between(root.<Date>get("date"),
-                                                            expenseTransactionService.getFirstDateOfExpense(account),
-                                                            expenseTransactionService.getLastDateOfExpense(account))
-                                            );
-                                }
-                                //TODO:tags
+
+                            if (filters.containsKey("expenseCategory.category")) {
+                                String categoryFilterValue = filters.get("expenseCategory.category").toString();
+                                predicates.add(cb.and(cb.like(root.get("expenseCategory").get("category"), "%" + categoryFilterValue + "%")));
                             }
+
+
+                            if (filters.containsKey("expenseTags") && ((String[]) filters.get("expenseTags")).length > 0) {
+                                //TODO: add tags to filter
+//                                String [] tagsArr = (String[]) filters.get("expenseTags");
+//                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
+
+                            }
+
+
+                            predicates.add(cb.and(cb.between(root.<Date>get("date"),
+                                    minDate, maxDate)));
+
+                            predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
                         }
 
-                        return predicate;
+
+                        Predicate[] predicatesArray = new Predicate[predicates.size()];
+                        return cb.and(predicates.toArray(predicatesArray));
+
                     }
                 };
 
-
+                this.setRowCount((int) expenseTransactionService.getWithSpecificationCount(specification));
                 transactions = expenseTransactionService.getWithSpecification(specification, request);
-
-//                transactions = expenseTransactionService.getBetweenPeriod(
-//                        account,
-//                        expenseTransactionService.getFirstDateOfExpense(account),
-//                        expenseTransactionService.getLastDateOfExpense(account), request);
-
-                return  transactions;
+                return transactions;
             }
         };
     }
+
 
     public void onRowSelect(SelectEvent event) {
 
@@ -150,19 +156,24 @@ public class SummaryView {
 
 
     public void periodFilterChanged() {
-        generateByExpenseCategory();
+        lazyDataModelMap = new LinkedHashMap<>();
+
+        if (periodFilter.equals("All")) {
+            minDate = expenseTransactionService.getFirstDateOfExpense(account);
+            maxDate = expenseTransactionService.getLastDateOfExpense(account);
+            LazyDataModel<ExpenseTransaction> lazyModel = generateLazyModel();
+
+            lazyDataModelMap.put("All", lazyModel);
+
+        }
+        else if (periodFilter.equals("Weekly")) {
+
+        }
+
+
+        tabKeys = new ArrayList<>(lazyDataModelMap.keySet());
     }
 
-
-    private void generateByExpenseCategory() {
-
-    }
-
-
-    //TODO:tags
-    private void generateByTags() {
-//        List<Object[]> list = expenseTagService.getSumByTagsAllPeriod(account);
-    }
 
     public AccountService getAccountService() {
         return accountService;
@@ -214,13 +225,6 @@ public class SummaryView {
         this.expenseTagService = expenseTagService;
     }
 
-    public LazyDataModel<ExpenseTransaction> getLazyModel() {
-        return lazyModel;
-    }
-
-    public void setLazyModel(LazyDataModel<ExpenseTransaction> lazyModel) {
-        this.lazyModel = lazyModel;
-    }
 
     public ExpenseTransaction getSelectedTransaction() {
         return selectedTransaction;
@@ -228,5 +232,53 @@ public class SummaryView {
 
     public void setSelectedTransaction(ExpenseTransaction selectedTransaction) {
         this.selectedTransaction = selectedTransaction;
+    }
+
+    public Map<String, Object> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(Map<String, Object> filters) {
+        this.filters = filters;
+    }
+
+    public List<String> getAvailableTagNames() {
+        return availableTagNames;
+    }
+
+    public void setAvailableTagNames(List<String> availableTagNames) {
+        this.availableTagNames = availableTagNames;
+    }
+
+    public Date getMinDate() {
+        return minDate;
+    }
+
+    public void setMinDate(Date minDate) {
+        this.minDate = minDate;
+    }
+
+    public Date getMaxDate() {
+        return maxDate;
+    }
+
+    public void setMaxDate(Date maxDate) {
+        this.maxDate = maxDate;
+    }
+
+    public List<String> getTabKeys() {
+        return tabKeys;
+    }
+
+    public void setTabKeys(List<String> tabKeys) {
+        this.tabKeys = tabKeys;
+    }
+
+    public Map<String, LazyDataModel<ExpenseTransaction>> getLazyDataModelMap() {
+        return lazyDataModelMap;
+    }
+
+    public void setLazyDataModelMap(Map<String, LazyDataModel<ExpenseTransaction>> lazyDataModelMap) {
+        this.lazyDataModelMap = lazyDataModelMap;
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ExpenseTagService {
     void add(ExpenseTag expenseTag);
-    List<Object[]> getSumByTagsAllPeriod(Account account);
+    List<ExpenseTag> getByAccount(Account account);
 
 }

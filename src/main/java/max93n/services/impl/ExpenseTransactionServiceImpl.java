@@ -71,6 +71,15 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
         return  expenseTransactionRepository.findAll(specification, request).getContent();
     }
 
+    public long getWithSpecificationCount(Specification specification) {
+        return  expenseTransactionRepository.count(specification);
+    }
+
+    @Override
+    public Object[] getWeekPeriods(Account account) {
+        return expenseTransactionRepository.getWeekPeriods(account);
+    }
+
 
     @Override
     public Date getFirstDateOfExpense(Account account) {

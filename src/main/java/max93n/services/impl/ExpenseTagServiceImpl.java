@@ -21,7 +21,8 @@ public class ExpenseTagServiceImpl implements ExpenseTagService{
     }
 
     @Override
-    public List<Object[]> getSumByTagsAllPeriod(Account account) {
-        return expenseTagRepository.getSumByTagsAllPeriod(account);
+    public List<ExpenseTag> getByAccount(Account account) {
+        return expenseTagRepository.getByAccount(account);
     }
+
 }

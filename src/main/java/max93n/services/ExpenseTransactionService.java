@@ -29,5 +29,9 @@ public interface ExpenseTransactionService {
 
     Double getSumFormCategory(Account account, ExpenseCategory expenseCategory);
     List<ExpenseTransaction> getWithSpecification(Specification specification, PageRequest request);
+    long getWithSpecificationCount(Specification specification);
+
+    Object[] getWeekPeriods(Account account);
+
 
 }
