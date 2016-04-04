@@ -1,15 +1,9 @@
 package max93n.view;
 
 
-import max93n.entities.Account;
-import max93n.entities.ExpenseTag;
-import max93n.entities.ExpenseTransaction;
-import max93n.entities.IncomeTransaction;
+import max93n.entities.*;
 import max93n.lazy.LazyExpenseTransactionDataModel;
-import max93n.services.AccountService;
-import max93n.services.ExpenseTagService;
-import max93n.services.ExpenseTransactionService;
-import max93n.services.IncomeTransactionService;
+import max93n.services.*;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 
@@ -39,11 +33,13 @@ public class SummaryView {
     @ManagedProperty("#{expenseTagService}")
     private ExpenseTagService expenseTagService;
 
+    @ManagedProperty("#{tagService}")
+    private TagService tagService;
+
+
 
     private String periodFilter;
-    //TODO: from date-to date
 
-    private int rows;
 
 
     private Account account;
@@ -83,26 +79,17 @@ public class SummaryView {
 
         account = accountService.getByName(accountName);
 
-        List<ExpenseTag> expenseTags = expenseTagService.getByAccount(account);
-        availableTagNames = new ArrayList<>(expenseTags.size());
-        for (ExpenseTag expenseTag : expenseTags) {
-            availableTagNames.add(expenseTag.getExpenseTag().getName());
+
+        List<Tag> tags = tagService.getAllByUser(account.getUser());
+        availableTagNames = new ArrayList<>(tags.size());
+        for (Tag expenseTag : tags) {
+            availableTagNames.add(expenseTag.getName());
         }
 
         periodFilter = "All";
         periodFilterChanged();
 
-
-        List<IncomeTransaction> o = incomeTransactionService.getAllByAccount(account);
-        o.size();
-
-
-        List<ExpenseTransaction> oo = expenseTransactionService.getAllByAccount(account);
-        oo.size();
-
-
     }
-
 
 
     public void onRowSelect(SelectEvent event) {
@@ -162,13 +149,6 @@ public class SummaryView {
     }
 
 
-    public int getRows() {
-        return rows;
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
 
     public ExpenseTransactionService getExpenseTransactionService() {
         return expenseTransactionService;
@@ -273,6 +253,14 @@ public class SummaryView {
 
     public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
         this.incomeTransactionService = incomeTransactionService;
+    }
+
+    public TagService getTagService() {
+        return tagService;
+    }
+
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
     }
 }
 

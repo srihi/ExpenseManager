@@ -1,15 +1,16 @@
 package max93n.lazy;
 
 import max93n.entities.Account;
+import max93n.entities.ExpenseTag;
 import max93n.entities.ExpenseTransaction;
+import max93n.entities.Tag;
 import max93n.services.ExpenseTransactionService;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 
@@ -23,9 +24,11 @@ public class LazyExpenseTransactionDataModel extends LazyDataModel<ExpenseTransa
     private Map<String, Object> filters;
 
     private List<ExpenseTransaction> transactions;
-    public LazyExpenseTransactionDataModel() {}
 
-    public LazyExpenseTransactionDataModel (ExpenseTransactionService expenseTransactionService, Account account, Date minDate, Date maxDate) {
+    public LazyExpenseTransactionDataModel() {
+    }
+
+    public LazyExpenseTransactionDataModel(ExpenseTransactionService expenseTransactionService, Account account, Date minDate, Date maxDate) {
         this.expenseTransactionService = expenseTransactionService;
         this.account = account;
         this.minDate = minDate;
@@ -67,13 +70,22 @@ public class LazyExpenseTransactionDataModel extends LazyDataModel<ExpenseTransa
 
                 if (filters.containsKey("expenseTags") && ((String[]) filters.get("expenseTags")).length > 0) {
                     //TODO: add tags to filter
-//                                String [] tagsArr = (String[]) filters.get("expenseTags");
+//                    String[] tagsArr = (String[]) filters.get("expenseTags");
 //                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
+
                 }
                 predicates.add(cb.and(cb.between(root.<Date>get("date"),
                         minDate, maxDate)));
                 predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
             }
+
+//            List<String> ids = new ArrayList<>();
+//            ids.add("Client");
+//            Root<ExpenseTag> child = query.from(ExpenseTag.class);
+//            Expression<String> expression = child.<Tag>get("expenseTag").get("name");
+//            Predicate p = expression.in(ids);
+//            predicates.add(cb.and(p));
+
 
             Predicate[] predicatesArray = new Predicate[predicates.size()];
             return cb.and(predicates.toArray(predicatesArray));

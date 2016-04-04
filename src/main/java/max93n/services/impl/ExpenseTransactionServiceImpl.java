@@ -78,9 +78,6 @@ public class ExpenseTransactionServiceImpl implements ExpenseTransactionService 
 //            expenseTransaction.getExpenseTags().size();
             Hibernate.initialize(expenseTransaction.getExpenseTags());
         }
-
-
-
         return  res;
     }
 
