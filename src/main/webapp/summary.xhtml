@@ -65,18 +65,17 @@
                         <h:outputText value="#{transaction.transactionType}"/>
                     </p:column>
 
-                    <p:column headerText="Category" filterBy="#{transaction.category}">
+                    <p:column headerText="Category" filterBy="#{transaction.category.parent}">
                         <h:outputText value="#{transaction.category.parent.name}"/>
                     </p:column>
 
-                    <p:column headerText="SubCategory">
+                    <p:column headerText="SubCategory" filterBy="#{transaction.category}">
                         <h:outputText value="#{transaction.category.name}"/>
                     </p:column>
 
                     <p:column headerText="Tags" filterBy="#{transaction.tags}">
                         <f:facet name="filter">
                             <p:selectOneMenu  onchange="PF('transactionTable').filter();">
-                                <!--onHide="PF('transactionTable').filter();"-->
                                 <f:selectItem itemLabel="Select tag" itemValue="#{null}" noSelectionOption="true"/>
                                 <f:selectItems value="#{summaryView.availableTags}" var="tag" itemValue="#{tag.name}"
                                                itemLabel="#{tag.name}"/>

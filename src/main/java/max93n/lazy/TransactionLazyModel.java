@@ -70,9 +70,14 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
             predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
 
             if (filters != null) {
+                if (filters.containsKey("category.parent")) {
+                    String categoryFilterValue = filters.get("category.parent").toString();
+                    predicates.add(cb.like(root.<Category>get("category").<Category>get("parent").<String>get("name"), "%" + categoryFilterValue + "%"));
+                }
+
                 if (filters.containsKey("category")) {
                     String categoryFilterValue = filters.get("category").toString();
-                    predicates.add(cb.like(root.<Category>get("category").<Category>get("parent").<String>get("name"), "%" + categoryFilterValue + "%"));
+                    predicates.add(cb.like(root.<Category>get("category").<String>get("name"), "%" + categoryFilterValue + "%"));
                 }
 
                 if (filters.containsKey("tags")) {
