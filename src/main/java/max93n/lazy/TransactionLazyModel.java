@@ -1,7 +1,9 @@
 package max93n.lazy;
 
 import max93n.entities.Account;
+import max93n.entities.Category;
 import max93n.entities.Transaction;
+import max93n.enums.TransactionType;
 import max93n.services.TransactionService;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -19,7 +21,6 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
     private Date minDate;
     private Date maxDate;
     private Account account;
-    private Map<String, Object> filters;
 
     private List<Transaction> transactions;
 
@@ -50,20 +51,21 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
 
     @Override
     public List<Transaction> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                  Map<String, Object> f) {
+                                  Map<String, Object> filters) {
 
         PageRequest request = new PageRequest(first / pageSize, pageSize);
 
-        filters = f;
 
         Specification<Transaction> specification = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            predicates.add(cb.and(cb.between(root.<Date>get("date"), minDate, maxDate)));
+            predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
 
             if (filters != null) {
-                if (filters.containsKey("expenseCategory.category")) {
-                    String categoryFilterValue = filters.get("expenseCategory.category").toString();
-                    predicates.add(cb.and(cb.like(root.get("expenseCategory").get("category"), "%" + categoryFilterValue + "%")));
+                if (filters.containsKey("category")) {
+                    String categoryFilterValue = filters.get("category").toString();
+                    predicates.add(cb.like(root.<Category>get("category").<Category>get("parent").<String>get("name"), "%" + categoryFilterValue + "%"));
                 }
 
 //                if (filters.containsKey("expenseTags") && ((String[]) filters.get("expenseTags")).length > 0) {
@@ -72,20 +74,17 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
 //                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
 
 //                }
-                predicates.add(cb.and(cb.between(root.<Date>get("date"),
-                        minDate, maxDate)));
-                predicates.add(cb.and(cb.equal(root.<Account>get("account"), account)));
             }
 
 
             Predicate[] predicatesArray = new Predicate[predicates.size()];
             return cb.and(predicates.toArray(predicatesArray));
         };
-//        int size = (int) expenseTransactionService.getWithSpecificationCount(specification);
-//        this.setRowCount(size);
-//        transactions = expenseTransactionService.getWithSpecification(specification, request);
-        transactions = transactionService.getAllByAccount(account);
-        this.setRowCount(transactions.size());
+        int size = (int) transactionService.getWithSpecificationCount(specification);
+        this.setRowCount(size);
+        transactions = transactionService.getWithSpecification(specification, request);
+//        transactions = transactionService.getAllByAccount(account);
+//        this.setRowCount(transactions.size());
         return transactions;
     }
 

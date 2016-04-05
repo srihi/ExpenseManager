@@ -70,17 +70,12 @@
                         <h:outputText value="#{transaction.transactionType}"/>
                     </p:column>
 
-                    <p:column headerText="Category">
-                        <h:outputText value="#{transaction.category.parent.name}"
-                                      rendered="#{transaction.transactionType == 'EXPENSE'}"/>
-
-                        <h:outputText value="#{transaction.category.name}"
-                                      rendered="#{transaction.transactionType == 'INCOME'}"/>
+                    <p:column headerText="Category" filterBy="#{transaction.category}">
+                        <h:outputText value="#{transaction.category.parent.name}"/>
                     </p:column>
 
                     <p:column headerText="SubCategory">
-                        <h:outputText value="#{transaction.category.name}"
-                                      rendered="#{transaction.transactionType == 'EXPENSE'}"/>
+                        <h:outputText value="#{transaction.category.name}"/>
                     </p:column>
 
                     <!--<p:column headerText="Tags" filterBy="#{expense.expenseTags}">-->

@@ -5,6 +5,8 @@ import max93n.entities.Transaction;
 import max93n.repositories.TransactionRepository;
 import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -45,4 +47,16 @@ public class transactionServiceImpl implements TransactionService {
     public Date getLastDateOfTransaction(Account account) {
         return transactionRepository.getLastDateOfTransaction(account);
     }
+
+    @Override
+    public List<Transaction> getWithSpecification(Specification specification, PageRequest request) {
+        return transactionRepository.findAll(specification, request).getContent();
+    }
+
+    @Override
+    public long getWithSpecificationCount(Specification specification) {
+        return  transactionRepository.count(specification);
+    }
+
+
 }

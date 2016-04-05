@@ -36,7 +36,7 @@ public class SpringConfiguration {
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         jpaProperties.put("hibernate.show_sql", "true");
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-//        jpaProperties.put("hibernate.format_sql", "true");
+        jpaProperties.put("hibernate.format_sql", "true");
         entityManagerFactory.setJpaProperties(jpaProperties);
         entityManagerFactory.setPackagesToScan("max93n");
         entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
