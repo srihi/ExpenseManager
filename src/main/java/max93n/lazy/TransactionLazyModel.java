@@ -75,21 +75,12 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
                     predicates.add(cb.like(root.<Category>get("category").<Category>get("parent").<String>get("name"), "%" + categoryFilterValue + "%"));
                 }
 
-                if (filters.containsKey("tags") && ((String[]) filters.get("tags")).length > 0) {
-                    //TODO: add tags to filter
-//                    String[] tagsArr = (String[]) filters.get("expenseTags");
-//                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
+                if (filters.containsKey("tags")) {
 
                     ListJoin<Transaction, Tag> transactionTagListJoin = root.joinList("tags");
                     List<Tag> tags = new ArrayList<>();
-//                    tags.add(tagService.getByName("Client"));
-                    String[] tagsArr = (String[]) filters.get("tags");
-                    for (String tagName : tagsArr) {
-                        tags.add(tagService.getByName(tagName));
-                    }
-
+                    tags.add(tagService.getByName((String) filters.get("tags")));
                     predicates.add(transactionTagListJoin.in(tags));
-
 
                 }
             }
@@ -98,11 +89,10 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
             Predicate[] predicatesArray = new Predicate[predicates.size()];
             return cb.and(predicates.toArray(predicatesArray));
         };
+
         int size = (int) transactionService.getWithSpecificationCount(specification);
         this.setRowCount(size);
         transactions = transactionService.getWithSpecification(specification, request);
-//        transactions = transactionService.getAllByAccount(account);
-//        this.setRowCount(transactions.size());
         return transactions;
     }
 

@@ -75,11 +75,12 @@
 
                     <p:column headerText="Tags" filterBy="#{transaction.tags}">
                         <f:facet name="filter">
-                            <p:selectCheckboxMenu label="Tags" onchange="PF('transactionTable').filter();">
+                            <p:selectOneMenu  onchange="PF('transactionTable').filter();">
                                 <!--onHide="PF('transactionTable').filter();"-->
+                                <f:selectItem itemLabel="Select tag" itemValue="#{null}" noSelectionOption="true"/>
                                 <f:selectItems value="#{summaryView.availableTags}" var="tag" itemValue="#{tag.name}"
                                                itemLabel="#{tag.name}"/>
-                            </p:selectCheckboxMenu>
+                            </p:selectOneMenu>
                         </f:facet>
                         <p:dataList value="#{transaction.tags}" var="tag">
                             #{tag.name}
