@@ -34,7 +34,10 @@ public class Transaction {
     private Category category;
 
 
-    @OneToMany(mappedBy = "transaction")
+    @ManyToMany()
+    @JoinTable(name = "transaction_tags",
+            joinColumns = @JoinColumn(name = "transaction_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     @Enumerated(EnumType.STRING)

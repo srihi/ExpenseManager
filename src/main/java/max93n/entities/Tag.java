@@ -1,6 +1,7 @@
 package max93n.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Tag {
@@ -10,12 +11,12 @@ public class Tag {
     private Long id;
 
 
-    @ManyToOne
-    private Transaction transaction;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
+    private List<Transaction> transaction;
 
     private String name;
-
     private String description;
+
 
     public Long getId() {
         return id;
@@ -25,12 +26,13 @@ public class Tag {
         this.id = id;
     }
 
-    public Transaction getTransaction() {
+
+    public List<Transaction> getTransaction() {
         return transaction;
     }
 
-    public void setTransaction(Transaction transactionManager) {
-        this.transaction = transactionManager;
+    public void setTransaction(List<Transaction> transaction) {
+        this.transaction = transaction;
     }
 
     public String getName() {

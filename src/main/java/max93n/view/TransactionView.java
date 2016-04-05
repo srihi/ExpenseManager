@@ -170,8 +170,6 @@ public class TransactionView {
         expenseTransaction.setAmount(amount);
         expenseTransaction.setPayer(payer);
 
-//        ExpenseSubCategory expenseSubCategory = expenseSubCategoryService.getBySubCategory(subCategory);
-//        ExpenseCategory expenseCategory = expenseSubCategory.getExpenseCategory();
 
         Category category = categoryService.getByCategoryName(subCategory);
 
