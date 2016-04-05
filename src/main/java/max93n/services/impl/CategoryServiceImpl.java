@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.AssociationOverride;
+import java.util.List;
 
 @Service("categoryService")
 public class CategoryServiceImpl implements CategoryService{
@@ -19,4 +20,14 @@ public class CategoryServiceImpl implements CategoryService{
     public Category getByCategoryName(String name) {
         return categoryRepository.getByCategoryName(name);
     }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.getCategories();
+    }
+
+//    @Override
+//    public List<Category> getSubCategories(Category category) {
+//        return categoryRepository.getSubCategories(category);
+//    }
 }
