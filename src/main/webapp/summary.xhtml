@@ -93,7 +93,10 @@
                             </p:column>
 
                             <p:column headerText="Amount">
-                                <h:outputText value="#{expense.amount}"/>
+                                <h:outputText value="#{currencyBean.getCurrencySymbol(summaryView.account)} "/>
+                                <h:outputText value="#{expense.amount}">
+                                    <f:convertNumber type="currency" currencySymbol=""/>
+                                </h:outputText>
                             </p:column>
                         </p:dataTable>
                     </h:form>
@@ -108,9 +111,13 @@
 
                         <h:outputText value="Date"/>
                         <h:outputText value="#{summaryView.selectedTransaction.date}"/>
-                        <!--//TODO add currency converter-->
                         <h:outputText value="Amount"/>
-                        <h:outputText value="#{summaryView.selectedTransaction.amount}"/>
+                        <p:outputPanel>
+                            <h:outputText value="#{currencyBean.getCurrencySymbol(summaryView.account)} "/>
+                            <h:outputText value="#{summaryView.selectedTransaction.amount}">
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:outputPanel>
 
                         <h:outputText value="Payer"/>
                         <h:outputText value="#{summaryView.selectedTransaction.payer}"/>
