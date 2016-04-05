@@ -1,5 +1,7 @@
 package max93n.entities;
 
+import max93n.enums.RoleEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

@@ -56,7 +56,7 @@ public class SpringConfiguration {
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/expensemanager");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/expense_manager");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
         return dataSource;

@@ -1,6 +1,8 @@
 package max93n.entities;
 
 
+import max93n.enums.CurrencyEnum;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class Account {
 
     private String name;
     private String description;
+
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currency;
 
@@ -23,10 +26,7 @@ public class Account {
     private User user;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<IncomeTransaction> incomeTransactions;
-
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<ExpenseTransaction> expenseTransactions;
+    private List<Transaction> transactions;
 
 
     public Account() {
@@ -73,19 +73,11 @@ public class Account {
         this.user = user;
     }
 
-    public List<IncomeTransaction> getIncomeTransactions() {
-        return incomeTransactions;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setIncomeTransactions(List<IncomeTransaction> incomeTransactions) {
-        this.incomeTransactions = incomeTransactions;
-    }
-
-    public List<ExpenseTransaction> getExpenseTransactions() {
-        return expenseTransactions;
-    }
-
-    public void setExpenseTransactions(List<ExpenseTransaction> expenseTransactions) {
-        this.expenseTransactions = expenseTransactions;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

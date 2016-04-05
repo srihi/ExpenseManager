@@ -1,7 +1,6 @@
 package max93n.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Tag {
@@ -10,21 +9,13 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Transaction transaction;
 
-    @OneToMany(mappedBy = "expenseTag", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<ExpenseTag> expenseTags;
+    private String name;
 
-    @OneToMany(mappedBy = "incomeTag", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<IncomeTag> incomeTags;
-
-
-    public Tag() {}
+    private String description;
 
     public Long getId() {
         return id;
@@ -32,6 +23,14 @@ public class Tag {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transactionManager) {
+        this.transaction = transactionManager;
     }
 
     public String getName() {
@@ -49,29 +48,4 @@ public class Tag {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<ExpenseTag> getExpenseTags() {
-        return expenseTags;
-    }
-
-    public void setExpenseTags(List<ExpenseTag> expenseTags) {
-        this.expenseTags = expenseTags;
-    }
-
-    public List<IncomeTag> getIncomeTags() {
-        return incomeTags;
-    }
-
-    public void setIncomeTags(List<IncomeTag> incomeTags) {
-        this.incomeTags = incomeTags;
-    }
 }
-

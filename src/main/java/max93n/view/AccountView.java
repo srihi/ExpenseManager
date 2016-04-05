@@ -2,11 +2,11 @@ package max93n.view;
 
 
 import max93n.entities.Account;
-import max93n.entities.IncomeTransaction;
+import max93n.entities.Transaction;
 import max93n.entities.User;
-import max93n.entities.CurrencyEnum;
+import max93n.enums.CurrencyEnum;
 import max93n.services.AccountService;
-import max93n.services.IncomeTransactionService;
+import max93n.services.TransactionService;
 import max93n.services.UserService;
 import max93n.utils.AccountAndBalance;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +28,8 @@ public class AccountView {
     @ManagedProperty("#{userService}")
     private UserService userService;
 
-    @ManagedProperty("#{incomeTransactionService}")
-    private IncomeTransactionService incomeTransactionService;
+    @ManagedProperty("#{transactionService}")
+    private TransactionService transactionService;
 
 
     private String name;
@@ -50,9 +50,8 @@ public class AccountView {
         accountsAndBalance = new ArrayList<>();
 
         for (Account account : accounts) {
-            IncomeTransaction income = incomeTransactionService.getInitial(account);
-
-            double balance = incomeTransactionService.getInitial(account).getAmount();
+            Transaction transaction = transactionService.getInitial(account);
+            double balance = transaction.getAmount();
             accountsAndBalance.add(new AccountAndBalance(account, balance));
         }
     }
@@ -73,8 +72,6 @@ public class AccountView {
         if (accountService.add(account, initialBalance)) {
             accountsAndBalance.add(new AccountAndBalance(account, initialBalance));
         }
-
-
     }
 
     public void editAccount() {
@@ -142,13 +139,6 @@ public class AccountView {
         this.currentUser = currentUser;
     }
 
-    public IncomeTransactionService getIncomeTransactionService() {
-        return incomeTransactionService;
-    }
-
-    public void setIncomeTransactionService(IncomeTransactionService incomeTransactionService) {
-        this.incomeTransactionService = incomeTransactionService;
-    }
 
     public List<AccountAndBalance> getAccountsAndBalance() {
         return accountsAndBalance;
@@ -164,5 +154,13 @@ public class AccountView {
 
     public void setCurrentAccountAndBalance(AccountAndBalance currentAccountAndBalance) {
         this.currentAccountAndBalance = currentAccountAndBalance;
+    }
+
+    public TransactionService getTransactionService() {
+        return transactionService;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 }

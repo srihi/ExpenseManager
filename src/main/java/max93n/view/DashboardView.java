@@ -29,8 +29,6 @@ public class DashboardView {
 
     private User currentUser;
 
-
-
     @PostConstruct
     public void init() {
         currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

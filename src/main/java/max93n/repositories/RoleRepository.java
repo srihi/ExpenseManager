@@ -1,7 +1,7 @@
 package max93n.repositories;
 
 import max93n.entities.Role;
-import max93n.entities.RoleEnum;
+import max93n.enums.RoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -2,7 +2,7 @@ package max93n.services.impl;
 
 import max93n.entities.Role;
 import max93n.entities.User;
-import max93n.entities.RoleEnum;
+import max93n.enums.RoleEnum;
 import max93n.repositories.UserRepository;
 import max93n.services.RoleService;
 import max93n.services.UserService;

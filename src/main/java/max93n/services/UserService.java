@@ -1,7 +1,7 @@
 package max93n.services;
 
 import max93n.entities.User;
-import max93n.entities.RoleEnum;
+import max93n.enums.RoleEnum;
 import max93n.utils.exceptions.UserExistsException;
 
 import java.util.List;

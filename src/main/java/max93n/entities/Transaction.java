@@ -1,11 +1,14 @@
 package max93n.entities;
 
+import max93n.enums.TransactionType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@MappedSuperclass
-public abstract class AppTransaction {
+@Entity
+@Table(name = "transaction")
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,18 +25,25 @@ public abstract class AppTransaction {
 
     private String description;
 
+    private double quantity;
+
+    private String measure;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+
+    @OneToMany(mappedBy = "transaction")
+    private List<Tag> tags;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    private double quantity;
-    private String measure;
-
-
-    public AppTransaction() {
-        date = new Date();
-        paymentMethod = "Cash";
-    }
 
     public Long getId() {
         return id;
@@ -80,16 +90,7 @@ public abstract class AppTransaction {
     }
 
     public void setDescription(String description) {
-
         this.description = description;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public double getQuantity() {
@@ -107,4 +108,40 @@ public abstract class AppTransaction {
     public void setMeasure(String measure) {
         this.measure = measure;
     }
+
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
 }
+
+
