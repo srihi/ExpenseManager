@@ -7,11 +7,6 @@
 <h:body>
 
     <ui:composition template="templates/common.xhtml">
-        <ui:define name="custom_include">
-            <h:outputStylesheet library="c3" name="c3.css"/>
-            <h:outputScript library="c3" name="d3.min.js"/>
-            <h:outputScript library="c3" name="c3.min.js"/>
-        </ui:define>
 
         <ui:define name="title">
             Summary
@@ -78,17 +73,18 @@
                         <h:outputText value="#{transaction.category.name}"/>
                     </p:column>
 
-                    <!--<p:column headerText="Tags" filterBy="#{expense.expenseTags}">-->
-                    <!--<f:facet name="filter">-->
-                    <!--<p:selectCheckboxMenu label="Tags" onchange="PF('transactionTable').filter();">-->
-                    <!--&lt;!&ndash;onHide="PF('transactionTable').filter();"&ndash;&gt;-->
-                    <!--<f:selectItems value="#{summaryView.availableTags}" var="tag" itemValue="#{tag}" itemLabel="#{tag.name}"/>-->
-                    <!--</p:selectCheckboxMenu>-->
-                    <!--</f:facet>-->
-                    <!--<p:dataList value="#{expense.expenseTags}" var="expenseTag">-->
-                    <!--#{expenseTag.expenseTag.name}-->
-                    <!--</p:dataList>-->
-                    <!--</p:column>-->
+                    <p:column headerText="Tags" filterBy="#{transaction.tags}">
+                        <f:facet name="filter">
+                            <p:selectCheckboxMenu label="Tags" onchange="PF('transactionTable').filter();">
+                                <!--onHide="PF('transactionTable').filter();"-->
+                                <f:selectItems value="#{summaryView.availableTags}" var="tag" itemValue="#{tag.name}"
+                                               itemLabel="#{tag.name}"/>
+                            </p:selectCheckboxMenu>
+                        </f:facet>
+                        <p:dataList value="#{transaction.tags}" var="tag">
+                            #{tag.name}
+                        </p:dataList>
+                    </p:column>
 
 
                     <p:column headerText="Date">

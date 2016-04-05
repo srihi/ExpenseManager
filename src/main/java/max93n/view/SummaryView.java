@@ -50,7 +50,7 @@ public class SummaryView {
 
         minDate = transactionService.getFirstDateOfTransaction(account);
         maxDate = transactionService.getLastDateOfTransaction(account);
-        lazyDataModel = new TransactionLazyModel(transactionService, account, minDate, maxDate);
+        lazyDataModel = new TransactionLazyModel(tagService, transactionService, account, minDate, maxDate);
 
 
     }

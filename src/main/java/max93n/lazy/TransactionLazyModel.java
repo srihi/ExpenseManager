@@ -2,8 +2,10 @@ package max93n.lazy;
 
 import max93n.entities.Account;
 import max93n.entities.Category;
+import max93n.entities.Tag;
 import max93n.entities.Transaction;
 import max93n.enums.TransactionType;
+import max93n.services.TagService;
 import max93n.services.TransactionService;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -17,21 +19,26 @@ import java.util.*;
 public class TransactionLazyModel extends LazyDataModel<Transaction> {
 
     TransactionService transactionService;
+    TagService tagService;
 
     private Date minDate;
     private Date maxDate;
     private Account account;
+
 
     private List<Transaction> transactions;
 
     public TransactionLazyModel() {
     }
 
-    public TransactionLazyModel(TransactionService transactionService, Account account, Date minDate, Date maxDate) {
+    public TransactionLazyModel(TagService tagService, TransactionService transactionService, Account account, Date minDate, Date maxDate) {
         this.transactionService = transactionService;
+        this.tagService = tagService;
+
         this.account = account;
         this.minDate = minDate;
         this.maxDate = maxDate;
+
     }
 
     @Override
@@ -68,12 +75,23 @@ public class TransactionLazyModel extends LazyDataModel<Transaction> {
                     predicates.add(cb.like(root.<Category>get("category").<Category>get("parent").<String>get("name"), "%" + categoryFilterValue + "%"));
                 }
 
-//                if (filters.containsKey("expenseTags") && ((String[]) filters.get("expenseTags")).length > 0) {
-                //TODO: add tags to filter
+                if (filters.containsKey("tags") && ((String[]) filters.get("tags")).length > 0) {
+                    //TODO: add tags to filter
 //                    String[] tagsArr = (String[]) filters.get("expenseTags");
 //                                predicates.add(cb.and(cb.equal(root.<List<ExpenseTag>>get("expenseTags").<Tag>get("tag").get("name"), tagsArr)));
 
-//                }
+                    ListJoin<Transaction, Tag> transactionTagListJoin = root.joinList("tags");
+                    List<Tag> tags = new ArrayList<>();
+//                    tags.add(tagService.getByName("Client"));
+                    String[] tagsArr = (String[]) filters.get("tags");
+                    for (String tagName : tagsArr) {
+                        tags.add(tagService.getByName(tagName));
+                    }
+
+                    predicates.add(transactionTagListJoin.in(tags));
+
+
+                }
             }
 
 
