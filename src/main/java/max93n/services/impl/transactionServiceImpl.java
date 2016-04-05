@@ -7,6 +7,9 @@ import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service("transactionService")
 public class transactionServiceImpl implements TransactionService {
 
@@ -26,5 +29,20 @@ public class transactionServiceImpl implements TransactionService {
     @Override
     public Transaction getInitial(Account account) {
         return transactionRepository.getInitial(account);
+    }
+
+    @Override
+    public List<Transaction> getAllByAccount(Account account) {
+        return transactionRepository.getAllByAccount(account);
+    }
+
+    @Override
+    public Date getFirstDateOfTransaction(Account account) {
+        return transactionRepository.getFirstDateOfTransaction(account);
+    }
+
+    @Override
+    public Date getLastDateOfTransaction(Account account) {
+        return transactionRepository.getLastDateOfTransaction(account);
     }
 }

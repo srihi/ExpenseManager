@@ -6,10 +6,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
+import java.util.List;
+
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 
 
     @Query("select t from Transaction t where t.account = :account and t.category.name = 'Initial Balance'")
     Transaction getInitial(@Param("account") Account account);
 
+
+    @Query("select min(e.date) from Transaction e where e.account = :account")
+    Date getFirstDateOfTransaction(@Param("account") Account account);
+
+    @Query("select min(e.date) from Transaction e where e.account = :account")
+    Date getLastDateOfTransaction(@Param("account") Account account);
+
+
+    @Query("select t from Transaction t where t.account = :account")
+    List<Transaction> getAllByAccount(@Param("account") Account account);
 }

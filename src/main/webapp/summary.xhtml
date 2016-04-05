@@ -21,93 +21,104 @@
         </ui:define>
         <ui:define name="content">
 
-            <p:panel id="periodFilterPanel">
-                <h:form>
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputLabel for="periodFilter" value="Period:"/>
-                        <p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">
-                            <f:selectItem itemLabel="All" itemValue="All"/>
-                            <f:selectItem itemLabel="Date Range" itemValue="Date Range"/>
-                            <p:ajax event="change" update=":tabView dataRangeOutputPanel"
-                                    listener="#{summaryView.periodFilterChanged()}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <p:outputPanel id="dataRangeOutputPanel" autoUpdate="true">
-                        <p:panel rendered="#{summaryView.dataRange}">
-                            <p:calendar id="begin" value="#{summaryView.beginDate}" pattern="MM/dd/yyyy HH:mm:ss">
-                                <p:ajax event="dateSelect"
-                                        update=":tabView"
-                                        listener="#{summaryView.periodFilterChanged}"/>
-                            </p:calendar>
-                            <h:outputText value=" - "/>
-                            <p:calendar id="finish" value="#{summaryView.finishDate}" pattern="MM/dd/yyyy HH:mm:ss">
-                                <p:ajax event="dateSelect"
-                                        update=":tabView"
-                                        listener="#{summaryView.periodFilterChanged}"/>
-                            </p:calendar>
-                        </p:panel>
-                    </p:outputPanel>
-                </h:form>
-            </p:panel>
-            <p:tabView value="#{summaryView.tabKeys}" var="tabKey" id="tabView">
-                <p:tab title="#{tabKey}">
-                    <h:form id="dataTableForm">
-                        <p:dataTable id="dataTable"
-                                     widgetVar="transactionTable"
-                                     value="#{summaryView.lazyDataModelMap.get(tabKey)}" var="expense"
-                                     rows="2"
-                                     rowsPerPageTemplate="2,5,10,15"
-                                     paginator="true"
-                                     lazy="true"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                                     selectionMode="single" selection="#{summaryView.selectedTransaction}">
+            <!--<p:panel id="periodFilterPanel">-->
+            <!--<h:form>-->
+            <!--<h:panelGrid columns="2" cellpadding="5">-->
+            <!--<h:outputLabel for="periodFilter" value="Period:"/>-->
+            <!--<p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">-->
+            <!--<f:selectItem itemLabel="All" itemValue="All"/>-->
+            <!--<f:selectItem itemLabel="Date Range" itemValue="Date Range"/>-->
+            <!--<p:ajax event="change" update=":tabView dataRangeOutputPanel"-->
+            <!--listener="#{summaryView.periodFilterChanged()}"/>-->
+            <!--</p:selectOneRadio>-->
+            <!--</h:panelGrid>-->
+            <!--<p:outputPanel id="dataRangeOutputPanel" autoUpdate="true">-->
+            <!--<p:panel rendered="#{summaryView.dataRange}">-->
+            <!--<p:calendar id="begin" value="#{summaryView.beginDate}" pattern="MM/dd/yyyy HH:mm:ss">-->
+            <!--<p:ajax event="dateSelect"-->
+            <!--update=":tabView"-->
+            <!--listener="#{summaryView.periodFilterChanged}"/>-->
+            <!--</p:calendar>-->
+            <!--<h:outputText value=" - "/>-->
+            <!--<p:calendar id="finish" value="#{summaryView.finishDate}" pattern="MM/dd/yyyy HH:mm:ss">-->
+            <!--<p:ajax event="dateSelect"-->
+            <!--update=":tabView"-->
+            <!--listener="#{summaryView.periodFilterChanged}"/>-->
+            <!--</p:calendar>-->
+            <!--</p:panel>-->
+            <!--</p:outputPanel>-->
+            <!--</h:form>-->
+            <!--</p:panel>-->
+            <!--<p:tabView value="#{summaryView.tabKeys}" var="tabKey" id="tabView">-->
+            <!--<p:tab title="#{tabKey}">-->
+            <h:form id="dataTableForm">
+                <p:dataTable id="dataTable"
+                             widgetVar="transactionTable"
+                             value="#{summaryView.lazyDataModel}" var="transaction"
+                             rows="2"
+                             rowsPerPageTemplate="2,5,10,15"
+                             paginator="true"
+                             lazy="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             selectionMode="single" selection="#{summaryView.selectedTransaction}">
 
-                            <p:ajax event="rowSelect" update=":transactionDetail"
-                                    listener="#{summaryView.onRowSelect}"
-                                    oncomplete="PF('transactionDialog').show()"/>
+                    <p:ajax event="rowSelect" update=":transactionDetail"
+                            listener="#{summaryView.onRowSelect}"
+                            oncomplete="PF('transactionDialog').show()"/>
+
+                    <p:column headerText="Transaction Type">
+                        <h:outputText value="#{transaction.transactionType}"/>
+                    </p:column>
+
+                    <p:column headerText="Category">
+                        <h:outputText value="#{transaction.category.parent.name}"
+                                      rendered="#{transaction.transactionType == 'EXPENSE'}"/>
+
+                        <h:outputText value="#{transaction.category.name}"
+                                      rendered="#{transaction.transactionType == 'INCOME'}"/>
+                    </p:column>
+
+                    <p:column headerText="SubCategory">
+                        <h:outputText value="#{transaction.category.name}"
+                                      rendered="#{transaction.transactionType == 'EXPENSE'}"/>
+                    </p:column>
+
+                    <!--<p:column headerText="Tags" filterBy="#{expense.expenseTags}">-->
+                    <!--<f:facet name="filter">-->
+                    <!--<p:selectCheckboxMenu label="Tags" onchange="PF('transactionTable').filter();">-->
+                    <!--&lt;!&ndash;onHide="PF('transactionTable').filter();"&ndash;&gt;-->
+                    <!--<f:selectItems value="#{summaryView.availableTags}" var="tag" itemValue="#{tag}" itemLabel="#{tag.name}"/>-->
+                    <!--</p:selectCheckboxMenu>-->
+                    <!--</f:facet>-->
+                    <!--<p:dataList value="#{expense.expenseTags}" var="expenseTag">-->
+                    <!--#{expenseTag.expenseTag.name}-->
+                    <!--</p:dataList>-->
+                    <!--</p:column>-->
 
 
-                            <p:column headerText="Category" filterBy="#{expense.expenseCategory.category}">
-                                <h:outputText value="#{expense.expenseCategory.category}"/>
-                            </p:column>
+                    <p:column headerText="Date">
+                        <h:outputText value="#{transaction.date}"/>
+                    </p:column>
 
-                            <p:column headerText="SubCategory">
-                                <h:outputText value="#{expense.expenseCategory.subCategory.get(0).subCategory}"/>
-                            </p:column>
-
-                            <p:column headerText="Tags" filterBy="#{expense.expenseTags}">
-                                <f:facet name="filter">
-                                    <p:selectCheckboxMenu label="Tags" onchange="PF('transactionTable').filter();"
-                                                          onHide="PF('transactionTable').filter();">
-                                        <f:selectItems value="#{summaryView.availableTagNames}"/>
-                                    </p:selectCheckboxMenu>
-                                </f:facet>
-                                <p:dataList value="#{expense.expenseTags}" var="expenseTag">
-                                    #{expenseTag.expenseTag.name}
-                                </p:dataList>
-                            </p:column>
-
-
-                            <p:column headerText="Date">
-                                <h:outputText value="#{expense.date}"/>
-                            </p:column>
-
-                            <p:column headerText="Amount">
-                                <h:outputText value="#{currencyBean.getCurrencySymbol(summaryView.account)} "/>
-                                <h:outputText value="#{expense.amount}">
-                                    <f:convertNumber type="currency" currencySymbol=""/>
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
-                </p:tab>
-            </p:tabView>
+                    <p:column headerText="Amount">
+                        <h:outputText value="#{currencyBean.getCurrencySymbol(summaryView.account)} "/>
+                        <h:outputText value="#{transaction.amount}">
+                            <f:convertNumber type="currency" currencySymbol=""/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <!--</p:tab>-->
+            <!--</p:tabView>-->
 
             <p:dialog header="Expense Transaction" widgetVar="transactionDialog" modal="true">
                 <p:outputPanel id="transactionDetail">
                     <p:panelGrid columns="2">
                         <h:outputText value="Id"/>
                         <h:outputText value="#{summaryView.selectedTransaction.id}"/>
+
+                        <h:outputText value="Transaction Type"/>
+                        <h:outputText value="#{summaryView.selectedTransaction.transactionType}"/>
 
                         <h:outputText value="Date"/>
                         <h:outputText value="#{summaryView.selectedTransaction.date}"/>
@@ -135,8 +146,8 @@
                         <h:outputText value="#{summaryView.selectedTransaction.measure}"/>
 
                         <h:outputText value="Tags"/>
-                        <p:dataList value="#{summaryView.selectedTransaction.expenseTags}" var="expenseTag">
-                            <h:outputText value="#{expenseTag.expenseTag.name}"/>
+                        <p:dataList value="#{summaryView.selectedTransaction.tags}" var="tag">
+                            <h:outputText value="#{tag.name}"/>
                         </p:dataList>
 
                     </p:panelGrid>
