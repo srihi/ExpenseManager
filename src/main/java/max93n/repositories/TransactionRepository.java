@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 
 
-    @Query("select t from Transaction t where t.account = :account")
+    @Query("select t from Transaction t where t.account = :account and t.category.name = 'Initial Balance'")
     Transaction getInitial(@Param("account") Account account);
 
 }
