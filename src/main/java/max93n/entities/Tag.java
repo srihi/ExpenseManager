@@ -11,6 +11,10 @@ public class Tag {
     private Long id;
 
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
     private List<Transaction> transaction;
 
@@ -49,5 +53,13 @@ public class Tag {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

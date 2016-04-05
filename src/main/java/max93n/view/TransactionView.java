@@ -2,6 +2,7 @@ package max93n.view;
 
 
 import max93n.entities.*;
+import max93n.enums.TransactionType;
 import max93n.services.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -30,6 +31,8 @@ public class TransactionView {
     @ManagedProperty("#{transactionService}")
     private TransactionService transactionService;
 
+    @ManagedProperty("#{tagService}")
+    private TagService tagService;
 
 
     private Date date;
@@ -39,6 +42,9 @@ public class TransactionView {
     private String subCategory;
     private String paymentMethod;
     private String description;
+
+    List<Tag> availableTags;
+    private List<String> selectedTagTitles;
 
     private List<SelectItem> incomeCategorySelectItems;
     private List<SelectItem> expenseCategorySelectItems;
@@ -64,6 +70,8 @@ public class TransactionView {
 
         Map<String, String[]> map = req.getParameterMap();
         transactionType = map.get("type")[0];
+
+        availableTags = tagService.getAllByUser(user);
 
 
         if (transactionType.equals("income")) {
@@ -166,6 +174,7 @@ public class TransactionView {
 
     private String addExpenseTransaction(String accountName) {
         Transaction expenseTransaction = new Transaction();
+        expenseTransaction.setTransactionType(TransactionType.EXPENSE);
         expenseTransaction.setDate(date);
         expenseTransaction.setAmount(amount);
         expenseTransaction.setPayer(payer);
@@ -180,17 +189,17 @@ public class TransactionView {
         Account account = accountService.getByName(accountName);
         expenseTransaction.setAccount(account);
 
-//        List<ExpenseTag> expenseTags = new ArrayList<>();
+        List<Tag> expenseTags = new ArrayList<>();
 
-//        for (String tagTitle : selectedTagTitles) {
-//            Tag tag = tagService.getByName(tagTitle);
+        for (String tagTitle : selectedTagTitles) {
+            Tag tag = tagService.getByName(tagTitle);
 //            ExpenseTag expenseTag = new ExpenseTag();
 //            expenseTag.setExpenseTag(tag);
 //            expenseTag.setExpenseTransaction(expenseTransaction);
-//            expenseTags.add(expenseTag);
-//        }
+            expenseTags.add(tag);
+        }
 
-//        expenseTransaction.setExpenseTags(expenseTags);
+        expenseTransaction.setTags(expenseTags);
         expenseTransaction.setQuantity(quantity);
         expenseTransaction.setMeasure(selectedMeasure);
 
@@ -329,5 +338,29 @@ public class TransactionView {
 
     public void setTransactionService(TransactionService transactionService) {
         this.transactionService = transactionService;
+    }
+
+    public TagService getTagService() {
+        return tagService;
+    }
+
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
+    }
+
+    public List<Tag> getAvailableTags() {
+        return availableTags;
+    }
+
+    public void setAvailableTags(List<Tag> availableTags) {
+        this.availableTags = availableTags;
+    }
+
+    public List<String> getSelectedTagTitles() {
+        return selectedTagTitles;
+    }
+
+    public void setSelectedTagTitles(List<String> selectedTagTitles) {
+        this.selectedTagTitles = selectedTagTitles;
     }
 }

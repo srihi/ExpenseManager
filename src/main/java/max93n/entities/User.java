@@ -28,6 +28,8 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Tag> tags;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -125,14 +127,12 @@ public class User implements UserDetails{
         this.email = email;
     }
 
-//    public List<OldTag> getOldTags() {
-//        return oldTags;
-//    }
-//
-//    public void setOldTags(List<OldTag> oldTags) {
-//        this.oldTags = oldTags;
-//    }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
 
-
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
 }
