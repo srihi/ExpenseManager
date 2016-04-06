@@ -20,6 +20,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long>{
     @Query("select c from Category c where c.parent.name = 'Income' and not c.name = 'Initial Balance'")
     List<Category> getIncomeSubCategoriesEscapeInitial();
 
-//    @Query("select c from Category c where c.children = :category")
-//    List<Category> getSubCategories(@Param("category") Category category);
+    @Query("select c from Category c where c.parent.name <> 'Income' and c.parent <> null")
+    List<Category> getExpenseSubCategories();
+
+    @Query("select c from Category c where c.name <> 'Income' and c.parent = null")
+    List<Category> getExpenseCategories();
 }

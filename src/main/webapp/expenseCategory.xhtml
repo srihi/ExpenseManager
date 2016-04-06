@@ -33,12 +33,12 @@
                     <h:outputText rendered="#{expenseCategoryView.selectedExpenseCategory != null}"
                                   value="Category selected: "/>
                     <h:outputText rendered="#{expenseCategoryView.selectedExpenseCategory != null}"
-                                  value="#{expenseCategoryView.selectedExpenseCategory.category}"/>
+                                  value="#{expenseCategoryView.selectedExpenseCategory.name}"/>
 
                     <h:outputText rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}"
                                   value="SubCategory selected: "/>
                     <h:outputText rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}"
-                                  value="#{expenseCategoryView.selectedExpenseSubCategory.subCategory}"/>
+                                  value="#{expenseCategoryView.selectedExpenseSubCategory.name}"/>
                 </p:panelGrid>
             </p:panel>
 
@@ -50,7 +50,7 @@
                                 <h:outputLabel for="category" value="Category: "/>
                             </p:column>
                             <p:column>
-                                <p:inputText id="category" value="#{expenseCategoryView.category}"/>
+                                <p:inputText id="category" value="#{expenseCategoryView.categoryName}"/>
                             </p:column>
                             <p:column rendered="#{expenseCategoryView.selectedExpenseCategory != null}">
                                 <p:commandButton value="Edit"
@@ -70,7 +70,7 @@
                             </p:column>
                             <p:column>
                                 <p:inputText id="subCategory"
-                                             value="#{expenseCategoryView.subCategory}"/>
+                                             value="#{expenseCategoryView.subCategoryName}"/>
                             </p:column>
                             <p:column rendered="#{expenseCategoryView.selectedExpenseSubCategory != null}">
                                 <p:commandButton value="Edit"

@@ -29,6 +29,11 @@ public class transactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public void remove(Transaction transaction) {
+        transactionRepository.delete(transaction.getId());
+    }
+
+    @Override
     public Transaction getInitial(Account account) {
         return transactionRepository.getInitial(account);
     }

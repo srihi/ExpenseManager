@@ -11,6 +11,7 @@ import java.util.List;
 public interface TransactionService {
     void add(Transaction transaction);
     void save(Transaction transaction);
+    void remove(Transaction transaction);
 
     Transaction getInitial(Account account);
 

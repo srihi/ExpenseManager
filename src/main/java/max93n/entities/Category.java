@@ -1,9 +1,7 @@
 package max93n.entities;
 
-import com.sun.istack.internal.Nullable;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +20,7 @@ public class Category {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Category> children = new HashSet<Category>();
+    private Set<Category> children;
 
     private String name;
 
