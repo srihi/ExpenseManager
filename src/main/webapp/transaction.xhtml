@@ -28,8 +28,8 @@
                     <p:inputText value="#{transactionView.payer}"/>
 
                     <h:outputText value="Category"/>
-                    <p:selectOneMenu value="#{transactionView.category}" rendered="#{param['type'] eq 'income'}">
-                        <f:selectItems value="#{transactionView.incomeCategorySelectItems}"/>
+                    <p:selectOneMenu value="#{transactionView.subCategory}" rendered="#{param['type'] eq 'income'}">
+                        <f:selectItems value="#{transactionView.incomeSubCategorySelectItems}"/>
                     </p:selectOneMenu>
                     <p:selectOneMenu value="#{transactionView.subCategory}" rendered="#{param['type'] eq 'expense'}">
                         <f:selectItems value="#{transactionView.expenseCategorySelectItems}"/>

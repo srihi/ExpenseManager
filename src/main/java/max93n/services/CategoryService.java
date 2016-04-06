@@ -8,6 +8,9 @@ public interface CategoryService {
     Category getByCategoryName(String name);
 
     List<Category> getCategories();
+
+    List<Category> getIncomeSubCategoriesEscapeInitial();
+
 //    List<Category> getSubCategories(Category category);
 
 

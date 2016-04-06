@@ -38,7 +38,6 @@ public class TransactionView {
     private Date date;
     private Double amount;
     private String payer;
-    private String category;
     private String subCategory;
     private String paymentMethod;
     private String description;
@@ -46,7 +45,7 @@ public class TransactionView {
     List<Tag> availableTags;
     private List<String> selectedTagTitles;
 
-    private List<SelectItem> incomeCategorySelectItems;
+    private List<SelectItem> incomeSubCategorySelectItems;
     private List<SelectItem> expenseCategorySelectItems;
 
     private double quantity;
@@ -75,30 +74,15 @@ public class TransactionView {
 
 
         if (transactionType.equals("income")) {
-//            List<IncomeCategory> incomeCategories= incomeCategoryService.getAllEscapeInitial();
-//
-//            incomeCategorySelectItems = new ArrayList<>();
-//
-//            for (IncomeCategory incomeCategory : incomeCategories) {
-//                incomeCategorySelectItems.add(new SelectItem(incomeCategory.getCategory(), incomeCategory.getCategory()));
-//            }
+            List<Category> incomeSubCategories= categoryService.getIncomeSubCategoriesEscapeInitial();
+
+            incomeSubCategorySelectItems = new ArrayList<>();
+
+            for (Category incomeSubCategory : incomeSubCategories) {
+                incomeSubCategorySelectItems.add(new SelectItem(incomeSubCategory.getName(), incomeSubCategory.getName()));
+            }
         }
         else if (transactionType.equals("expense")) {
-//            expenseCategorySelectItems = new ArrayList<>();
-//
-//            List<ExpenseCategory> expenseCategories = expenseCategoryService.getAll();
-//            for (ExpenseCategory expenseCategory : expenseCategories) {
-//                SelectItemGroup group = new SelectItemGroup(expenseCategory.getCategory());
-//
-//                SelectItem [] items = new SelectItem[expenseCategory.getSubCategory().size()];
-//                int i = 0;
-//                for (ExpenseSubCategory expenseSubCategory : expenseCategory.getSubCategory()) {
-//                    items[i++] = new SelectItem(expenseSubCategory.getSubCategory(), expenseSubCategory.getSubCategory());
-//                }
-//                group.setSelectItems(items);
-//
-//                expenseCategorySelectItems.add(group);
-//            }
 
             expenseCategorySelectItems = new ArrayList<>();
 
@@ -126,76 +110,33 @@ public class TransactionView {
         String type = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("type");
         String accountName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("account-name");
 
-        if (type.equals("income")) {
-//            return addIncomeTransaction(accountName);
-        }
-        else if (type.equals("expense")) {
-            return addExpenseTransaction(accountName);
-        }
-
-        return null;
-    }
-
-//    private String addIncomeTransaction(String accountName) {
-//        IncomeTransaction incomeTransaction = new IncomeTransaction();
-//        incomeTransaction.setDate(date);
-//        incomeTransaction.setAmount(amount);
-//        incomeTransaction.setPayer(payer);
-//        IncomeCategory incomeCategory = incomeCategoryService.getByCategory(category);
-//        incomeTransaction.setIncomeCategory(incomeCategory);
-//        incomeTransaction.setPaymentMethod(paymentMethod);
-//        incomeTransaction.setDescription(description);
-//        Account account = accountService.getByName(accountName);
-//        incomeTransaction.setAccount(account);
-//
-//        List<IncomeTag> incomeTags = new ArrayList<>();
-//
-//        for (String tagTitle : selectedTagTitles) {
-//            Tag tag = tagService.getByName(tagTitle);
-//            IncomeTag incomeTag = new IncomeTag();
-////            incomeTag.setIncomeTag(tag);
-////            incomeTag.setIncomeTransaction(incomeTransaction);
-////            incomeTags.add(incomeTag);
-//        }
-//
-////        incomeTransaction.setIncomeTags(incomeTags);
-//        incomeTransaction.setQuantity(quantity);
-//        incomeTransaction.setMeasure(selectedMeasure);
-//
-//        incomeTransactionService.add(incomeTransaction);
-//
-//        for (IncomeTag incomeTag : incomeTags) {
-//            incomeTagService.add(incomeTag);
-//        }
-//
-//        return "dashboard";
-//    }
-
-
-    private String addExpenseTransaction(String accountName) {
         Transaction expenseTransaction = new Transaction();
-        expenseTransaction.setTransactionType(TransactionType.EXPENSE);
+
         expenseTransaction.setDate(date);
         expenseTransaction.setAmount(amount);
         expenseTransaction.setPayer(payer);
-
-
-        Category category = categoryService.getByCategoryName(subCategory);
-
-        expenseTransaction.setCategory(category);
 
         expenseTransaction.setPaymentMethod(paymentMethod);
         expenseTransaction.setDescription(description);
         Account account = accountService.getByName(accountName);
         expenseTransaction.setAccount(account);
 
+
+        if (type.equals("income")) {
+            expenseTransaction.setTransactionType(TransactionType.INCOME);
+        }
+        else if (type.equals("expense")) {
+            expenseTransaction.setTransactionType(TransactionType.EXPENSE);
+        }
+
+        Category category = categoryService.getByCategoryName(subCategory);
+        expenseTransaction.setCategory(category);
+
+
         List<Tag> expenseTags = new ArrayList<>();
 
         for (String tagTitle : selectedTagTitles) {
             Tag tag = tagService.getByName(tagTitle);
-//            ExpenseTag expenseTag = new ExpenseTag();
-//            expenseTag.setExpenseTag(tag);
-//            expenseTag.setExpenseTransaction(expenseTransaction);
             expenseTags.add(tag);
         }
 
@@ -205,11 +146,8 @@ public class TransactionView {
 
         transactionService.add(expenseTransaction);
 
-//        for (ExpenseTag expenseTag : expenseTags) {
-//            expenseTagService.add(expenseTag);
-//        }
-
         return "dashboard?faces-redirect=true";
+
     }
 
     public AccountService getAccountService() {
@@ -252,13 +190,6 @@ public class TransactionView {
         this.payer = payer;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getSubCategory() {
         return subCategory;
@@ -284,12 +215,12 @@ public class TransactionView {
         this.description = description;
     }
 
-    public List<SelectItem> getIncomeCategorySelectItems() {
-        return incomeCategorySelectItems;
+    public List<SelectItem> getIncomeSubCategorySelectItems() {
+        return incomeSubCategorySelectItems;
     }
 
-    public void setIncomeCategorySelectItems(List<SelectItem> incomeCategorySelectItems) {
-        this.incomeCategorySelectItems = incomeCategorySelectItems;
+    public void setIncomeSubCategorySelectItems(List<SelectItem> incomeSubCategorySelectItems) {
+        this.incomeSubCategorySelectItems = incomeSubCategorySelectItems;
     }
 
     public List<SelectItem> getExpenseCategorySelectItems() {

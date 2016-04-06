@@ -26,8 +26,9 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.getCategories();
     }
 
-//    @Override
-//    public List<Category> getSubCategories(Category category) {
-//        return categoryRepository.getSubCategories(category);
-//    }
+    @Override
+    public List<Category> getIncomeSubCategoriesEscapeInitial() {
+        return categoryRepository.getIncomeSubCategoriesEscapeInitial();
+    }
+
 }
