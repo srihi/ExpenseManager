@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service("tagService")
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagRepository tagRepository;
@@ -23,5 +23,28 @@ public class TagServiceImpl implements TagService{
     @Override
     public Tag getByName(String name) {
         return tagRepository.getByName(name);
+    }
+
+    @Override
+    public boolean add(Tag tag) {
+
+        if (tagRepository.getByName(tag.getName()) != null) {
+            return false;
+        }
+
+        tagRepository.saveAndFlush(tag);
+        return true;
+    }
+
+    @Override
+    public boolean edit(Tag tag) {
+        tagRepository.saveAndFlush(tag);
+        return true;
+    }
+
+    @Override
+    public void remove(Tag tag) {
+        //TODO: fix, when remove tag, transaction must not be removed
+        tagRepository.delete(tag.getId());
     }
 }
