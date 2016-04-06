@@ -1,5 +1,7 @@
 package max93n.entities;
 
+import com.sun.istack.internal.Nullable;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +14,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)

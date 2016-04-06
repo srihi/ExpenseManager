@@ -19,7 +19,7 @@
             <p:dialog header="Edit" widgetVar="editDialog" closeOnEscape="true">
                 <h:form id="editForm">
                     <h:outputLabel for="edit-category" value="Category"/>
-                    <p:inputText id="edit-category" value="#{incomeCategoryView.modifyingIncomeCategory.category}"/>
+                    <p:inputText id="edit-category" value="#{incomeCategoryView.modifyingIncomeSubCategory.name}"/>
                     <br/>
                     <p:commandButton value="Cancel" onclick="PF('editDialog').hide()"/>
                     <p:commandButton value="Save"
@@ -31,7 +31,7 @@
             </p:dialog>
 
             <h:form id="categoriesForm">
-                <p:dataList value="#{incomeCategoryView.incomeCategories}" var="c" type="definition">
+                <p:dataList value="#{incomeCategoryView.incomeSubCategories}" var="c" type="definition">
                     <f:facet name="header">
                         Income category
                     </f:facet>
@@ -47,7 +47,7 @@
 
                     <f:facet name="description">
                         <div style="padding: 10px;">
-                            #{c.category}
+                            #{c.name}
                         </div>
                     </f:facet>
                 </p:dataList>
@@ -57,7 +57,7 @@
             <h:form id="newCategoryForm">
                 <p:panel id="panel">
                     <h:outputLabel for="category" value="Category: "/>
-                    <p:inputText id="category" value="#{incomeCategoryView.category}" required="true"/>
+                    <p:inputText id="category" value="#{incomeCategoryView.name}" required="true"/>
                 </p:panel>
                 <br/>
                 <p:commandButton value="Cancel" update="panel">

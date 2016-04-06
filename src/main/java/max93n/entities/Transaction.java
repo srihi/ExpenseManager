@@ -30,7 +30,7 @@ public class Transaction {
     private String measure;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
 

@@ -11,7 +11,11 @@ public interface CategoryService {
 
     List<Category> getIncomeSubCategoriesEscapeInitial();
 
-//    List<Category> getSubCategories(Category category);
+    void add(Category category);
+
+    void save(Category category);
+
+    void remove(Category category);
 
 
 }
