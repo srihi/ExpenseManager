@@ -9,6 +9,7 @@ import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,14 +25,7 @@ public class AccountServiceImpl implements AccountService{
     @Autowired
     private CategoryService categoryService;
 
-//    @Autowired
-//    IncomeCategoryService incomeCategoryService;
-//
-//    @Autowired
-//    IncomeTransactionService incomeTransactionService;
-//
-//    @Autowired
-//    ExpenseTransactionService expenseTransactionService;
+
 
 
     @Override
@@ -39,14 +33,16 @@ public class AccountServiceImpl implements AccountService{
 
         double balance = 0;
 
-//        for (IncomeTransaction income : account.getIncomeTransactions()) {
-//
-//            balance += income.getAmount();
-//        }
-//        for (ExpenseTransaction expense : account.getExpenseTransactions()) {
-//
-//            balance -= expense.getAmount();
-//        }
+        for (Transaction transaction : account.getTransactions()) {
+
+            if (transaction.getTransactionType() == TransactionType.INCOME) {
+                balance += transaction.getAmount();
+            }
+            else {
+                balance -= transaction.getAmount();
+            }
+
+        }
 
         return  balance;
     }
@@ -54,62 +50,57 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public double getThisMonthBalance(Account account) {
-//        double balance = calcSum(account.getIncomeTransactions(), Calendar.MONTH);
-//        balance -= calcSum(account.getExpenseTransactions(), Calendar.MONTH);
-//        return balance;
-        return 0;
+
+        double balance = calcSum(transactionService.getIncomeTransactionByAccount(account), Calendar.MONTH);
+        balance -= calcSum(transactionService.getExpenseTransactionByAccount(account), Calendar.MONTH);
+        return balance;
     }
 
     @Override
     public double getThisWeekIncome(Account account) {
-//        return calcSum(account.getIncomeTransactions(), Calendar.WEEK_OF_MONTH);
-        return 0;
+        return calcSum(transactionService.getIncomeTransactionByAccount(account), Calendar.WEEK_OF_MONTH);
     }
 
     @Override
     public double getThisMonthIncome(Account account) {
-//        return calcSum(account.getIncomeTransactions(), Calendar.MONTH);
-        return 0;
+        return calcSum(transactionService.getIncomeTransactionByAccount(account), Calendar.MONTH);
     }
 
     @Override
     public double getTodayExpense(Account account) {
-//        return calcSum(account.getExpenseTransactions(), Calendar.DATE);
-        return 0;
+        return calcSum(transactionService.getExpenseTransactionByAccount(account), Calendar.DATE);
     }
 
     @Override
     public double getThisWeekExpense(Account account) {
-//        return calcSum(account.getExpenseTransactions(), Calendar.WEEK_OF_MONTH);
-        return 0;
+        return calcSum(transactionService.getExpenseTransactionByAccount(account), Calendar.WEEK_OF_MONTH);
     }
 
     @Override
     public double getThisMonthExpense(Account account) {
-//        return calcSum(account.getExpenseTransactions(), Calendar.MONTH);
-        return 0;
+        return calcSum(transactionService.getExpenseTransactionByAccount(account), Calendar.MONTH);
     }
 
-//    private double calcSum(List<? extends AppTransaction> transactions, int calType) {
-//        Calendar calender = Calendar.getInstance();
-//        calender.setTime(new Date());
-//
-//        int currentMoment = calender.get(calType);
-//
-//        double sum = 0.0;
-//
-//        for (AppTransaction transaction: transactions) {
-//            calender.setTime(transaction.getDate());
-//            int transactionMoment = calender.get(calType);
-//
-//            if (currentMoment != transactionMoment) {
-//                continue;
-//            }
-//
-//            sum += transaction.getAmount();
-//        }
-//        return sum;
-//    }
+    private double calcSum(List<Transaction> transactions, int calType) {
+        Calendar calender = Calendar.getInstance();
+        calender.setTime(new Date());
+
+        int currentMoment = calender.get(calType);
+
+        double sum = 0.0;
+
+        for (Transaction transaction: transactions) {
+            calender.setTime(transaction.getDate());
+            int transactionMoment = calender.get(calType);
+
+            if (currentMoment != transactionMoment) {
+                continue;
+            }
+
+            sum += transaction.getAmount();
+        }
+        return sum;
+    }
 
 
     @Override

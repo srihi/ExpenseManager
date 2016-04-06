@@ -58,5 +58,15 @@ public class transactionServiceImpl implements TransactionService {
         return  transactionRepository.count(specification);
     }
 
+    @Override
+    public List<Transaction> getIncomeTransactionByAccount(Account account) {
+        return transactionRepository.getIncomeTransactionByAccount(account);
+    }
+
+    @Override
+    public List<Transaction> getExpenseTransactionByAccount(Account account) {
+        return transactionRepository.getExpenseTransactionByAccount(account);
+    }
+
 
 }

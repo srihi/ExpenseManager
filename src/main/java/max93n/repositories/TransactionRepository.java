@@ -26,4 +26,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     @Query("select t from Transaction t where t.account = :account")
     List<Transaction> getAllByAccount(@Param("account") Account account);
+
+    @Query("select t from Transaction t where t.account = :account and t.transactionType = 'INCOME'")
+    List<Transaction> getIncomeTransactionByAccount(@Param("account") Account account);
+
+    @Query("select t from Transaction t where t.account = :account and t.transactionType = 'EXPENSE'")
+    List<Transaction> getExpenseTransactionByAccount(@Param("account") Account account);
 }

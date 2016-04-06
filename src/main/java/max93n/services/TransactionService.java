@@ -23,4 +23,8 @@ public interface TransactionService {
     List<Transaction> getWithSpecification(Specification specification, PageRequest request);
     long getWithSpecificationCount(Specification specification);
 
+
+    List<Transaction> getIncomeTransactionByAccount(Account account);
+    List<Transaction> getExpenseTransactionByAccount(Account account);
+
 }
