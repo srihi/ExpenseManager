@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.AssociationOverride;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("categoryService")
@@ -106,6 +107,8 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.saveAndFlush(parent);
         }
         else {
+//            category.setChildren(null);
+//            categoryRepository.saveAndFlush(category);
             categoryRepository.delete(category.getId());
         }
     }

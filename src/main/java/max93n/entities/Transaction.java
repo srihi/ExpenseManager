@@ -30,7 +30,7 @@ public class Transaction {
     private String measure;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
 
@@ -43,7 +43,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 

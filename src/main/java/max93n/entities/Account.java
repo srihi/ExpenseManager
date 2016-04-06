@@ -22,7 +22,7 @@ public class Account {
     private CurrencyEnum currency;
 
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

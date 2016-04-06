@@ -2,6 +2,8 @@ package max93n.entities;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,17 +15,19 @@ public class Category {
     private Long id;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions;
+    private List<Transaction> transactions  = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Category> children;
+    private Set<Category> children = new HashSet<>();
 
     private String name;
 
+
+    public Category() {}
 
     public Long getId() {
         return id;
