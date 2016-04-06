@@ -9,6 +9,7 @@ import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -141,7 +142,15 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void remove(Account account) {
-        accountRepository.delete(account.getId());
+
+        //TODO: fix remove
+        for (Transaction t:account.getTransactions()) {
+            transactionService.remove(t);
+        }
+//
+//        account.setTransactions(new ArrayList<>());
+//        accountRepository.saveAndFlush(account);
+//        accountRepository.delete(account.getId());
     }
 
 

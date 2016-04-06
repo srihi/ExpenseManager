@@ -38,6 +38,7 @@ public class TransactionView {
     private Date date;
     private Double amount;
     private String payer;
+    private String category;
     private String subCategory;
     private String paymentMethod;
     private String description;
@@ -190,6 +191,13 @@ public class TransactionView {
         this.payer = payer;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getSubCategory() {
         return subCategory;

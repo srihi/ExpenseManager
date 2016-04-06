@@ -43,10 +43,12 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
+    public Transaction() {
+    }
 
     public Long getId() {
         return id;

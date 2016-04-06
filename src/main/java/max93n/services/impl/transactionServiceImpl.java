@@ -2,6 +2,7 @@ package max93n.services.impl;
 
 import max93n.entities.Account;
 import max93n.entities.Transaction;
+import max93n.enums.TransactionType;
 import max93n.repositories.TransactionRepository;
 import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class transactionServiceImpl implements TransactionService {
 
     @Override
     public void remove(Transaction transaction) {
+
+
+
+
         transactionRepository.delete(transaction.getId());
     }
 
@@ -73,5 +78,29 @@ public class transactionServiceImpl implements TransactionService {
         return transactionRepository.getExpenseTransactionByAccount(account);
     }
 
+    @Override
+    public List<Object[]> getByWeeks(Account account) {
+        return transactionRepository.getByWeeks(account);
+    }
+
+    @Override
+    public List<Object[]> getByMonths(Account account) {
+        return transactionRepository.getByMonths(account);
+    }
+
+    @Override
+    public List<Object[]> getByYears(Account account) {
+        return transactionRepository.getByYears(account);
+    }
+
+    @Override
+    public List<Object[]> getByAllPeriod(Account account, TransactionType transactionType) {
+        return transactionRepository.getByAllPeriod(account, transactionType);
+    }
+
+    @Override
+    public List<Object[]> getSumGroupedByMonthsOfYear(Account account, TransactionType transactionType) {
+        return transactionRepository.getSumGroupedByMonthsOfYear(account, transactionType);
+    }
 
 }

@@ -2,6 +2,7 @@ package max93n.services;
 
 import max93n.entities.Account;
 import max93n.entities.Transaction;
+import max93n.enums.TransactionType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -28,4 +29,12 @@ public interface TransactionService {
     List<Transaction> getIncomeTransactionByAccount(Account account);
     List<Transaction> getExpenseTransactionByAccount(Account account);
 
+
+
+    List<Object[]> getByWeeks(Account account);
+    List<Object[]> getByMonths(Account account);
+    List<Object[]> getByYears(Account account);
+    List<Object[]> getByAllPeriod(Account account, TransactionType transactionType);
+
+    List<Object[]> getSumGroupedByMonthsOfYear(Account account, TransactionType transactionType);
 }
