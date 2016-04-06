@@ -87,7 +87,7 @@ public class TransactionView {
 
             expenseCategorySelectItems = new ArrayList<>();
 
-            List<Category> expenseCategories = categoryService.getCategories();
+            List<Category> expenseCategories = categoryService.getExpenseCategories();
             for (Category expenseCategory : expenseCategories) {
 
                 SelectItemGroup group = new SelectItemGroup(expenseCategory.getName());
