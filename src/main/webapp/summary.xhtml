@@ -16,34 +16,34 @@
         </ui:define>
         <ui:define name="content">
 
-            <!--<p:panel id="periodFilterPanel">-->
-            <!--<h:form>-->
-            <!--<h:panelGrid columns="2" cellpadding="5">-->
-            <!--<h:outputLabel for="periodFilter" value="Period:"/>-->
-            <!--<p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">-->
-            <!--<f:selectItem itemLabel="All" itemValue="All"/>-->
-            <!--<f:selectItem itemLabel="Date Range" itemValue="Date Range"/>-->
-            <!--<p:ajax event="change" update=":tabView dataRangeOutputPanel"-->
-            <!--listener="#{summaryView.periodFilterChanged()}"/>-->
-            <!--</p:selectOneRadio>-->
-            <!--</h:panelGrid>-->
-            <!--<p:outputPanel id="dataRangeOutputPanel" autoUpdate="true">-->
-            <!--<p:panel rendered="#{summaryView.dataRange}">-->
-            <!--<p:calendar id="begin" value="#{summaryView.beginDate}" pattern="MM/dd/yyyy HH:mm:ss">-->
-            <!--<p:ajax event="dateSelect"-->
-            <!--update=":tabView"-->
-            <!--listener="#{summaryView.periodFilterChanged}"/>-->
-            <!--</p:calendar>-->
-            <!--<h:outputText value=" - "/>-->
-            <!--<p:calendar id="finish" value="#{summaryView.finishDate}" pattern="MM/dd/yyyy HH:mm:ss">-->
-            <!--<p:ajax event="dateSelect"-->
-            <!--update=":tabView"-->
-            <!--listener="#{summaryView.periodFilterChanged}"/>-->
-            <!--</p:calendar>-->
-            <!--</p:panel>-->
-            <!--</p:outputPanel>-->
-            <!--</h:form>-->
-            <!--</p:panel>-->
+            <p:panel id="periodFilterPanel">
+                <h:form>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="periodFilter" value="Period:"/>
+                        <p:selectOneRadio id="periodFilter" value="#{summaryView.periodFilter}">
+                            <f:selectItem itemLabel="All" itemValue="All"/>
+                            <f:selectItem itemLabel="Date Range" itemValue="Date Range"/>
+                            <p:ajax event="change" update="dataTableForm dataRangeOutputPanel"
+                                    listener="#{summaryView.periodFilterChanged()}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <p:outputPanel id="dataRangeOutputPanel" autoUpdate="true">
+                        <p:panel rendered="#{summaryView.dataRange}">
+                            <p:calendar id="begin" value="#{summaryView.beginDate}" pattern="MM/dd/yyyy HH:mm:ss">
+                                <p:ajax event="dateSelect"
+                                        update="dataTableForm"
+                                        listener="#{summaryView.periodFilterChanged}"/>
+                            </p:calendar>
+                            <h:outputText value=" - "/>
+                            <p:calendar id="finish" value="#{summaryView.finishDate}" pattern="MM/dd/yyyy HH:mm:ss">
+                                <p:ajax event="dateSelect"
+                                        update="dataTableForm"
+                                        listener="#{summaryView.periodFilterChanged}"/>
+                            </p:calendar>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:panel>
             <!--<p:tabView value="#{summaryView.tabKeys}" var="tabKey" id="tabView">-->
             <!--<p:tab title="#{tabKey}">-->
             <h:form id="dataTableForm">

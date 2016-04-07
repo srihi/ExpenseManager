@@ -39,6 +39,9 @@ public class SummaryView {
 
     private List<Tag> availableTags;
 
+    private String periodFilter;
+    private Date beginDate, finishDate;
+    private boolean dataRange;
 
     @PostConstruct
     public void init() {
@@ -48,11 +51,27 @@ public class SummaryView {
         availableTags = tagService.getAllByUser(account.getUser());
 
 
-        minDate = transactionService.getFirstDateOfTransaction(account);
-        maxDate = transactionService.getLastDateOfTransaction(account);
+
+        periodFilter = "All";
+        dataRange = false;
+        periodFilterChanged();
+    }
+
+
+    public void periodFilterChanged() {
+        if (periodFilter.equals("All")) {
+            dataRange = false;
+            minDate = transactionService.getFirstDateOfTransaction(account);
+            maxDate = transactionService.getLastDateOfTransaction(account);
+
+        }
+        else if (periodFilter.equals("Date Range")) {
+            dataRange = true;
+            minDate = beginDate;
+            maxDate = finishDate;
+        }
+
         lazyDataModel = new TransactionLazyModel(tagService, transactionService, account, minDate, maxDate);
-
-
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -129,5 +148,38 @@ public class SummaryView {
 
     public void setAvailableTags(List<Tag> availableTags) {
         this.availableTags = availableTags;
+    }
+
+
+    public String getPeriodFilter() {
+        return periodFilter;
+    }
+
+    public void setPeriodFilter(String periodFilter) {
+        this.periodFilter = periodFilter;
+    }
+
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public boolean isDataRange() {
+        return dataRange;
+    }
+
+    public void setDataRange(boolean dataRange) {
+        this.dataRange = dataRange;
     }
 }
