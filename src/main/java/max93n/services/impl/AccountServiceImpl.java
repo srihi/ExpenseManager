@@ -8,6 +8,7 @@ import max93n.services.CategoryService;
 import max93n.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,6 +119,7 @@ public class AccountServiceImpl implements AccountService{
         }
         accountRepository.saveAndFlush(account);
 
+
         Transaction transaction = new Transaction();
         transaction.setDate(new Date());
         transaction.setAmount(initialBalance);
@@ -129,6 +131,7 @@ public class AccountServiceImpl implements AccountService{
         transaction.setAccount(account);
         transaction.setTransactionType(TransactionType.INCOME);
         transactionService.add(transaction);
+        account.getTransactions().add(transaction);
         return true;
     }
 
@@ -141,16 +144,15 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    @Transactional
     public void remove(Account account) {
-
-        //TODO: fix remove
+        //refresh
+        account = accountRepository.findOne(account.getId());
         for (Transaction t:account.getTransactions()) {
             transactionService.remove(t);
         }
-//
-//        account.setTransactions(new ArrayList<>());
-//        accountRepository.saveAndFlush(account);
-//        accountRepository.delete(account.getId());
+
+        accountRepository.deleteById(account.getId());
     }
 
 

@@ -4,6 +4,7 @@ package max93n.entities;
 import max93n.enums.CurrencyEnum;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,11 +27,10 @@ public class Account {
     private User user;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
 
-    public Account() {
-    }
+    public Account() {}
 
     public Long getId() {
         return id;

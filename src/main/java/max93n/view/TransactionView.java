@@ -147,6 +147,7 @@ public class TransactionView {
 
         transactionService.add(expenseTransaction);
 
+        account.getTransactions().add(expenseTransaction);
         return "dashboard?faces-redirect=true";
 
     }
