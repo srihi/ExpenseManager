@@ -99,17 +99,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void remove(Category category) {
 
+        if (category.getTransactions() != null && category.getTransactions().size() > 0) {
+            for (Transaction t :
+                    category.getTransactions()) {
+                transactionService.remove(t);
+            }
+        }
+
+
+
         if (category.getParent() != null) {
-            Category parent = category.getParent();
-            parent.getChildren().remove(category);
-            categoryRepository.saveAndFlush(parent);
+//            Category parent = category.getParent();
+//            parent.getChildren().remove(category);
+//            categoryRepository.saveAndFlush(parent);
+            categoryRepository.removeById(category.getId());
         }
         else {
 //            category.setChildren(null);
 //            categoryRepository.saveAndFlush(category);
-            categoryRepository.delete(category.getId());
+            for (Category c :
+                    category.getChildren()) {
+                remove(c);
+            }
+            categoryRepository.removeById(category.getId());
         }
     }
 }

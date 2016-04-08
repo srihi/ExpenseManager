@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -30,12 +31,9 @@ public class transactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public void remove(Transaction transaction) {
-
-
-
-
-        transactionRepository.delete(transaction.getId());
+        transactionRepository.removeById(transaction.getId());
     }
 
     @Override

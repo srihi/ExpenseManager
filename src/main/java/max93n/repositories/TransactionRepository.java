@@ -5,6 +5,7 @@ import max93n.entities.Transaction;
 import max93n.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,6 +14,10 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
 
+
+    @Modifying
+    @Query("delete from Transaction  t where t.id = :id")
+    void removeById(@Param("id") Long id);
 
     @Query("select t from Transaction t where t.account = :account and t.category.name = 'Initial Balance'")
     Transaction getInitial(@Param("account") Account account);
